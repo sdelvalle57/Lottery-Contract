@@ -20,11 +20,11 @@ contract Lottery is Ownable {
         contest[_number].push(msg.sender);    
     }
 
-    function getPlayers() external view returns (address[]) {
+    function getAllPlayers() external view returns (address[]) {
         return players;
     }
 
-    function getPlayer(uint256 _number) external view returns (address[]) {
+    function getPlayers(uint256 _number) external view returns (address[]) {
         return contest[_number];
     }
 

@@ -23,8 +23,8 @@ contract('Lottery', () =>{
             value: web3.utils.toWei('3', 'ether'),
             gas: '1000000'
         });
-        const players = await lottery.methods.getPlayers().call();
-        const playersByNumber = await lottery.methods.getPlayer(numberOfLottery).call();
+        const players = await lottery.methods.getAllPlayers().call();
+        const playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery).call();
         assert.equal(accounts[0], players[0]);
         assert.equal(accounts[0], playersByNumber[0]);
         assert.equal(1, players.length);
@@ -61,24 +61,24 @@ contract('Lottery', () =>{
             value: web3.utils.toWei('3', 'ether'),
             gas: '1000000'
         });
-        const players = await lottery.methods.getPlayers().call();
+        const players = await lottery.methods.getAllPlayers().call();
         assert.equal(accounts[0], players[0]);
         assert.equal(accounts[1], players[1]);
         assert.equal(accounts[2], players[2]);
         assert.equal(accounts[3], players[3]);
         assert.equal(accounts[4], players[4]);
         assert.equal(5, players.length);
-        let playersByNumber = await lottery.methods.getPlayer(numberOfLottery1).call();
+        let playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery1).call();
         assert.equal(2, playersByNumber.length);
         assert.equal(accounts[0], playersByNumber[0]);
         assert.equal(accounts[4], playersByNumber[1]);
-        playersByNumber = await lottery.methods.getPlayer(numberOfLottery2).call();
+        playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery2).call();
         assert.equal(1, playersByNumber.length);
-        playersByNumber = await lottery.methods.getPlayer(numberOfLottery3).call();
+        playersByNumber = await lottery.methods.getgetPlayersByLotteryNumberPlayer(numberOfLottery3).call();
         assert.equal(1, playersByNumber.length);
-        playersByNumber = await lottery.methods.getPlayer(numberOfLottery4).call();
+        playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery4).call();
         assert.equal(1, playersByNumber.length);
-        playersByNumber = await lottery.methods.getPlayer(numberOfLottery5).call();
+        playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery5).call();
         assert.equal(2, playersByNumber.length);
         assert.equal(accounts[0], playersByNumber[0]);
         assert.equal(accounts[4], playersByNumber[1]);    
@@ -103,16 +103,16 @@ contract('Lottery', () =>{
             value: web3.utils.toWei('3', 'ether'),
             gas: '1000000'
         });
-        const players = await lottery.methods.getPlayers().call();
+        const players = await lottery.methods.getAllPlayers().call();
         assert.equal(accounts[0], players[0]);
         assert.equal(accounts[0], players[1]);
         assert.equal(accounts[0], players[2]);
         assert.equal(3, players.length);
-        let playersByNumber = await lottery.methods.getPlayer(numberOfLottery1).call();
+        let playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery1).call();
         assert.equal(accounts[0], playersByNumber[0]);
-        playersByNumber = await lottery.methods.getPlayer(numberOfLottery2).call();
+        playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery2).call();
         assert.equal(accounts[0], playersByNumber[0]);
-        playersByNumber = await lottery.methods.getPlayer(numberOfLottery3).call();
+        playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery3).call();
         assert.equal(accounts[0], playersByNumber[0]);        
     });
     it('allows one account to enter several times the same number', async () =>{
@@ -132,12 +132,12 @@ contract('Lottery', () =>{
             value: web3.utils.toWei('3', 'ether'),
             gas: '1000000'
         });
-        const players = await lottery.methods.getPlayers().call();
+        const players = await lottery.methods.getAllPlayers().call();
         assert.equal(accounts[0], players[0]);
         assert.equal(accounts[0], players[1]);
         assert.equal(accounts[0], players[2]);
         assert.equal(3, players.length);
-        const playersByNumber = await lottery.methods.getPlayer(numberOfLottery).call();
+        const playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery).call();
         assert.equal(accounts[0], playersByNumber[0]);
         assert.equal(accounts[0], playersByNumber[1]);
         assert.equal(accounts[0], playersByNumber[2]);
