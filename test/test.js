@@ -74,7 +74,7 @@ contract('Lottery', () =>{
         assert.equal(accounts[4], playersByNumber[1]);
         playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery2).call();
         assert.equal(1, playersByNumber.length);
-        playersByNumber = await lottery.methods.getgetPlayersByLotteryNumberPlayer(numberOfLottery3).call();
+        playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery3).call();
         assert.equal(1, playersByNumber.length);
         playersByNumber = await lottery.methods.getPlayersByLotteryNumber(numberOfLottery4).call();
         assert.equal(1, playersByNumber.length);
