@@ -24,7 +24,7 @@ contract Lottery is Ownable {
         return players;
     }
 
-    function getPlayers(uint256 _number) external view returns (address[]) {
+    function getPlayersByLotteryNumber(uint256 _number) external view returns (address[]) {
         return contest[_number];
     }
 
