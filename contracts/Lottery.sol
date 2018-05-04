@@ -17,7 +17,7 @@ contract Lottery is Ownable {
     uint256 public lotteryValue;
     uint256 public jackPot;
     uint256 public winningNumber;
-    // @dev probability is (99*98*97*96*95*94)/6!
+    // @dev probability is (99*98*97*96*95*94)/6! = 1120529256
     uint256 probability = 1120529256; //
     
     // @dev mapping of the LotteryNumber => users who chose that number
@@ -48,6 +48,7 @@ contract Lottery is Ownable {
     function enter(uint256 _number) external payable {
         require(msg.value >= lotteryValue, "value received is less than the lotteryValue");
         require(now < deadline, "Lottery has finalized");
+        require(_number <= probability, "number is less than probability");
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
         contest[_number].push(msg.sender);    
@@ -58,9 +59,10 @@ contract Lottery is Ownable {
     * @notice add the refunded value to the sender
     */
     function _refundIfValueExceedsPrice() private {
-        require(msg.value > lotteryValue, "No refund is taking place");
-        refunds[msg.sender] = refunds[msg.sender].add(msg.value.sub(lotteryValue));
-        emit RefundAdded(msg.sender, refunds[msg.sender]);
+        if (msg.value > lotteryValue) {
+            refunds[msg.sender] = refunds[msg.sender].add(msg.value.sub(lotteryValue));
+            emit RefundAdded(msg.sender, refunds[msg.sender]);
+        } 
     }
 
     /** 
