@@ -12,12 +12,14 @@ contract Lottery is Ownable {
 
     event RefundAdded(address player, uint256 amount);
     event Winners(address[] winners, uint256 jackPot);
+    event NewLottery(address newLotteryAddress);
+    event TransferJackPot(uint256 value);
 
     uint256 public deadline;
     uint256 public lotteryValue;
     uint256 public jackPot;
     uint256 public winningNumber;
-    // @dev probability is (99*98*97*96*95*94)/6! = 1120529256
+    // @dev probability is (99*98*97*96*95*94)/6! = 1.120'529.256
     uint256 probability = 1120529256; //
     
     // @dev mapping of the LotteryNumber => users who chose that number
@@ -29,6 +31,17 @@ contract Lottery is Ownable {
     address[] public winners;
 
     bool public lotteryHasPlayed = false;
+
+    // @dev the new lottery deployed where we are transfering the jackpot
+    address public newLotteryAddress;
+
+    modifier isTransferable(address _newLotteryAddress) {
+        require(lotteryHasPlayed == true);
+        require(newLotteryAddress == 0);
+        _;
+        newLotteryAddress = _newLotteryAddress;
+        emit NewLottery(newLotteryAddress);
+    }   
 
     /**
     * @dev constructor
@@ -49,6 +62,7 @@ contract Lottery is Ownable {
         require(msg.value >= lotteryValue, "value received is less than the lotteryValue");
         require(now < deadline, "Lottery has finalized");
         require(_number <= probability, "number is less than probability");
+        require(lotteryHasPlayed == false);
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
         contest[_number].push(msg.sender);    
@@ -76,7 +90,7 @@ contract Lottery is Ownable {
         require(now > deadline, "The lottery is still open");
         require(lotteryHasPlayed == false, "The lottery has already played");
         lotteryHasPlayed = true;
-        winningNumber = _setResult();
+        if(winningNumber==0) winningNumber = _setResult();
         winners = contest[winningNumber];
         if (winners.length > 0) {
             uint256 prizePerPlayer = jackPot.div(winners.length);
@@ -101,20 +115,26 @@ contract Lottery is Ownable {
     * @param winner the winner of the lottery
     * @param amount to be refunded
     */
-    function _refund(address winner, uint256 amount) private {
+    function _refund(address winner, uint256 amount) internal {
         refunds[winner] = refunds[winner].add(amount);
     }
 
     /** 
     * @notice Transfer the jackpot nobody won the lottery to a new deployed lottery
-    * @param contractAddress 
+    * @param _newLotteryAddress , we keep track of the new contract, we send the jackpot to the new contract
     */
-    function transferJackPot(address contractAddress) external onlyOwner {
-        require(lotteryHasPlayed == true);
+    function transferJackPot(address _newLotteryAddress) external onlyOwner isTransferable(_newLotteryAddress) {
         require(winners.length == 0);
-        contractAddress.transfer(jackPot);
+        Lottery newLottery = Lottery(_newLotteryAddress);
+        uint256 _jackPot = jackPot;
         jackPot = 0;
+        newLottery.addJackPot.value(_jackPot)();  
     }
+
+    function setNewLotteryAddress(address _newLotteryAddress) external onlyOwner isTransferable(_newLotteryAddress) {
+        require(jackPot==0);
+    }
+
 
     /** 
     * @notice withdraw the whole amount stored in the refunds mapping
@@ -124,4 +144,10 @@ contract Lottery is Ownable {
         refunds[msg.sender] = 0;
         msg.sender.transfer(amount);
     }
+
+    function addJackPot() public payable {
+        jackPot = jackPot.add(msg.value);
+        emit TransferJackPot(jackPot);
+    }
+
 }
