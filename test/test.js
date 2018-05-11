@@ -11,7 +11,7 @@ beforeEach(async () =>{
     lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
         .deploy({
             data: LotteryMock.bytecode, 
-            arguments: [300, amount]
+            arguments: [5, amount]
         })
         .send({
             from: accounts[0], 
@@ -318,7 +318,7 @@ contract('Lottery', () =>{
         let newLottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
         .deploy({
             data: LotteryMock.bytecode, 
-            arguments: [240, amount]
+            arguments: [5, amount]
         })
         .send({
             from: accounts[0], 
@@ -448,7 +448,7 @@ contract('Lottery', () =>{
         let newLottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
         .deploy({
             data: LotteryMock.bytecode, 
-            arguments: [240, amount]
+            arguments: [5, amount]
         })
         .send({
             from: accounts[0], 

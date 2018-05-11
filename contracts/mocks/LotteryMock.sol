@@ -2,7 +2,11 @@ pragma solidity ^0.4.23;
 
 import "../Lottery.sol";
 
-contract LotteryMock is Lottery(5 seconds, 0.001 ether) {
+contract LotteryMock is Lottery {
+
+    constructor(uint256 _deadline, uint256 _price) Lottery(_deadline, _price) public {
+        
+    }
 
     function getPlayers() external view returns(address[]) {
         return players;
