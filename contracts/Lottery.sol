@@ -1,14 +1,15 @@
 pragma solidity ^0.4.23;
 
 import "./ownership/Ownable.sol";
-import "./math/safeMath.sol";
+import "./math/SafeMath.sol";
+import "./LotteryFactory.sol";
 
 /**
  * @title Lottery
  * @dev Lottery with 6 numbers between 01-99.
  */
 contract Lottery is Ownable {
-    using SafeMath for uint256;
+    using SafeMath for uint256; 
 
     event RefundAdded(address player, uint256 amount);
     event Winners(address[] winners, uint256 jackPot);
@@ -33,24 +34,25 @@ contract Lottery is Ownable {
     bool public lotteryHasPlayed = false;
 
     // @dev the new lottery deployed where we are transfering the jackpot
-    address public newLotteryAddress;
+    address public newLottery;
+    // @dev we keep a reference of the last lottery
+    address public lastLottery;
 
-    modifier isTransferable(address _newLotteryAddress) {
-        require(lotteryHasPlayed == true);
-        require(newLotteryAddress == 0);
-        _;
-        newLotteryAddress = _newLotteryAddress;
-        emit NewLottery(newLotteryAddress);
-    }   
+    //instance of the lottery factory
+    LotteryFactory lotteryFactory; 
 
     /**
     * @dev constructor
     * @param _duration how long will the lottery be open to enter
     * @param _lotteryValue sets the value of the lottery
+    * @param _lotteryFactory instabce of lotteryFactory to create a new lottery
+    * @param _lastLottery we keep a reference of the last lottery, or the lottery which created this lottery
     */
-    constructor(uint256 _duration, uint256 _lotteryValue) public {
+    constructor(uint256 _duration, uint256 _lotteryValue, LotteryFactory _lotteryFactory, address _lastLottery) public {
         deadline = now + _duration;
         lotteryValue = _lotteryValue;
+        lotteryFactory = _lotteryFactory;
+        lastLottery = _lastLottery;
     }
 
     /** 
@@ -120,19 +122,35 @@ contract Lottery is Ownable {
     }
 
     /** 
-    * @notice Transfer the jackpot nobody won the lottery to a new deployed lottery
-    * @param _newLotteryAddress , we keep track of the new contract, we send the jackpot to the new contract
+    * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
     */
-    function transferJackPot(address _newLotteryAddress) external onlyOwner isTransferable(_newLotteryAddress) {
+    function _transferJackPot() private  {
         require(winners.length == 0);
-        Lottery newLottery = Lottery(_newLotteryAddress);
         uint256 _jackPot = jackPot;
         jackPot = 0;
-        newLottery.addJackPot.value(_jackPot)();  
+        Lottery lottery = Lottery(newLottery);
+        lottery.addJackPot.value(_jackPot)();  
     }
 
-    function setNewLotteryAddress(address _newLotteryAddress) external onlyOwner isTransferable(_newLotteryAddress) {
-        require(jackPot==0);
+    /** 
+    * @notice Attemps to create a new lottery, gets stored into newLottery, if winners we cal _transferJackPot()
+    * @param _duration duration of the new lottery
+    * @param _lotteryValue value of the new lottery
+    */
+    function attempNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner {
+        newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue, this);
+       
+       /*
+        require(lotteryHasPlayed == true);
+        require(newLottery == address(0));
+        require(_duration > 0);
+        require(_lotteryValue > 0);
+        newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue, this);
+        emit NewLottery(newLottery);
+        if (winners.length==0 && newLottery != address(0)) {
+           // _transferJackPot();
+        } 
+        */
     }
 
 
@@ -146,8 +164,11 @@ contract Lottery is Ownable {
     }
 
     function addJackPot() public payable {
+        require(msg.value>0);
         jackPot = jackPot.add(msg.value);
         emit TransferJackPot(jackPot);
     }
-
 }
+
+
+

@@ -4,10 +4,6 @@ import "../Lottery.sol";
 
 contract LotteryMock is Lottery {
 
-    constructor(uint256 _deadline, uint256 _price) Lottery(_deadline, _price) public {
-        
-    }
-
     function getPlayers() external view returns(address[]) {
         return players;
     }
@@ -25,6 +21,11 @@ contract LotteryMock is Lottery {
     }
 
     function setProbability(uint256 _probability) external onlyOwner {
+        require(players.length == 0);
+        require(lotteryHasPlayed == false);
         probability = _probability;
     }
+
+    
 }
+
