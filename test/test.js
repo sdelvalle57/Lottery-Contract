@@ -1,31 +1,28 @@
-//import assertRevert from './helpers/assertRevert';
-var Web3 = require('web3');
-var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-let LotteryFactoryMock = artifacts.require('./LotteryFactoryMock.sol');
-let LotteryMock = artifacts.require('./LotteryMock.sol');
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const LotteryFactory = artifacts.require('./LotteryFactory.sol');
+const Lottery = artifacts.require('./Lottery.sol');
 
-let lotteryFactoryMock;
+
+let lotteryFactory;
 let accounts;
 let lottery;
 const lotteryValue = web3.utils.toWei('0.001', 'ether');
 beforeEach(async () =>{
     accounts = await web3.eth.getAccounts();
     const amount =  web3.utils.toWei('0.001', 'ether');
-    lotteryFactoryMock = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryFactoryMock.abi)))
+    lotteryFactory = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryFactory.abi)))
         .deploy({
-            data: LotteryFactoryMock.bytecode
+            data: LotteryFactory.bytecode,
+            arguments: [5, lotteryValue]
         })
         .send({
             from: accounts[0], 
-            gas: '3000000'
+            gas: '4700000'
         });  
-    await lotteryFactoryMock.methods.createNewLottery(5, lotteryValue, 0x0).send({
-        from: accounts[0],
-        gas: '2000000'
-    });
-    lottery = await lotteryFactoryMock.methods.deployedLottery().call();
+    lottery = await lotteryFactory.methods.deployedLottery().call();
     assert.ok(lottery);
-    lottery = new web3.eth.Contract(LotteryMock.abi, lottery);
+    lottery = new web3.eth.Contract(Lottery.abi, lottery);
 });
 
 contract('Lottery', () =>{
@@ -33,13 +30,13 @@ contract('Lottery', () =>{
     const numberOfLottery2 = 2;
     const numberOfLottery3 = 3;
     const numberOfLottery4 = 4;
-    
-/*
-    it('deploys a LotteryFactoryMock', ()=>{
-        assert.ok(lotteryFactoryMock.options.address);
+    /*
+
+    it('deploys a LotteryFactory', ()=>{
+        assert.ok(lotteryFactory.options.address);
     });
 
-    it('LotteryFactoryMock creates a new lottery', ()=>{
+    it('LotteryFactory creates a new lottery', ()=>{
         assert.ok(lottery.options.address);
     });
 
@@ -59,8 +56,7 @@ contract('Lottery', () =>{
         const players = await lottery.methods.getPlayers().call();
         assert.equal(1, players.length);
     });
-
-    
+ 
     it('allows five accounts to enter with one repeated number', async () =>{        
         await lottery.methods.enter(numberOfLottery1).send({
             from: accounts[0],
@@ -287,12 +283,13 @@ contract('Lottery', () =>{
             value: web3.utils.toWei('0.0012', 'ether'),
             gas: '200000'
         }));
-        //mock a winning number
+        
+        await sleep(6*1000);
+        //simulate a winning number
         await lottery.methods.setWinningNumber(numberOfLottery4).send({
             from: accounts[0],
             gas: '200000'
         });
-        await sleep(6*1000);
         await lottery.methods.pickWinner().send({
             from: accounts[0],
             gas: '200000'
@@ -310,30 +307,32 @@ contract('Lottery', () =>{
         refund = await lottery.methods.refunds(accounts[1]).call();
         assert.equal(0, refund);
     });
-
     */
+
     it('several players enter, not winners this time, owner tries to call attempNewLottery before and after deadline', async() => {
+
+
+        const enter1 = await (lottery.methods.enter(numberOfLottery1).send({
+            from: accounts[0],
+            value: web3.utils.toWei('0.0014', 'ether'),
+            gas: '200000'
+        }));
+        assert.ok(enter1.events.RefundAdded);
+        assert.equal(enter1.events.RefundAdded.returnValues.amount,  web3.utils.toWei('0.0004', 'ether'));
+
         await (lottery.methods.enter(numberOfLottery1).send({
             from: accounts[0],
-            value: web3.utils.toWei('0.001', 'ether'),
+            value: web3.utils.toWei('0.0014', 'ether'),
             gas: '200000'
         }));
-        await (lottery.methods.enter(numberOfLottery2).send({
-            from: accounts[1],
-            value: web3.utils.toWei('0.0012', 'ether'),
-            gas: '200000'
-        }));
+        ;
+        
         await (lottery.methods.enter(numberOfLottery3).send({
             from: accounts[1],
             value: web3.utils.toWei('0.0012', 'ether'),
             gas: '200000'
         }));
-        //mock a winning number
-        await lottery.methods.setWinningNumber(numberOfLottery4).send({
-            from: accounts[0],
-            gas: '200000'
-        });
-
+ 
         //attemp to deploy new lottery
         let createLotteryError;
         try{
@@ -346,7 +345,14 @@ contract('Lottery', () =>{
         }
         assert.isDefined(createLotteryError);
 
+        
         await sleep(6*1000);
+        //simulate a winning number
+        await lottery.methods.setWinningNumber(numberOfLottery4).send({
+            from: accounts[0],
+            gas: '200000'
+        });
+
         //pick a winner to set lottery played
         await lottery.methods.pickWinner().send({
             from: accounts[0],
@@ -364,45 +370,58 @@ contract('Lottery', () =>{
         //check no winners
         const winners = await lottery.methods.getWinners().call();
         assert.equal(0, winners.length);
+    
 
         //newLottery address is still 0
-        const newLotteryAddress = await lottery.methods.newLottery().call();
+        let newLotteryAddress = await lottery.methods.newLottery().call();
         assert.equal(0, newLotteryAddress);
 
+        //attemp to deploy new lottery from another account
+        let createLotteryError2;
+        try{
+            await lottery.methods.attempNewLottery(5, lotteryValue).send({
+                from: accounts[1], 
+                gas: '2000000'
+            });   
+        } catch (e){
+            createLotteryError2 = e;
+        }
+        assert.isDefined(createLotteryError2);
+        
         //call to create a new lottery and transfer the jackpot
         await lottery.methods.attempNewLottery(5, lotteryValue).send({
             from: accounts[0], 
             gas: '4000000'
         });
 
+        //we check if the refence maintains
+        newLotteryAddress = await lottery.methods.newLottery().call();
+        const deployedLotteryAddress = await lotteryFactory.methods.deployedLottery().call();
+        
+        assert.equal(newLotteryAddress, deployedLotteryAddress);
+        
+        //load the new lottery
+        const newLottery = new web3.eth.Contract(Lottery.abi, newLotteryAddress);
+        //check lastLottery of the deployed lottery
+        const lastLotteryAddress = await newLottery.methods.lastLottery().call();
+        assert.equal(lastLotteryAddress, lottery.options.address);
+
+        //if there is no winners in the last lottery, so jackpot should be 0 
+        //because function _transferJackPot has been called
+        jackpot = await lottery.methods.jackPot().call();
+        assert.equal(0, jackpot);
+
+        //jackpot of new lottery should be the jackpot of last lottery
+        jackpot = await newLottery.methods.jackPot().call();
+        assert.equal(web3.utils.toWei('0.003', 'ether'), jackpot);
+        const balance = await web3.eth.getBalance(newLotteryAddress);
+        assert.equal(balance, jackpot);
+        
+
         //newLottery is now not 0
         newLotteryAddress = await lottery.methods.newLottery().call();
         assert.notEqual(0, newLotteryAddress);
         
-        /*
-        
-        
-        
-        
-        await lottery.methods.transferJackPot(newLottery.options.address).send({
-            from: accounts[0],
-            gas: '200000'
-        });
-
-        //newLottery address is the new deployed contract, 
-        newLotteryAddress = await lottery.methods.newLotteryAddress().call();
-        assert.equal(newLotteryAddress, newLottery.options.address);
-       
-        //check both contracts's jackpot
-        jackpot = await lottery.methods.jackPot().call();
-        assert.equal(0, jackpot);
-        const newJackpot =  await newLottery.methods.jackPot().call();        
-        assert.equal(web3.utils.toWei('0.003', 'ether'), newJackpot);
-
-        //check newLottery has balance equals to jackpot
-        const balance = await web3.eth.getBalance(newLottery.options.address);
-        assert.equal(balance, newJackpot);
-        */
     });
       
     /*
@@ -423,7 +442,7 @@ contract('Lottery', () =>{
             gas: '200000'
         }));
 
-        //mock a winning number
+        //simulate a winning number
         await lottery.methods.setWinningNumber(numberOfLottery2).send({
             from: accounts[0],
             gas: '200000'
@@ -470,9 +489,9 @@ contract('Lottery', () =>{
         //we try to call transferJackpot to set the new lotteryAddress, wont succeed cause there is no jackpot to transfer
         //deploy new lottery
         const amount =  web3.utils.toWei('0.001', 'ether');
-        let newLottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
+        let newLottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(Lottery.abi)))
         .deploy({
-            data: LotteryMock.bytecode, 
+            data: Lottery.bytecode, 
             arguments: [5, amount]
         })
         .send({
@@ -539,7 +558,7 @@ contract('Lottery', () =>{
             gas: '200000'
         }));
 
-        //mock a winning number
+        //simulate a winning number
         await lottery.methods.setWinningNumber(numberOfLottery3).send({
             from: accounts[0],
             gas: '200000'
@@ -596,4 +615,14 @@ contract('Lottery', () =>{
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
+
+function awaitEvent (event, handler) {
+    return new Promise((resolve, reject) => {
+      function wrappedHandler (...args) {
+        Promise.resolve(handler(...args)).then(resolve).catch(reject);
+      }
+  
+      event.watch(wrappedHandler);
+    });
+  }
 

@@ -21,7 +21,7 @@ contract Lottery is Ownable {
     uint256 public jackPot;
     uint256 public winningNumber;
     // @dev probability is (99*98*97*96*95*94)/6! = 1.120'529.256
-    uint256 probability = 1120529256; //
+    uint256 public probability = 1120529256; //
     
     // @dev mapping of the LotteryNumber => users who chose that number
     mapping(uint256 => address[]) public contest;
@@ -45,8 +45,8 @@ contract Lottery is Ownable {
     * @dev constructor
     * @param _duration how long will the lottery be open to enter
     * @param _lotteryValue sets the value of the lottery
-    * @param _lotteryFactory instabce of lotteryFactory to create a new lottery
-    * @param _lastLottery we keep a reference of the last lottery, or the lottery which created this lottery
+    * @param _lotteryFactory instance of lotteryFactory to create a new lottery
+    * @param _lastLottery we keep a reference of the creator of this lottery
     */
     constructor(uint256 _duration, uint256 _lotteryValue, LotteryFactory _lotteryFactory, address _lastLottery) public {
         deadline = now + _duration;
@@ -122,6 +122,23 @@ contract Lottery is Ownable {
     }
 
     /** 
+    * @notice Attemps to create a new lottery, gets stored into newLottery, if winners we cal _transferJackPot()
+    * @param _duration duration of the new lottery
+    * @param _lotteryValue value of the new lottery
+    */
+    function attempNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner {
+        require(lotteryHasPlayed == true);
+        require(newLottery == address(0));
+        require(_duration > 0);
+        require(_lotteryValue > 0);
+        newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue);
+        emit NewLottery(newLottery); 
+        if (winners.length==0 && newLottery != address(0)) {
+            _transferJackPot();
+        } 
+    }
+
+     /** 
     * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
     */
     function _transferJackPot() private  {
@@ -130,27 +147,6 @@ contract Lottery is Ownable {
         jackPot = 0;
         Lottery lottery = Lottery(newLottery);
         lottery.addJackPot.value(_jackPot)();  
-    }
-
-    /** 
-    * @notice Attemps to create a new lottery, gets stored into newLottery, if winners we cal _transferJackPot()
-    * @param _duration duration of the new lottery
-    * @param _lotteryValue value of the new lottery
-    */
-    function attempNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner {
-        newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue, this);
-       
-       /*
-        require(lotteryHasPlayed == true);
-        require(newLottery == address(0));
-        require(_duration > 0);
-        require(_lotteryValue > 0);
-        newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue, this);
-        emit NewLottery(newLottery);
-        if (winners.length==0 && newLottery != address(0)) {
-           // _transferJackPot();
-        } 
-        */
     }
 
 
@@ -167,6 +163,45 @@ contract Lottery is Ownable {
         require(msg.value>0);
         jackPot = jackPot.add(msg.value);
         emit TransferJackPot(jackPot);
+    }
+
+    /** 
+    * @notice All getters
+    */
+    function getPlayers() external view returns(address[]) {
+        return players;
+    }
+
+    function getPlayersByLotteryNumber(uint256 _number) external view returns(address[]) {
+        return contest[_number];
+    }
+
+    function getWinners() external view returns(address[]){
+        return winners;
+    }
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+    /** 
+    * @notice This is used only for testing purpose, has to be deleted 
+    */
+    function setWinningNumber(uint256 _winningNumber) external onlyOwner {
+        require(lotteryHasPlayed==false);
+        require(deadline < now);
+        winningNumber = _winningNumber;
+    }
+
+    /** 
+    * @notice This is used only for testing purpose, has to be deleted 
+    */
+    function setProbability(uint256 _probability) external onlyOwner {
+        require(players.length == 0);
+        require(lotteryHasPlayed == false);
+        probability = _probability;
     }
 }
 

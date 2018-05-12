@@ -1,4 +1,4 @@
-var Lottery = artifacts.require("./LotteryMock.sol");
+var Lottery = artifacts.require("./Lottery.sol");
 
 module.exports = function(deployer) {
   const amount =  web3.toWei('0.001', 'ether');
