@@ -10,7 +10,6 @@ import "./Lottery.sol";
 contract LotteryFactory is Ownable { 
     event LotteryDeployed(address deployedLottery);
     address public deployedLottery;
-    event Oe(address one, address two);
     
     //
     /** 
