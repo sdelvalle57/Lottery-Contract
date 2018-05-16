@@ -13,7 +13,6 @@ contract Lottery is Ownable {
 
     event RefundAdded(address player, uint256 amount);
     event Winners(address[] winners, uint256 jackPot);
-    event NewLottery(address newLotteryAddress);
     event TransferJackPot(uint256 value);
 
     uint256 public deadline;
@@ -21,7 +20,7 @@ contract Lottery is Ownable {
     uint256 public jackPot;
     uint256 public winningNumber;
     // @dev probability is (99*98*97*96*95*94)/6! = 1.120'529.256
-    uint256 public probability = 1120529256; //
+    uint256 public probability = 10; //
     
     // @dev mapping of the LotteryNumber => users who chose that number
     mapping(uint256 => address[]) public contest;
@@ -33,8 +32,6 @@ contract Lottery is Ownable {
 
     bool public lotteryHasPlayed = false;
 
-    // @dev the new lottery deployed where we are transfering the jackpot
-    address public newLottery;
     // @dev we keep a reference of the last lottery
     address public lastLottery;
 
@@ -64,6 +61,7 @@ contract Lottery is Ownable {
         require(msg.value >= lotteryValue, "value received is less than the lotteryValue");
         require(now < deadline, "Lottery has finalized");
         require(_number <= probability, "number is less than probability");
+        require(_number > 0, "number is greater than probability");
         require(lotteryHasPlayed == false);
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
@@ -92,7 +90,10 @@ contract Lottery is Ownable {
         require(now > deadline, "The lottery is still open");
         require(lotteryHasPlayed == false, "The lottery has already played");
         lotteryHasPlayed = true;
-        if(winningNumber==0) winningNumber = _setResult();
+        if(winningNumber == 0){
+            winningNumber = _setResult();
+        }
+        //require(winningNumber != 0, "Winnning number has to be greater than 0");
         winners = contest[winningNumber];
         if (winners.length > 0) {
             uint256 prizePerPlayer = jackPot.div(winners.length);
@@ -108,8 +109,9 @@ contract Lottery is Ownable {
     * @notice we just using blockhash fro the moment to set the lottery result
     */
     function _setResult() private view returns(uint256) {
-        uint256 result = uint256(blockhash(block.number));
-        return result >= probability ? result % probability : result;
+        uint256 result = uint256(keccak256(block.difficulty, block.number, players));
+
+        return result >= probability ? (result % probability)+1 : result;        
     }
 
     /** 
@@ -128,20 +130,19 @@ contract Lottery is Ownable {
     */
     function attempNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner {
         require(lotteryHasPlayed == true);
-        require(newLottery == address(0));
+        require(lotteryFactory.indexOf(this) == lotteryFactory.getLotteries().length-1, "if this is the later deployed Lottery"); 
         require(_duration > 0);
         require(_lotteryValue > 0);
-        newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue);
-        emit NewLottery(newLottery); 
+        address newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue); 
         if (winners.length==0 && newLottery != address(0)) {
-            _transferJackPot();
+            _transferJackPot(newLottery);
         } 
     }
 
      /** 
     * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
     */
-    function _transferJackPot() private  {
+    function _transferJackPot(address newLottery) private  {
         require(winners.length == 0);
         uint256 _jackPot = jackPot;
         jackPot = 0;
