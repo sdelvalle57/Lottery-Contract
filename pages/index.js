@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react';7
+import { Card, Button } from 'semantic-ui-react'
 import lotteryFactoryAt from '../ethereum/factory';
 
 class LotteryIndex extends Component {
@@ -7,10 +8,28 @@ class LotteryIndex extends Component {
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         return { lotteries };
     }
+
+    renderLotteries() {
+        const items = this.props.lotteries.map(address => {
+            return {
+                header: address,
+                description: <a>View Lottery</a>,
+                fluid: true
+            };
+        });
+        return <Card.Group items={items} />;
+    }
     
 
     render() {
-        return <div>{this.props.lotteries[0]}</div>
+        return <div>
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
+            {this.renderLotteries()}
+            <Button
+                content="Deploy the first Lottery"
+                icon="add"
+                primary />
+        </div>
     }
 }
 
