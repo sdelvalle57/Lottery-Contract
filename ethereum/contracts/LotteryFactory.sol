@@ -21,9 +21,8 @@ contract LotteryFactory is Ownable {
     */
 
     constructor(uint256 _duration, uint256 _lotteryValue) public {
-        createLottery(_duration, _lotteryValue, address(0));
+        createLottery(_duration, _lotteryValue);
     }
-
 
     /** 
     * @notice gets called when a new lottery is created from Lottery.sol,
@@ -31,10 +30,10 @@ contract LotteryFactory is Ownable {
     * @param _duration duration of the lottery
     * @param _lotteryValue value of the lottery
     */
-    function createNewLottery(uint256 _duration, uint256 _lotteryValue) public returns (Lottery) { 
-        require(msg.sender==lotteries[lotteries.length-1], "Caller of this function must be the last lottery created");
-        return createLottery(_duration, _lotteryValue, lotteries[lotteries.length-1]);
-        
+    function createNewLottery(uint256 _duration, uint256 _lotteryValue) public onlyOwner returns (Lottery) { 
+        Lottery lottery = Lottery(lotteries[lotteries.length-1]);
+        require(lottery.lotteryHasPlayed());
+        createLottery(_duration, _lotteryValue);
     }
 
     /** 
@@ -43,13 +42,12 @@ contract LotteryFactory is Ownable {
     * @param _lotteryValue value of the lottery
     * @param _laterLottery address of the most recent lottery
     */
-    function createLottery(uint256 _duration, uint256 _lotteryValue, address _laterLottery) private returns (Lottery) {
-        Lottery l = new Lottery(_duration, _lotteryValue, this, _laterLottery);
+    function createLottery(uint256 _duration, uint256 _lotteryValue) private returns (Lottery) {
+        Lottery l = new Lottery(_duration, _lotteryValue, this, lotteries[lotteries.length-1]);
         l.transferOwnership(owner);
         lotteries.push(address(l));
         indexOf[address(l)] = lotteries.length - 1;
         emit LotteryDeployed(address(l));
-        return l;
     }
 
     /**

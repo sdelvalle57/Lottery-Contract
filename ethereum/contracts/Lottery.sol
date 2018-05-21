@@ -35,9 +35,6 @@ contract Lottery is Ownable {
     // @dev we keep a reference of the last lottery
     address public lastLottery;
 
-    //instance of the lottery factory
-    LotteryFactory lotteryFactory; 
-
     /**
     * @dev constructor
     * @param _duration how long will the lottery be open to enter
@@ -45,7 +42,7 @@ contract Lottery is Ownable {
     * @param _lotteryFactory instance of lotteryFactory to create a new lottery
     * @param _lastLottery we keep a reference of the creator of this lottery
     */
-    constructor(uint256 _duration, uint256 _lotteryValue, LotteryFactory _lotteryFactory, address _lastLottery) public {
+    constructor(uint256 _duration, uint256 _lotteryValue, address _lastLottery) public {
         deadline = now + _duration;
         lotteryValue = _lotteryValue;
         lotteryFactory = _lotteryFactory;
@@ -122,30 +119,17 @@ contract Lottery is Ownable {
         refunds[winner] = refunds[winner].add(amount);
     }
 
-    /** 
-    * @notice Attemps to create a new lottery, gets stored into newLottery, if winners we cal _transferJackPot()
-    * @param _duration duration of the new lottery
-    * @param _lotteryValue value of the new lottery
-    */
-    function attempNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner {
-        require(lotteryHasPlayed == true);
-        require(lotteryFactory.indexOf(address(this)) == lotteryFactory.getLotteries().length-1, "if this is the later deployed Lottery"); 
-        require(_duration > 0);
-        require(_lotteryValue > 0);
-        address newLottery = lotteryFactory.createNewLottery(_duration, _lotteryValue); 
-        if (winners.length==0 && newLottery != address(0) && address(this).balance > 0) {
-            _transferJackPot(newLottery);
-        } 
-    }
-
      /** 
     * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
     */
-    function _transferJackPot(address newLottery) private  {
+    function _transferJackPot(address _newLottery) external onlyOwner  {
         require(winners.length == 0);
+        require(jackPot > 0);
+        require(lotteryHasPlayed == true);
+        require(_newLottery != address(0));
         uint256 _jackPot = jackPot;
         jackPot = 0;
-        Lottery lottery = Lottery(newLottery);
+        Lottery lottery = Lottery(_newLottery);
         lottery.addJackPot.value(_jackPot)();  
     }
 
