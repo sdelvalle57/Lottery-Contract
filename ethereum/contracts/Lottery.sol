@@ -2,7 +2,6 @@ pragma solidity ^0.4.23;
 
 import "./ownership/Ownable.sol";
 import "./math/SafeMath.sol";
-import "./LotteryFactory.sol";
 
 /**
  * @title Lottery
@@ -14,6 +13,7 @@ contract Lottery is Ownable {
     event RefundAdded(address player, uint256 amount);
     event Winners(address[] winners, uint256 jackPot);
     event TransferJackPot(uint256 value);
+    event Debug(uint val);
 
     uint256 public deadline;
     uint256 public lotteryValue;
@@ -39,18 +39,16 @@ contract Lottery is Ownable {
     * @dev constructor
     * @param _duration how long will the lottery be open to enter
     * @param _lotteryValue sets the value of the lottery
-    * @param _lotteryFactory instance of lotteryFactory to create a new lottery
     * @param _lastLottery we keep a reference of the creator of this lottery
     */
     constructor(uint256 _duration, uint256 _lotteryValue, address _lastLottery) public {
         deadline = now + _duration;
         lotteryValue = _lotteryValue;
-        lotteryFactory = _lotteryFactory;
         lastLottery = _lastLottery;
     }
 
     /** 
-    * @notice allows the player to enter, chacking amount and deadline and refund 
+    * @notice (130000 gas) allows the player to enter, chacking amount and deadline and refund 
     * if the value sent is more than the lotteryValue
     * @param _number inside the probability 
     */
@@ -59,7 +57,7 @@ contract Lottery is Ownable {
         require(now < deadline, "Lottery has finalized");
         require(_number <= probability, "number is less than probability");
         require(_number > 0, "number is greater than probability");
-        require(lotteryHasPlayed == false);
+        require(!lotteryHasPlayed);
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
         contest[_number].push(msg.sender);    
@@ -77,7 +75,7 @@ contract Lottery is Ownable {
     }
 
     /** 
-    * @notice pickWinner can only be called by the owner and requires
+    * @notice (from 50000 gas) pickWinner can only be called by the owner and requires
     * the lottery to be closed, still waiting for a good source 
     * of random generator, we will use the blockhash for the moment
     * check if there are winners, if yes, divide the jackpot between
@@ -85,7 +83,7 @@ contract Lottery is Ownable {
     */
     function pickWinner() external onlyOwner {
         require(now > deadline, "The lottery is still open");
-        require(lotteryHasPlayed == false, "The lottery has already played");
+        require(!lotteryHasPlayed, "The lottery has already played");
         lotteryHasPlayed = true;
         if(winningNumber == 0){
             winningNumber = _setResult();
@@ -122,10 +120,11 @@ contract Lottery is Ownable {
      /** 
     * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
     */
-    function _transferJackPot(address _newLottery) external onlyOwner  {
+    function transferJackPot(address _newLottery, address _owner) external  {
+        require(owner == _owner, "The owner of the factory should be the same owner of the lottery");
         require(winners.length == 0);
         require(jackPot > 0);
-        require(lotteryHasPlayed == true);
+        require(lotteryHasPlayed);
         require(_newLottery != address(0));
         uint256 _jackPot = jackPot;
         jackPot = 0;
@@ -178,7 +177,7 @@ contract Lottery is Ownable {
     * @notice This is used only for testing purpose, has to be deleted 
     */
     function setWinningNumber(uint256 _winningNumber) external onlyOwner {
-        require(lotteryHasPlayed==false);
+        require(!lotteryHasPlayed);
         require(deadline < now);
         winningNumber = _winningNumber;
     }
@@ -188,7 +187,7 @@ contract Lottery is Ownable {
     */
     function setProbability(uint256 _probability) external onlyOwner {
         require(players.length == 0);
-        require(lotteryHasPlayed == false);
+        require(!lotteryHasPlayed);
         probability = _probability;
     }
 }
