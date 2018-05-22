@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Card, Button } from 'semantic-ui-react'
 import lotteryFactoryAt from '../ethereum/factory';
 import Layout from '../components/Layout';
+import { Link } from '../routes';
 
 class LotteryIndex extends Component {
     static async getInitialProps() {
-        let lotteryFactory = lotteryFactoryAt("0xc074464985abc9b2cf200bf6658ebfd3c9862ea4");
+        let lotteryFactory = lotteryFactoryAt("0xcc528c8135ca6318149c2e6a247619187434ff63");
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         return { lotteries };
     }
@@ -14,7 +15,11 @@ class LotteryIndex extends Component {
         const items = this.props.lotteries.map(address => {
             return {
                 header: address,
-                description: <a>View Lottery</a>,
+                description: (
+                    <Link route={ `/lotteries/${address}`}>
+                        <a>View Lottery</a>
+                    </Link>
+                ),
                 fluid: true
             };
         });
@@ -26,14 +31,17 @@ class LotteryIndex extends Component {
         return (
             <Layout>
                 <div>
-                    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
                     <h3>Open lotteries</h3>
-                    <Button 
-                        floated="right" 
-                        content="Deploy the first Lottery" 
-                        icon="add" 
-                        primary 
-                    />
+                    <Link route="/lotteries/new">
+                        <a>
+                            <Button 
+                                floated="right" 
+                                content="Deploy Lottery" 
+                                icon="add" 
+                                primary 
+                            />
+                        </a>
+                    </Link>
                     {this.renderLotteries()}
                 </div>
             </Layout>

@@ -14,13 +14,15 @@ beforeEach(async () =>{
     lotteryFactory = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryFactory.abi)))
         .deploy({
             data: LotteryFactory.bytecode,
-            arguments: [5, lotteryValue]
         })
         .send({
             from: accounts[0], 
-            gas: '5500000'
+            gas: '4000000'
         });  
-
+    await lotteryFactory.methods.createNewLottery(5, lotteryValue).send({
+        from: accounts[0],
+        gas: '2000000'
+    })
     let lotteries = await lotteryFactory.methods.getLotteries().call();
     assert.equal(lotteries.length, 1);
     lottery = new web3.eth.Contract(Lottery.abi, lotteries[lotteries.length-1]);
@@ -31,7 +33,7 @@ contract('Lottery', () =>{
     const numberOfLottery2 = 2;
     const numberOfLottery3 = 3;
     const numberOfLottery4 = 4;
-    
+   
     it('deploys a LotteryFactory', ()=>{
         assert.ok(lotteryFactory.options.address);
     });
@@ -357,9 +359,9 @@ contract('Lottery', () =>{
         //attemp to deploy new lottery
         let createLotteryError;
         try{
-            await lottery.methods.attempNewLottery(5, lotteryValue).send({
+            await lotteryFactory.methods.createNewLottery(5, lotteryValue).send({
                 from: accounts[0], 
-                gas: '4000000'
+                gas: '2000000'
             });   
         } catch (e){
             createLotteryError = e;
@@ -368,7 +370,7 @@ contract('Lottery', () =>{
 
         
         await sleep(6*1000);
-        //simulate a winning number
+        //mock a winning number
         await lottery.methods.setWinningNumber(numberOfLottery4).send({
             from: accounts[0],
             gas: '200000'
@@ -379,7 +381,6 @@ contract('Lottery', () =>{
             from: accounts[0],
             gas: '200000'
         });
-        console.log(winner.gasUsed);
 
         //check contract jackpot
         let jackpot = await lottery.methods.jackPot().call();
@@ -398,7 +399,7 @@ contract('Lottery', () =>{
         try{
             await lotteryFactory.methods.createNewLottery(5, lotteryValue).send({
                 from: accounts[1], 
-                gas: '5000000'
+                gas: '2000000'
             });   
         } catch (e){
             createLotteryError2 = e;
@@ -408,7 +409,7 @@ contract('Lottery', () =>{
         //call to create a new lottery and transfer the jackpot
         await lotteryFactory.methods.createNewLottery(5, lotteryValue).send({
             from: accounts[0], 
-            gas: '6000000'
+            gas: '2000000'
         });
                 
         //load the new lottery
@@ -669,6 +670,8 @@ contract('Lottery', () =>{
         jackpot = await newLottery.methods.jackPot().call();
         assert.equal(jackpot, balance);
     });
+
+    
 })
 
 function sleep (time) {

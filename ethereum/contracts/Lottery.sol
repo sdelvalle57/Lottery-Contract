@@ -2,6 +2,7 @@ pragma solidity ^0.4.23;
 
 import "./ownership/Ownable.sol";
 import "./math/SafeMath.sol";
+import "./LotteryFactory.sol";
 
 /**
  * @title Lottery
@@ -35,16 +36,27 @@ contract Lottery is Ownable {
     // @dev we keep a reference of the last lottery
     address public lastLottery;
 
-    /**
-    * @dev constructor
+    // @dev the address of the factory which deployed this lottery
+    address public factoryAddress;
+
+    // @dev modifier to check if sender is the factoryAddress
+    modifier onlyFactory() {
+        require(msg.sender == factoryAddress);
+        _;
+    }
+    /** 
+    * @dev we set the lotteryFactory as the creator of this lottery
     * @param _duration how long will the lottery be open to enter
     * @param _lotteryValue sets the value of the lottery
-    * @param _lastLottery we keep a reference of the creator of this lottery
+    * @param _lastLotteryAddress address of the previous lottery
     */
-    constructor(uint256 _duration, uint256 _lotteryValue, address _lastLottery) public {
+    constructor(uint256 _duration, uint256 _lotteryValue, address _lastLotteryAddress) public {
+        require(_duration > 0);
+        require(_lotteryValue > 0);
+        factoryAddress = msg.sender;
         deadline = now + _duration;
         lotteryValue = _lotteryValue;
-        lastLottery = _lastLottery;
+        lastLottery = _lastLotteryAddress;
     }
 
     /** 
@@ -120,12 +132,11 @@ contract Lottery is Ownable {
      /** 
     * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
     */
-    function transferJackPot(address _newLottery, address _owner) external  {
-        require(owner == _owner, "The owner of the factory should be the same owner of the lottery");
-        require(winners.length == 0);
-        require(jackPot > 0);
-        require(lotteryHasPlayed);
-        require(_newLottery != address(0));
+    function transferJackPot(address _newLottery) external onlyFactory {
+        require(winners.length == 0, "Must not be winners in order to transfer");
+        require(jackPot > 0, "Jackpot sohuld be more than 0");
+        require(lotteryHasPlayed, "lottery has played");
+        require(_newLottery != address(0), "new lottery address should not be 0");
         uint256 _jackPot = jackPot;
         jackPot = 0;
         Lottery lottery = Lottery(_newLottery);

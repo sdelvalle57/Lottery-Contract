@@ -12,40 +12,36 @@ contract LotteryFactory is Ownable {
     
     address[] public lotteries;
 
-    //
     /** 
-    * @notice (1586381 gas) We launch this to start creating the chain of all contratacts
+    * @notice (1800000 gas) To create a new Lottery
+    * first checks if there was lotteries created, if so creates the first lottery
+    * if there was lottery before created, then checks if lastLottery has already played
+    * to then create the newLottery
     * @param _duration duration of the lottery
     * @param _lotteryValue value of the lottery
     */
-    constructor(uint256 _duration, uint256 _lotteryValue) public {
-        Lottery newLottery = new Lottery(_duration, _lotteryValue, address(0));        
-        _setLotteryData(newLottery);
+    function createNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner { 
+        if (lotteries.length==0) {
+            Lottery newLottery = new Lottery(_duration, _lotteryValue, address(0));        
+            _setLotteryData(newLottery);
+        } else { 
+            Lottery lottery = Lottery(lotteries[lotteries.length-1]);
+            require(lottery.lotteryHasPlayed(), "Checks if the previous lottery has already played");
+            _createLottery(_duration, _lotteryValue, lottery);
+        }
     }
 
     /** 
-    * @notice (1700000 gas) To create a new Lottery, first checks if lastLottery has played
-    * if not, creates new lottery and transfers jackpot from the old to the new one 
-    * if there is jackpot available
+    * @notice create the new lottery, checks if last lottery has jackpot to transfer
     * @param _duration duration of the lottery
     * @param _lotteryValue value of the lottery
+    * @param _lastLottery the last deployed lottery
     */
-    function createNewLottery(uint256 _duration, uint256 _lotteryValue) public onlyOwner { 
-        Lottery lottery = Lottery(lotteries[lotteries.length-1]);
-        require(lottery.lotteryHasPlayed());
-        _createLottery(_duration, _lotteryValue, lottery);
-    }
-
-    /** 
-    * @notice create the new lottery,
-    * @param _duration duration of the lottery
-    * @param _lotteryValue value of the lottery
-    */
-    function _createLottery(uint256 _duration, uint256 _lotteryValue, Lottery lottery) private {
-        Lottery newLottery = new Lottery(_duration, _lotteryValue, lotteries[lotteries.length-1]);
+    function _createLottery(uint256 _duration, uint256 _lotteryValue, Lottery _lastLottery) private {
+        Lottery newLottery = new Lottery(_duration, _lotteryValue, address(_lastLottery));
         _setLotteryData(newLottery);
-        if (address(lottery) != 0 && lottery.getWinners().length == 0 && lottery.jackPot() > 0) {
-            lottery.transferJackPot(address(newLottery), owner);
+        if (address(_lastLottery) != 0 && _lastLottery.getWinners().length == 0 && _lastLottery.jackPot() > 0) {
+            _lastLottery.transferJackPot(address(newLottery)); 
         } 
     }
 
