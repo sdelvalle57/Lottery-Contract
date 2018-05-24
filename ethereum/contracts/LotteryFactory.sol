@@ -13,7 +13,7 @@ contract LotteryFactory is Ownable {
     address[] public lotteries;
 
     /** 
-    * @notice (1800000 gas) To create a new Lottery
+    * @notice (2600000 gas) To create a new Lottery
     * first checks if there was lotteries created, if so creates the first lottery
     * if there was lottery before created, then checks if lastLottery has already played
     * to then create the newLottery
