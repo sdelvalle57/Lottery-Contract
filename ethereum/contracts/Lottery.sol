@@ -178,6 +178,22 @@ contract Lottery is Ownable {
         return refunds[msg.sender];
     } 
 
+    function getSummary() external view returns (
+        uint256, uint256, uint256, uint256, uint256, uint256, bool, address, address
+    ) {
+        return(
+            lotteryValue,
+            deadline,
+            jackPot,
+            winningNumber,
+            players.length,
+            winners.length,
+            lotteryHasPlayed,
+            lastLottery,
+            factoryAddress
+        );
+    }
+
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////

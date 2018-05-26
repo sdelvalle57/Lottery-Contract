@@ -134,7 +134,7 @@ var LotteryIndex = function (_Component) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                lotteryFactory = (0, _factory2.default)("0xcc528c8135ca6318149c2e6a247619187434ff63");
+                                lotteryFactory = (0, _factory2.default)("0x50b8914552bb3cd622fa024a2066c7d34a581ea9");
                                 _context.next = 3;
                                 return lotteryFactory.methods.getLotteries().call();
 

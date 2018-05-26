@@ -6,7 +6,7 @@ import { Link } from '../routes';
 
 class LotteryIndex extends Component {
     static async getInitialProps() {
-        let lotteryFactory = lotteryFactoryAt("0xcc528c8135ca6318149c2e6a247619187434ff63");
+        let lotteryFactory = lotteryFactoryAt("0x50b8914552bb3cd622fa024a2066c7d34a581ea9");
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         return { lotteries };
     }

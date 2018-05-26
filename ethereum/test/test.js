@@ -8,6 +8,7 @@ let lotteryFactory;
 let accounts;
 let lottery;
 const lotteryValue = web3.utils.toWei('0.001', 'ether');
+
 beforeEach(async () =>{
     accounts = await web3.eth.getAccounts();
     const amount =  web3.utils.toWei('0.001', 'ether');
@@ -28,12 +29,14 @@ beforeEach(async () =>{
     lottery = new web3.eth.Contract(Lottery.abi, lotteries[lotteries.length-1]);
 });
 
+
 contract('Lottery', () =>{
     const numberOfLottery1 = 1;
     const numberOfLottery2 = 2;
     const numberOfLottery3 = 3;
     const numberOfLottery4 = 4;
    
+    
     it('deploys a LotteryFactory', ()=>{
         assert.ok(lotteryFactory.options.address);
     });
@@ -670,9 +673,21 @@ contract('Lottery', () =>{
         jackpot = await newLottery.methods.jackPot().call();
         assert.equal(jackpot, balance);
     });
-
     
 })
+
+function probability(numbers, maximum){
+    return factorial(maximum)/(factorial(numbers)*factorial(maximum-numbers));
+
+}
+
+function factorial(n){
+    let total = 1;
+    for(let i = 1; i<=n; i++){
+        total = total * i;
+    }
+    return total;
+}
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));

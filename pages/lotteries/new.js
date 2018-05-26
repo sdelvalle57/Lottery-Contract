@@ -18,7 +18,7 @@ class LotteryNew extends Component {
         try {
             this.setState({ loading:true, errorMessage:""});
             const accounts = await web3.eth.getAccounts();
-            const lotteryFactory = lotteryFactoryAt("0xcc528c8135ca6318149c2e6a247619187434ff63");
+            const lotteryFactory = lotteryFactoryAt("0x50b8914552bb3cd622fa024a2066c7d34a581ea9");
             const lotteries = await lotteryFactory.methods.getLotteries().call();
             await lotteryFactory.methods
                 .createNewLottery(this.state.duration, web3.utils.toWei(this.state.entranceValue, 'ether'))
