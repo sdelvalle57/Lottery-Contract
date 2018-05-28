@@ -4,10 +4,13 @@
   "description": "Worldpay Lottery",
   "main": "index.js",
   "dependencies": {
+    "humanize-duration": "^3.14.0",
     "next": "^4.2.0",
     "next-routes": "^1.4.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-number-format": "^3.3.4",
+    "react-timestamp": "^4.4.0",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.80.0",
     "truffle": "^4.1.8",
