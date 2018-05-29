@@ -3,142 +3,123 @@ import { Card, Button, Grid } from 'semantic-ui-react';
 import Timestamp from 'react-timestamp';
 import humanize from 'humanize-duration';
 import NumberFormat from 'react-number-format'
+import ReactInterval from 'react-interval';
 import { Link } from '../../routes';
 import Layout from '../../components/Layout';
 import lotteryAt from '../../ethereum/lottery';
 import web3 from '../../ethereum/web3';
+import EnterForm from '../../components/EnterForm';
 
 
+class Lottery extends Component {  
 
-class Lottery extends Component {
-    static async getInitialProps(props) {
-        const lottery = lotteryAt(props.query.address);
-        const summary = await lottery.methods.getSummary().call();
-        return {
-            lotteryValue: summary[0],
-            deadline: summary[1],
-            jackPot: summary[2],
-            winningNumber: summary[3],
-            playersLenght: summary[4],
-            winnersLenght: summary[5],
-            lotteryHasPlayed: summary[6],
-            lastLotery: summary[7],
-            factoryAddress: summary[8]
+    constructor(props) {
+        super(props);
+        this.state = {
+            lotteryAddress: props.url.query.address,
+            lotteryValue: '',
+            deadline: '',
+            jackPot: '',
+            winningNumber: '',
+            playersLenght: '',
+            winnersLenght: '',
+            lotteryHasPlayed: '',
+            lastLotery: '',
+            factoryAddress: '',
+            owner: '',
+            userAccount: '',
+            canBuyLottery: '',
         }
+        
     }
 
-    onClick = async () => {
+    async componentDidMount() {
+        console.log("did");
+        this.setLotteryValues();
+        this.intervalId = setInterval(this.timer.bind(this), 1000);
+    }
 
+
+    setLotteryValues = async () => {
+        const lotteryAddress = this.state.lotteryAddress;
+        const lottery = lotteryAt(lotteryAddress);
+        const summary = await lottery.methods.getSummary().call();
+        const accounts = await web3.eth.getAccounts(); 
+        const lotteryValue = summary[0];
+        const deadline = summary[1];
+        const jackPot = summary[2];
+        const winningNumber = summary[3];
+        const playersLenght = summary[4];
+        const winnersLenght = summary[5];
+        const lotteryHasPlayed = summary[6];
+        const lastLotery = summary[7];
+        const factoryAddress = summary[8];
+        const owner = summary[9];
+        const userAccount = accounts[0];
+        const canBuyLottery = !lotteryHasPlayed && deadline - Date.now()/1000 > 0;
+        this.setState({lotteryValue, deadline, jackPot, winningNumber,
+            playersLenght, winnersLenght, lotteryHasPlayed, lastLotery, factoryAddress,
+            owner, userAccount, canBuyLottery})
     }
 
     renderCards() {
-        const {
-            lotteryValue,
-            deadline,
-            jackPot,
-            winningNumber,
-            playersLenght,
-            winnersLenght,
-            lotteryHasPlayed,
-            lastLotery,
-            factoryAddress
-        } = this.props;
-
         const items = [
             {
-                header: web3.utils.fromWei(lotteryValue, 'ether') + " Ether",
+                header: web3.utils.fromWei(this.state.lotteryValue, 'ether') + " Ether",
                 meta: 'We accept just Ether as payment',
                 description: 'This is the value of each ticket to enter the Lottery',
                 style: { overflowWrap: 'break-word' }
             },
             {
-                header: <Timestamp time={deadline} format='full' includeDay/>,
-                meta: 'Lottery selling '+this.getDeadline(deadline),
+                header: <Timestamp time={this.state.deadline} format='full' includeDay/>,
+                meta: 'Lottery selling '+this.getDeadline(this.state.deadline),
                 description: 'We sale tickets untils this date',
                 style: { overflowWrap: 'break-word' }
             },
             {
-                header: web3.utils.fromWei(jackPot, 'ether') + " Ether",
+                header: web3.utils.fromWei(this.state.jackPot, 'ether') + " Ether",
                 meta: 'Lottery Jackpot',
                 description: 'This jackpot will be release to the winners',
                 style: { overflowWrap: 'break-word' }
             },
             {
-                header: playersLenght,
+                header: this.state.playersLenght,
                 meta: 'Participants',
                 description: 'Number of tickets sold',
                 style: { overflowWrap: 'break-word' }
             },
             {
-                header: winningNumber,
+                header: this.state.winningNumber,
                 meta: 'And the winner is...',
                 description: 'This is the lottery winner number',
                 style: { overflowWrap: 'break-word' }
             },
             {
-                header: winnersLenght,
+                header: this.state.winnersLenght,
                 meta: 'Winners',
                 description: 'Number of winners',
                 style: { overflowWrap: 'break-word' }
             },
             {
-                href: `/lotteries/${lastLotery}`,
-                header: lastLotery,
+                href: `/lotteries/${this.state.lastLotery}`,
+                header: this.state.lastLotery,
                 meta: 'Address of previous lottery',
-                description: (
-                    <Link route={ `/lotteries/${lastLotery}`}>
-                        <a>View Lottery</a>
-                    </Link>),
                 style: { overflowWrap: 'break-word' }
             }
         ];
 
         return <Card.Group items={ items } />;
-    }
-
-    renderEnterCard() {
-        const {
-            lotteryValue,
-            lotteryHasPlayed
-        } = this.props;
-        const items = [
-            {
-                header: 'Enter the lottery',
-                meta: 'Value of the lottery is '+ web3.utils.fromWei(lotteryValue, 'ether') + " Ether",
-                description: (
-                    this.canBuyLottery() ?
-                        <Button negative>Ended</Button>:
-                        <Button positive onClick={this.onClick}>Enter</Button>
-                )
-            }
-        ];
-        return <Card.Group items={ items } />;
-    }
-
-    canBuyLottery() {
-        const {
-            deadline,
-            lotteryHasPlayed
-        } = this.props;
-
-        return lotteryHasPlayed || deadline < Date.now()/1000;
     }
 
     getDeadline(deadline) {
         deadline = parseInt(deadline*1000);
         const ans = humanize(deadline-Date.now(), { largest: 2 });
         return (deadline - Date.now()) < 0 ? 'ended '+ans+' ago':'ends in '+ans;
-        //return deadline < parseInt(Date.now()) ? 'ends in '+ans: 'ended'ans;
-        
+        //return deadline < parseInt(Date.now()) ? 'ends in '+ans: 'ended'ans; 
     }
 
     timer = () => {
-        this.setState({
-          currentCount: this.state.currentCount + 1
-        })
-        if(this.state.currentCount % 5 == 0) { 
-          this.render();
-        }
+        this.setLotteryValues();
       }
 
     render() {
@@ -150,7 +131,11 @@ class Lottery extends Component {
                         { this.renderCards() }
                     </Grid.Column>
                     <Grid.Column width = { 6 }>
-                        { this.renderEnterCard() }
+                       <EnterForm
+                            address={this.props.address} 
+                            canBuyLottery = {this.props.canBuyLottery}
+                            lotteryValue = {this.props.lotteryValue}
+                        />
                     </Grid.Column>
                 </Grid>
                 

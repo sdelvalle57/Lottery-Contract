@@ -179,7 +179,7 @@ contract Lottery is Ownable {
     } 
 
     function getSummary() external view returns (
-        uint256, uint256, uint256, uint256, uint256, uint256, bool, address, address
+        uint256, uint256, uint256, uint256, uint256, uint256, bool, address, address, address
     ) {
         return(
             lotteryValue,
@@ -190,7 +190,8 @@ contract Lottery is Ownable {
             winners.length,
             lotteryHasPlayed,
             lastLottery,
-            factoryAddress
+            factoryAddress, 
+            owner
         );
     }
 

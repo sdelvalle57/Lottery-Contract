@@ -6,19 +6,30 @@ import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
 
 class LotteryNew extends Component {
+
     state = {
         duration: "",
         entranceValue: "",
         errorMessage: "",
-        loading: false
+        loading: false,
+        factoryAddress:''
+    }
+
+    static async getInitialProps(props) {
+        return {
+            factoryAddress: props.query.factoryAddress
+        }
     }
 
     onSubmit = async (event) => {
         event.preventDefault();
+        const {
+            factoryAddress,
+        } = this.props;
         try {
             this.setState({ loading:true, errorMessage:""});
             const accounts = await web3.eth.getAccounts();
-            const lotteryFactory = lotteryFactoryAt("0x50b8914552bb3cd622fa024a2066c7d34a581ea9");
+            const lotteryFactory = lotteryFactoryAt(factoryAddress);
             const lotteries = await lotteryFactory.methods.getLotteries().call();
             await lotteryFactory.methods
                 .createNewLottery(this.state.duration, web3.utils.toWei(this.state.entranceValue, 'ether'))
