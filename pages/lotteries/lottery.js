@@ -1,6 +1,6 @@
 import React , { Component } from 'react';
-import { Card, Button, Grid } from 'semantic-ui-react';
-import Timestamp from 'react-timestamp';
+import { Card, Button, Grid, Dimmer, Loader, Segment } from 'semantic-ui-react';
+import Timestamp from 'react-moment';
 import humanize from 'humanize-duration';
 import NumberFormat from 'react-number-format'
 import ReactInterval from 'react-interval';
@@ -9,6 +9,8 @@ import Layout from '../../components/Layout';
 import lotteryAt from '../../ethereum/lottery';
 import web3 from '../../ethereum/web3';
 import EnterForm from '../../components/EnterForm';
+import PickWinnerForm from '../../components/PickWinnerForm';
+import NumberPicker from '../../components/NumberPicker'
 
 
 class Lottery extends Component {  
@@ -29,14 +31,19 @@ class Lottery extends Component {
             owner: '',
             userAccount: '',
             canBuyLottery: '',
+            canPickWinner: '',
+            loading: true,
+            numbers: []
         }
-        
+    }
+
+    numberPickerCallback = (numbers) => {
+        this.setState({numbers});
     }
 
     async componentDidMount() {
-        console.log("did");
         this.setLotteryValues();
-        this.intervalId = setInterval(this.timer.bind(this), 1000);
+        this.intervalId = setInterval(this.timer.bind(this), 30000);
     }
 
 
@@ -57,9 +64,10 @@ class Lottery extends Component {
         const owner = summary[9];
         const userAccount = accounts[0];
         const canBuyLottery = !lotteryHasPlayed && deadline - Date.now()/1000 > 0;
+        const canPickWinner = !lotteryHasPlayed && deadline - Date.now()/1000 < 0;
         this.setState({lotteryValue, deadline, jackPot, winningNumber,
             playersLenght, winnersLenght, lotteryHasPlayed, lastLotery, factoryAddress,
-            owner, userAccount, canBuyLottery})
+            owner, userAccount, canBuyLottery, canPickWinner, loading:false})
     }
 
     renderCards() {
@@ -68,10 +76,10 @@ class Lottery extends Component {
                 header: web3.utils.fromWei(this.state.lotteryValue, 'ether') + " Ether",
                 meta: 'We accept just Ether as payment',
                 description: 'This is the value of each ticket to enter the Lottery',
-                style: { overflowWrap: 'break-word' }
+                style: { overflowWrap: 'break-word' },
             },
             {
-                header: <Timestamp time={this.state.deadline} format='full' includeDay/>,
+                header: <Timestamp interval={1000} to={Date.now()}>{this.state.deadline}</Timestamp>,
                 meta: 'Lottery selling '+this.getDeadline(this.state.deadline),
                 description: 'We sale tickets untils this date',
                 style: { overflowWrap: 'break-word' }
@@ -115,7 +123,6 @@ class Lottery extends Component {
         deadline = parseInt(deadline*1000);
         const ans = humanize(deadline-Date.now(), { largest: 2 });
         return (deadline - Date.now()) < 0 ? 'ended '+ans+' ago':'ends in '+ans;
-        //return deadline < parseInt(Date.now()) ? 'ends in '+ans: 'ended'ans; 
     }
 
     timer = () => {
@@ -125,20 +132,29 @@ class Lottery extends Component {
     render() {
         return (
             <Layout>
+                <Dimmer active = {this.state.loading}>
+                    <Loader size='large'>Loading</Loader>
+                </Dimmer>
                 <h3>Lottery Show</h3>
                 <Grid>
                     <Grid.Column width = { 10 }>
                         { this.renderCards() }
                     </Grid.Column>
                     <Grid.Column width = { 6 }>
-                       <EnterForm
-                            address={this.props.address} 
-                            canBuyLottery = {this.props.canBuyLottery}
-                            lotteryValue = {this.props.lotteryValue}
+                        <Segment>
+                            <EnterForm
+                                address={this.state.lotteryAddress} 
+                                canBuyLottery = {this.state.canBuyLottery}
+                                lotteryValue = {this.state.lotteryValue}
+                                numbers = {this.state.numbers}/>
+                            <NumberPicker callback={this.numberPickerCallback} />
+                        </Segment>
+                        <PickWinnerForm
+                            address={this.state.lotteryAddress} 
+                            canPickWinner = {this.state.canPickWinner}
                         />
                     </Grid.Column>
                 </Grid>
-                
             </Layout>
         )
     }

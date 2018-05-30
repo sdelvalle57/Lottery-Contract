@@ -8,16 +8,13 @@ class EnterForm extends Component {
     state = {
         value: '',
         errroMessage:'',
-        loading:false
-
+        loading: false,
+        numbers: []
     }
 
-    async componentDidMount() {
+    
 
-    }
-
-    onSubmit = async event =>{
-        
+    onSubmit = async event =>{  
         event.preventDefault();
         const lottery = lotteryAt(this.props.address);
         if(this.props.canBuyLottery){
@@ -38,7 +35,9 @@ class EnterForm extends Component {
 
     renderButton() {
         if(this.props.canBuyLottery){
-            return <Button positive loading={this.state.loading}>Buy</Button>
+            return <Button 
+                positive = {this.props.numbers.length==6} 
+                loading={this.state.loading}>Buy</Button>
         }else{
             return <Button negative>Ended</Button>
         }
@@ -50,8 +49,8 @@ class EnterForm extends Component {
                 <Form.Field>
                     <label>Enter the lottery</label>
                 </Form.Field>
-                <Message error header="Oops!" content={this.state.errroMessage} />
                 {this.renderButton()}
+                <Message error header="Oops!" content={this.state.errroMessage} />
                 
             </Form>
         )
