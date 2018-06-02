@@ -15,14 +15,77 @@ contract('Combs', () =>{
             }
             nums[i]=num;
             i++;
-        }
-        console.log(k_combinations(nums, 5));      
-    });
+		}
+		nums = [4, 6, 16, 19, 37, 44];
+		let combs = k_combinations(nums, 5);
+		console.log(combs); 
+		let combsBytes = convertEachToBytes(combs); 
+		console.log(combsBytes);    
+		combs = k_combinations(nums, 4);
+		console.log(combs); 
+		combsBytes = convertEachToBytes(combs); 
+		console.log(combsBytes); 
+	});
+	/*
+	
+	it('checks repeated numbers', () => {
+		let numbers = [4, 6, 16, 19, 37, 44]
+		assert.isOk(checkNoRepeated(numbers));
+		numbers = [1,2,2,7,8,10]
+		assert.isNotOk(checkNoRepeated(numbers));
+	})
+
+	it('converts numbers to bytes6', () =>{
+		let numbers = [4, 6, 16, 19, 37, 44];
+		let final='';
+		for(let i=0; i < numbers.length; i++){
+			let hexNumber = numbers[i].toString(16);
+			if(hexNumber.length==1) hexNumber = '0'+hexNumber;
+			final+=hexNumber;
+		}
+		const theFinal = '0x'+final;
+		
+		console.log(theFinal);
+		console.log(theFinal.split('0x')[1]);
+		console.log(parseInt(theFinal, 16));
+		console.log(parseInt(theFinal, 16).toString(16));
+		
+
+	})
+	*/
 
 })
 
+function convertEachToBytes(combs) {
+	const combsBytes = [];
+	for(let i= 0; i < combs.length; i++){
+		combsBytes[i] = convertToBytes(combs[i]);
+	}
+	return combsBytes;
+}
+
+function convertToBytes(numbers) {
+	let final='';
+	for(let i=0; i < numbers.length; i++){
+		let hexNumber = numbers[i].toString(16);
+		if(hexNumber.length==1) hexNumber = '0'+hexNumber;
+		final+=hexNumber;
+	}
+	return '0x'+final;
+}
+
+function checkNoRepeated(numbers) {
+	for(let i = 0; i < numbers.length; i++){
+		let num = numbers[i];
+		for(let j = i+1; j < numbers.length; j++){
+			if(num==numbers[j]) return false;
+		}
+	}
+	return true;
+}
+
 function k_combinations(set, k) {
-	var i, j, combs, head, tailcombs;
+	let i, j, combs, head, tailcombs;
 	if (k > set.length || k <= 0) {
 		return [];
 	}
@@ -41,7 +104,7 @@ function k_combinations(set, k) {
 		head = set.slice(i, i + 1);
 		tailcombs = k_combinations(set.slice(i + 1), k - 1);
 		for (j = 0; j < tailcombs.length; j++) {
-            comb = head.concat(tailcombs[j]);
+            let comb = head.concat(tailcombs[j]);
             comb = comb.sort(function (a, b) {  return a - b;  });
 			combs.push(comb);
 		}

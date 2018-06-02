@@ -163,7 +163,7 @@ var Lottery = function (_Component) {
             canBuyLottery: '',
             canPickWinner: '',
             loading: true,
-            numbers: []
+            numbers: ''
         };
         return _this;
     }

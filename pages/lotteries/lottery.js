@@ -33,12 +33,14 @@ class Lottery extends Component {
             canBuyLottery: '',
             canPickWinner: '',
             loading: true,
-            numbers: []
+            numbers6: '',
+            numbers5:[],
+            numbers4:[]
         }
     }
 
-    numberPickerCallback = (numbers) => {
-        this.setState({numbers});
+    numberPickerCallback = (numbers6, numbers5, numbers4) => {
+        this.setState({numbers6, numbers5, numbers4});
     }
 
     async componentDidMount() {
@@ -146,7 +148,9 @@ class Lottery extends Component {
                                 address={this.state.lotteryAddress} 
                                 canBuyLottery = {this.state.canBuyLottery}
                                 lotteryValue = {this.state.lotteryValue}
-                                numbers = {this.state.numbers}/>
+                                numbers6
+                                numbers5
+                                numbers4/>
                             <NumberPicker callback={this.numberPickerCallback} />
                         </Segment>
                         <PickWinnerForm
