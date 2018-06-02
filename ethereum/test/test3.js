@@ -127,7 +127,7 @@ contract('Lottery', () =>{
         }
         
     })
-    */ 
+    
    it('checks numbers stored', async () => {
        let allNumbers6 = {};
        let allNumbers5 = [];
@@ -211,6 +211,11 @@ contract('Lottery', () =>{
             });
             console.log(key + " "+value +" "+ storedNumber[0] + " "+storedNumber[1]);
         });        
+    })
+*/ 
+
+    it('checks the winning number', async() => {
+        
     })
 })
 

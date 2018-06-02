@@ -31,6 +31,8 @@ contract Lottery is Ownable {
         bytes4[15] winningNumbers4;
     } 
 
+    WinningNumbers public winningNumbers;
+
     // @dev mapping of the sender => numbers, when user enters the lottery we save his numbers
     mapping(address => bytes6[]) public playerNumbers6;
     mapping(address => bytes5[]) public playerNumbers5;
@@ -273,7 +275,9 @@ contract Lottery is Ownable {
             random = random << 16;
         }
         _number6 = _sortArray(_number6);
-        WinningNumbers.winningNumber = convertBytesToBytes6(_sortArray);
+        winningNumbers.winningNumber = convertBytesToBytes6(_number6);
+        //WinningNumbers.winningNumbers5 = setCombinations5();
+        //WinningNumbers.winningNumbers4 = setCombinations4(); 
     }
 
     /** 
@@ -316,6 +320,16 @@ contract Lottery is Ownable {
             tempBytes6 = tempBytes6 >> (8 * i);
             outBytes6 = outBytes6 | tempBytes6;
         }
+    }
+
+    function setCombinations5() private view returns (bytes5[]) {
+        //bytes6 winner = WinningNumbers.winningNumber;
+
+    }
+
+    function setCombinations4() private view returns (bytes4[]) {
+        //bytes6 winner = WinningNumbers.winningNumber;
+
     }
 
      /** 
@@ -376,33 +390,6 @@ contract Lottery is Ownable {
             owner
         );
     }
-
-    function getWinningNumbers() external view returns(uint256[6]) {
-        bytes1[6] memory _winningNumbers = winningNumbers;
-        uint256[6] memory intNumbers;
-        for(uint256 i = 0; i < _winningNumbers.length; i++){
-            intNumbers[i] = uint256(_winningNumbers[i]);
-        }
-        return intNumbers;
-    }
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-    /** 
-    * @notice This is used only for testing purpose, has to be deleted 
-    */
-    function setWinningNumbers(bytes6 _winningNumbers) external onlyOwner {
-        require(!lotteryHasPlayed);
-        require(deadline < now);
-        for(uint256 i = 0; i < _winningNumbers.length; i++) {
-            bytes1 num = _winningNumbers[i];
-            winningNumbers[i] = num;
-        }
-    }
-
     
 }
 
