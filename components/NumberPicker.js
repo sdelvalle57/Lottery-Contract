@@ -82,7 +82,7 @@ class NumberPicker extends Component {
     }
 
     k_combinations(set, k) {
-        var i, j, combs, head, tailcombs;
+        let i, j, combs, head, tailcombs;
         if (k > set.length || k <= 0) {
             return [];
         }

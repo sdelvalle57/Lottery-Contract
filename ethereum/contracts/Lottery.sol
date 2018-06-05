@@ -275,9 +275,9 @@ contract Lottery is Ownable {
             random = random << 16;
         }
         _number6 = _sortArray(_number6);
-        winningNumbers.winningNumber = convertBytesToBytes6(_number6);
-        //WinningNumbers.winningNumbers5 = setCombinations5();
-        //WinningNumbers.winningNumbers4 = setCombinations4(); 
+        winningNumbers.winningNumber = _convertBytesToBytes6(_number6);
+        winningNumbers.winningNumbers5 = _setCombinations5(_number6);
+        winningNumbers.winningNumbers4 = _setCombinations4(_number6); 
     }
 
     /** 
@@ -314,7 +314,7 @@ contract Lottery is Ownable {
     * @notice converts byte to readonly bytes6, this will be the final number
     * @param _number6 array of 6 bytes 
     */
-    function convertBytesToBytes6(bytes memory _number6) private pure returns (bytes6 outBytes6) {
+    function _convertBytesToBytes6(bytes memory _number6) private pure returns (bytes6 outBytes6) {
         for (uint256 i = 0; i < _number6.length; i++) {
             bytes6 tempBytes6 = _number6[i];
             tempBytes6 = tempBytes6 >> (8 * i);
@@ -322,14 +322,99 @@ contract Lottery is Ownable {
         }
     }
 
-    function setCombinations5() private view returns (bytes5[]) {
-        //bytes6 winner = WinningNumbers.winningNumber;
-
+    /** 
+    * @notice outputs the 6 possible combinations
+    * @param _number6 array of 6 bytes 
+    */
+    function _setCombinations5(bytes memory _number6) private pure returns (bytes5[6]) {
+        uint256 k = 5;
+        uint256 n = 6;
+        uint256[] memory combination = new uint256[](k);
+        uint256 r = 0;
+        uint256 index = 0;
+        uint256 nIndex = 0;
+        bytes5[6] memory _numbers5;
+        while(r >= 0) {
+            if(index <= (n + (r - k))){
+                combination[r] = index;
+                if(r == k-1){
+                    bytes memory _number5 = new bytes(k);
+                    for(uint256 j = 0; j < combination.length; j++) {
+                        _number5[j] = _number6[combination[j]];
+                    }
+                    _numbers5[nIndex] = _convertBytesToBytes5(_number5);
+                    nIndex++;
+                    index++;
+                    if(nIndex == 6) return _numbers5;
+                } else {
+                    index = combination[r] + 1;
+                    r++;
+                }
+            } else {
+                r--;
+                if(r > 0) index = combination[r] + 1;
+                else index = combination[0] + 1;
+            }
+        }
     }
 
-    function setCombinations4() private view returns (bytes4[]) {
-        //bytes6 winner = WinningNumbers.winningNumber;
+    /** 
+    * @notice converts byte to readonly bytes5, this will be one of the final numbers
+    * @param _number5 array of 5 bytes 
+    */
+    function _convertBytesToBytes5(bytes memory _number5) private pure returns (bytes5 outBytes5) {
+        for (uint256 i = 0; i < _number5.length; i++) {
+            bytes5 tempBytes5 = _number5[i];
+            tempBytes5 = tempBytes5 >> (8 * i);
+            outBytes5 = outBytes5 | tempBytes5;
+        }
+    }
 
+    /** 
+    * @notice outputs the 15 possible combinations
+    * @param _number6 array of 6 bytes 
+    */
+    function _setCombinations4(bytes memory _number6) private pure returns (bytes4[15] _numbers4) {
+        uint256 k = 4;
+        uint256 n = 6;
+        uint256[] memory combination = new uint256[](k);
+        uint256 r = 0;
+        uint256 index = 0;
+        uint256 nIndex = 0;
+        while(r >= 0) {
+            if(index <= (n + (r - k))){
+                combination[r] = index;
+                if(r == k-1){
+                    bytes memory _number4 = new bytes(k);
+                    for(uint256 j = 0; j < combination.length; j++) {
+                        _number4[j] = _number6[combination[j]];
+                    }
+                    _numbers4[nIndex] = _convertBytesToBytes4(_number4);
+                    nIndex++;
+                    index++;
+                    if(nIndex == 15) break;
+                } else {
+                    index = combination[r] + 1;
+                    r++;
+                }
+            } else {
+                r--;
+                if(r > 0) index = combination[r] + 1;
+                else index = combination[0] + 1;
+            }
+        }
+    }
+
+    /** 
+    * @notice converts byte to readonly bytes4, this will be one of the final numbers
+    * @param _number4 array of 4 bytes 
+    */
+    function _convertBytesToBytes4(bytes memory _number4) private pure returns (bytes4 outBytes4) {
+        for (uint256 i = 0; i < _number4.length; i++) {
+            bytes4 tempBytes4 = _number4[i];
+            tempBytes4 = tempBytes4 >> (8 * i);
+            outBytes4 = outBytes4 | tempBytes4;
+        }
     }
 
      /** 
@@ -346,7 +431,7 @@ contract Lottery is Ownable {
         lottery.addJackPot.value(_jackPot)();  
     }
 
-    //Getters
+    //@dev Getters
     function getStoredNumbers6(bytes6 _number6, address user) public view returns(
         uint256, uint256) {
         return (
@@ -390,7 +475,18 @@ contract Lottery is Ownable {
             owner
         );
     }
-    
+
+    function getWinner() external view returns(bytes6 winningNumber6) {
+        winningNumber6 = winningNumbers.winningNumber;
+    }
+
+    function getWinner5(uint256 index) external view returns(bytes5) {
+        return  winningNumbers.winningNumbers5[index];
+    }
+
+    function getWinner4(uint256 index) external view returns(bytes4) {
+        return  winningNumbers.winningNumbers4[index];
+    }
 }
 
 
