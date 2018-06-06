@@ -3,6 +3,7 @@ pragma solidity ^0.4.23;
 import "./ownership/Ownable.sol";
 import "./math/SafeMath.sol";
 import "./LotteryFactory.sol";
+import "./BytesConvertLib.sol";
 
 /**
  * @title Lottery
@@ -29,6 +30,7 @@ contract Lottery is Ownable {
         bytes6 winningNumber; 
         bytes5[6] winningNumbers5;
         bytes4[15] winningNumbers4;
+        bytes3[20] winningNumbers3;
     } 
 
     WinningNumbers public winningNumbers;
@@ -37,12 +39,14 @@ contract Lottery is Ownable {
     mapping(address => bytes6[]) public playerNumbers6;
     mapping(address => bytes5[]) public playerNumbers5;
     mapping(address => bytes4[]) public playerNumbers4;
+    mapping(address => bytes3[]) public playerNumbers3;
 
     // @dev mapping of the numbers => players[], when user enters a number we save his 
     // number pointing to his address
     mapping(bytes6 => address[]) public numbers6;
     mapping(bytes5 => address[]) public numbers5;
     mapping(bytes4 => address[]) public numbers4;
+    mapping(bytes3 => address[]) public numbers3;
 
     address[] public players;
 
@@ -82,138 +86,17 @@ contract Lottery is Ownable {
     * @param _numbers4 array[15] of bytes4, 15 possible combinations of 4 numbers
     * [ 14, 15, 16, 19 ] = 0x0e0f1013, ....
     */
-    function enter(bytes6 _number6, bytes5[6] _numbers5, bytes4[15] _numbers4) external payable {
+    function enter(bytes6 _number6, bytes5[6] _numbers5, bytes4[15] _numbers4, bytes3[20] _numbers3) external payable {
         require(msg.value == lotteryValue, "value received is less than the lotteryValue");
         require(now < deadline, "Lottery has finalized");
         require(!lotteryHasPlayed, "Lottery has already played");
-        require(_areValidNumbers6(_number6), "No repeated numbers inside the bet");
-        require(_areInsideNumber6(_number6, _numbers5));
-        require(_areInsideNumber6(_number6, _numbers4));
+        require(BytesConvertLib._areValidNumbers6(_number6), "No repeated numbers inside the bet");
+        require(BytesConvertLib._areInsideNumber6(_number6, _numbers5));
+        require(BytesConvertLib._areInsideNumber6(_number6, _numbers4));
+        require(BytesConvertLib._areInsideNumber6(_number6, _numbers3));
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
-        _storeNumbers(_number6, _numbers5, _numbers4);
-    }
-
-    /** 
-    * @notice checks if there is no numbers below 0 and above 45
-    * then checks if there is no repeated number and they are
-    * organized from lowest to highest
-    * @param _number6 6 bytes containing the numbers
-    */
-    function _areValidNumbers6(bytes6 _number6) private pure returns(bool) {
-        if(_number6.length!=6) return false;
-        for(uint256 i = 0; i < _number6.length; i++) {
-            bytes1 num = _number6[i];
-            if(uint256(num) <= 0 || uint256(num)>45) { 
-                return false;
-            }
-            for(uint256 j = i+1; j < _number6.length; j++) {
-                if(num >= _number6[j]) return false;
-            }
-        }
-        return true;
-    }
-
-    /** 
-    * @notice checks if there is no numbers below 0 and above 45
-    * then checks if there is no repeated number and they are
-    * organized from lowest to highest
-    * @param _number5 5 bytes containing the numbers
-    */
-    function _areValidNumbers5(bytes5 _number5) private pure returns(bool) {
-        if(_number5.length!=5) return false;
-        for(uint256 i = 0; i < _number5.length; i++) {
-            bytes1 num = _number5[i];
-            if(uint256(num) <= 0 || uint256(num)>45) { 
-                return false;
-            }
-            for(uint256 j = i+1; j < _number5.length; j++) {
-                if(num >= _number5[j]) return false;
-            }
-        }
-        return true;
-    }
-
-    /** 
-    * @notice checks if there is no numbers below 0 and above 45
-    * then checks if there is no repeated number and they are
-    * organized from lowest to highest
-    * @param _number4 4 bytes containing the numbers
-    */
-    function _areValidNumbers4(bytes4 _number4) private pure returns(bool) {
-        if(_number4.length!=4) return false;
-        for(uint256 i = 0; i < _number4.length; i++) {
-            bytes1 num = _number4[i];
-            if(uint256(num) <= 0 || uint256(num)>45) { 
-                return false;
-            }
-            for(uint256 j = i+1; j < _number4.length; j++) {
-                if(num >= _number4[j]) return false;
-            }
-        }
-        return true;
-    }
-
-    /** 
-    * @notice checks if each number(2nd for) inside each combination(1st for) is valid
-    * and is inside the main number(3rd for) or @param _number6 
-    * so, we check for example a number6 in integers is [ 14, 15, 16, 19, 32, 35 ]
-    * this in bytes is 0x0e0f10132023, so one of the possible 15 combinations of 4 
-    * numbers could be [ 14, 15, 16, 19, 35 ] where in bytes is 0x0e0f101323 
-    * @param _number6 6 bytes containing the numbers
-    * @param _numbers5 array[6] of bytes5
-    */
-    function _areInsideNumber6(bytes6 _number6, bytes5[6] memory _numbers5) private pure returns(bool) {
-        uint256 numbersLength = 0;
-        for(uint256 i = 0; i < _numbers5.length; i++){
-            bytes5 number5 = _numbers5[i];
-            if(!_areValidNumbers5(number5)) return false;
-            uint256 index = 0;
-            uint256 found = 0;
-            for(uint256 j = 0; j < number5.length; j++){
-                bytes1 each = number5[j];
-                for(uint256 k = index; k < _number6.length; k++){
-                    if(_number6[k] == each){
-                        index = k;
-                        found++;
-                        break;
-                    }
-                }
-            }
-            if(found==5) numbersLength++;
-        }
-        return numbersLength==6;
-    }
-
-    /** 
-    * @notice checks if each number(2nd for) inside each combination(1st for) is valid
-    * and is inside the main number(3rd for) or @param _number6 
-    * so, we check for example a number6 in integers is [ 14, 15, 16, 19, 32, 35 ]
-    * this in bytes is 0x0e0f10132023, so one of the possible 15 combinations of 4 
-    * numbers could be [ 14, 15, 16, 35 ] where in bytes is 0x0e0f1023 
-    * @param _number6 6 bytes containing the numbers
-    * @param _numbers4 array[15]  of bytes4 
-    */
-    function _areInsideNumber6(bytes6 _number6, bytes4[15] memory _numbers4) private pure returns(bool) {
-        uint256 numbersLength = 0;
-        for(uint256 i = 0; i < _numbers4.length; i++){
-            bytes4 number4 = _numbers4[i];
-            if(!_areValidNumbers4(number4)) return false;
-            uint256 index = 0;
-            uint256 found = 0;
-            for(uint256 j = 0; j < number4.length; j++){
-                bytes1 each = number4[j];
-                for(uint256 k = index; k < _number6.length; k++){
-                    if(_number6[k] == each){
-                        index = k;
-                        found++;
-                        break;
-                    }
-                }
-            }
-            if(found==4) numbersLength++;
-        }
-        return numbersLength==15;
+        _storeNumbers(_number6, _numbers5, _numbers4, _numbers3);
     }
 
     /** 
@@ -223,8 +106,9 @@ contract Lottery is Ownable {
     * @param _number6 6 bytes containing the numbers
     * @param _numbers5 array[6]  of bytes5
     * @param _numbers4 array[15]  of bytes4 
+    * @param _numbers3 array[20]  of bytes3 
     */
-    function _storeNumbers(bytes6 _number6, bytes5[6] memory _numbers5, bytes4[15] memory _numbers4) private {
+    function _storeNumbers(bytes6 _number6, bytes5[6] memory _numbers5, bytes4[15] memory _numbers4, bytes3[20] memory _numbers3) private {
         playerNumbers6[msg.sender].push(_number6);
         numbers6[_number6].push(msg.sender);
         for(uint256 i = 0; i < _numbers5.length; i++){
@@ -236,6 +120,11 @@ contract Lottery is Ownable {
             bytes4 _number4 = _numbers4[j];
             playerNumbers4[msg.sender].push(_number4);
             numbers4[_number4].push(msg.sender);
+        }
+        for(uint256 k = 0; k < _numbers3.length; k++){
+            bytes3 _number3 = _numbers3[k];
+            playerNumbers3[msg.sender].push(_number3);
+            numbers3[_number3].push(msg.sender);
         }
     }
 
@@ -268,153 +157,17 @@ contract Lottery is Ownable {
             if(size==6) break;
             uint256 pair = uint256(bytes2(random)) % 45;
             if(pair == 0) pair = 45;
-            if(_isNotRepeated(bytes1(pair), _number6) && pair != 0){
+            if(BytesConvertLib._isNotRepeated(bytes1(pair), _number6) && pair != 0){
                 _number6[size] = bytes1(pair);
                 size++;
             } 
             random = random << 16;
         }
-        _number6 = _sortArray(_number6);
-        winningNumbers.winningNumber = _convertBytesToBytes6(_number6);
-        winningNumbers.winningNumbers5 = _setCombinations5(_number6);
-        winningNumbers.winningNumbers4 = _setCombinations4(_number6); 
-    }
-
-    /** 
-    * @notice we check there are no repeated numbers inside the future winning number
-    * @param _pair the byte to check if is not inside the array of bytes
-    * @param _number6 array of 6 bytes 
-    */
-    function _isNotRepeated(bytes1 _pair, bytes memory _number6) private pure returns(bool) {
-        for(uint256 i = 0; i < _number6.length; i++){
-            if(_pair == _number6[i]) return false;
-        }
-        return true;
-    }
-
-    /** 
-    * @notice sorts the array from the lowest to highest
-    * @param _number6 array of 6 bytes 
-    */
-    function _sortArray(bytes memory _number6) private pure returns (bytes) {
-        uint256 l = _number6.length;
-        for(uint256 i = 0; i < l; i++) {
-            for(uint256 j = i+1; j < l ;j++) {
-                if(_number6[i] > _number6[j]) {
-                    bytes1 temp = _number6[i];
-                    _number6[i] = _number6[j];
-                    _number6[j] = temp;
-                }
-            }
-        }
-        return _number6;
-    }
-
-    /** 
-    * @notice converts byte to readonly bytes6, this will be the final number
-    * @param _number6 array of 6 bytes 
-    */
-    function _convertBytesToBytes6(bytes memory _number6) private pure returns (bytes6 outBytes6) {
-        for (uint256 i = 0; i < _number6.length; i++) {
-            bytes6 tempBytes6 = _number6[i];
-            tempBytes6 = tempBytes6 >> (8 * i);
-            outBytes6 = outBytes6 | tempBytes6;
-        }
-    }
-
-    /** 
-    * @notice outputs the 6 possible combinations
-    * @param _number6 array of 6 bytes 
-    */
-    function _setCombinations5(bytes memory _number6) private pure returns (bytes5[6]) {
-        uint256 k = 5;
-        uint256 n = 6;
-        uint256[] memory combination = new uint256[](k);
-        uint256 r = 0;
-        uint256 index = 0;
-        uint256 nIndex = 0;
-        bytes5[6] memory _numbers5;
-        while(r >= 0) {
-            if(index <= (n + (r - k))){
-                combination[r] = index;
-                if(r == k-1){
-                    bytes memory _number5 = new bytes(k);
-                    for(uint256 j = 0; j < combination.length; j++) {
-                        _number5[j] = _number6[combination[j]];
-                    }
-                    _numbers5[nIndex] = _convertBytesToBytes5(_number5);
-                    nIndex++;
-                    index++;
-                    if(nIndex == 6) return _numbers5;
-                } else {
-                    index = combination[r] + 1;
-                    r++;
-                }
-            } else {
-                r--;
-                if(r > 0) index = combination[r] + 1;
-                else index = combination[0] + 1;
-            }
-        }
-    }
-
-    /** 
-    * @notice converts byte to readonly bytes5, this will be one of the final numbers
-    * @param _number5 array of 5 bytes 
-    */
-    function _convertBytesToBytes5(bytes memory _number5) private pure returns (bytes5 outBytes5) {
-        for (uint256 i = 0; i < _number5.length; i++) {
-            bytes5 tempBytes5 = _number5[i];
-            tempBytes5 = tempBytes5 >> (8 * i);
-            outBytes5 = outBytes5 | tempBytes5;
-        }
-    }
-
-    /** 
-    * @notice outputs the 15 possible combinations
-    * @param _number6 array of 6 bytes 
-    */
-    function _setCombinations4(bytes memory _number6) private pure returns (bytes4[15] _numbers4) {
-        uint256 k = 4;
-        uint256 n = 6;
-        uint256[] memory combination = new uint256[](k);
-        uint256 r = 0;
-        uint256 index = 0;
-        uint256 nIndex = 0;
-        while(r >= 0) {
-            if(index <= (n + (r - k))){
-                combination[r] = index;
-                if(r == k-1){
-                    bytes memory _number4 = new bytes(k);
-                    for(uint256 j = 0; j < combination.length; j++) {
-                        _number4[j] = _number6[combination[j]];
-                    }
-                    _numbers4[nIndex] = _convertBytesToBytes4(_number4);
-                    nIndex++;
-                    index++;
-                    if(nIndex == 15) break;
-                } else {
-                    index = combination[r] + 1;
-                    r++;
-                }
-            } else {
-                r--;
-                if(r > 0) index = combination[r] + 1;
-                else index = combination[0] + 1;
-            }
-        }
-    }
-
-    /** 
-    * @notice converts byte to readonly bytes4, this will be one of the final numbers
-    * @param _number4 array of 4 bytes 
-    */
-    function _convertBytesToBytes4(bytes memory _number4) private pure returns (bytes4 outBytes4) {
-        for (uint256 i = 0; i < _number4.length; i++) {
-            bytes4 tempBytes4 = _number4[i];
-            tempBytes4 = tempBytes4 >> (8 * i);
-            outBytes4 = outBytes4 | tempBytes4;
-        }
+        _number6 = BytesConvertLib._sortArray(_number6);
+        winningNumbers.winningNumber = BytesConvertLib._convertBytesToBytes6(_number6);
+        winningNumbers.winningNumbers5 = BytesConvertLib._setCombinations5(_number6);
+        winningNumbers.winningNumbers4 = BytesConvertLib._setCombinations4(_number6); 
+        winningNumbers.winningNumbers3 = BytesConvertLib._setCombinations3(_number6); 
     }
 
      /** 
@@ -486,6 +239,10 @@ contract Lottery is Ownable {
 
     function getWinner4(uint256 index) external view returns(bytes4) {
         return  winningNumbers.winningNumbers4[index];
+    }
+
+    function getWinner3(uint256 index) external view returns(bytes3) {
+        return  winningNumbers.winningNumbers3[index];
     }
 }
 

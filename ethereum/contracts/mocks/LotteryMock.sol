@@ -29,7 +29,9 @@ contract LotteryMock is Lottery {
         _number6 = _sortArray(_number6);
         winningNumbers.winningNumber = _convertBytesToBytes6(_number6);
         winningNumbers.winningNumbers5 = _setCombinations5(_number6);
-        winningNumbers.winningNumbers4 = _setCombinations4(_number6);  
+        winningNumbers.winningNumbers4 = _setCombinations4(_number6); 
+        winningNumbers.winningNumbers3 = _setCombinations3(_number6); 
+         
     }
 
     function _isNotRepeated(bytes1 _pair, bytes memory _number6) private pure returns(bool) {
@@ -145,6 +147,46 @@ contract LotteryMock is Lottery {
             bytes4 tempBytes4 = _number4[i];
             tempBytes4 = tempBytes4 >> (8 * i);
             outBytes4 = outBytes4 | tempBytes4;
+        }
+    }
+
+    function _setCombinations3(bytes memory _number6) private pure returns (bytes3[20]) {
+        uint256 k = 3;
+        uint256 n = 6;
+        uint256[] memory combination = new uint256[](k);
+        uint256 r = 0;
+        uint256 index = 0;
+        uint256 nIndex = 0;
+        bytes3[20] memory _numbers3;
+        while(r >= 0) {
+            if(index <= (n + (r - k))){
+                combination[r] = index;
+                if(r == k-1){
+                    bytes memory _number3 = new bytes(k);
+                    for(uint256 j = 0; j < combination.length; j++) {
+                        _number3[j] = _number6[combination[j]];
+                    }
+                    _numbers3[nIndex] = _convertBytesToBytes3(_number3);
+                    nIndex++;
+                    index++;
+                    if(nIndex == 20) return _numbers3;
+                } else {
+                    index = combination[r] + 1;
+                    r++;
+                }
+            } else {
+                r--;
+                if(r > 0) index = combination[r] + 1;
+                else index = combination[0] + 1;
+            }
+        }
+    }
+
+    function _convertBytesToBytes3(bytes memory _number3) private pure returns (bytes3 outBytes3) {
+        for (uint256 i = 0; i < _number3.length; i++) {
+            bytes3 tempBytes3 = _number3[i];
+            tempBytes3 = tempBytes3 >> (8 * i);
+            outBytes3 = outBytes3 | tempBytes3;
         }
     }
 }

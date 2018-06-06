@@ -19,7 +19,7 @@ beforeEach(async () =>{
         })
         .send({
             from: accounts[0], 
-            gas: '4000000'
+            gas: '5000000'
         });  
     const nums = createRandomEntry(6, 45);
     const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
@@ -222,19 +222,20 @@ contract('Lottery', () =>{
             })
             .send({
                 from: accounts[0], 
-                gas: '6000000'
+                gas: '5000000'
         });
         let finalNumbers = [3,6,13,32,44,45];
         const number6Winner = convertToBytes(finalNumbers);
         let numbers5winners = convertEachToBytes(k_combinations(finalNumbers, 5));
         let numbers4winners = convertEachToBytes(k_combinations(finalNumbers, 4));
+        let numbers3winners = convertEachToBytes(k_combinations(finalNumbers, 3));
 
          
         try{
-            const enter = await lottery.methods.enter(number6Winner, numbers5winners, numbers4winners).send({
+            const enter = await lottery.methods.enter(number6Winner, numbers5winners, numbers4winners, numbers3winners).send({
                 from: accounts[1],
                 value: lotteryValue,
-                gas: '6000000'
+                gas: '4000000'
             })
             console.log("Good  "+finalNumbers + " "+number6Winner + " "+enter.gasUsed);
         
@@ -249,11 +250,12 @@ contract('Lottery', () =>{
             let number6 = convertToBytes(finalNumbers);
             let numbers5 = convertEachToBytes(k_combinations(finalNumbers, 5));
             let numbers4 = convertEachToBytes(k_combinations(finalNumbers, 4));
+            let numbers3 = convertEachToBytes(k_combinations(finalNumbers, 3));
             try{
-                const enter = await lottery.methods.enter(number6, numbers5, numbers4).send({
+                const enter = await lottery.methods.enter(number6, numbers5, numbers4, numbers3).send({
                     from: accounts[1],
                     value: lotteryValue,
-                    gas: '6000000'
+                    gas: '5000000'
                 })
                 console.log("Good "+i+" "+finalNumbers + " "+number6 + " "+enter.gasUsed);          
             } catch(e) {
@@ -269,13 +271,17 @@ contract('Lottery', () =>{
         console.log(play.gasUsed);
         const winnerNumber = await lottery.methods.getWinner().call();
         assert.equal(winnerNumber, number6Winner);
+        for(let j = 0; j < numbers5winners.length; j++){
+            const winnerNumber5 = await lottery.methods.getWinner5(j).call();
+            assert.equal(winnerNumber5, numbers5winners[j]);
+        }
         for(let j = 0; j < numbers4winners.length; j++){
             const winnerNumber4 = await lottery.methods.getWinner4(j).call();
             assert.equal(winnerNumber4, numbers4winners[j]);
         }
-        for(let j = 0; j < numbers5winners.length; j++){
-            const winnerNumber5 = await lottery.methods.getWinner5(j).call();
-            assert.equal(winnerNumber5, numbers5winners[j]);
+        for(let j = 0; j < numbers3winners.length; j++){
+            const winnerNumber3 = await lottery.methods.getWinner3(j).call();
+            assert.equal(winnerNumber3, numbers3winners[j]);
         }
         
         //assert.equal(number6Winner, winnerNumber);
