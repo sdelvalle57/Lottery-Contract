@@ -4,189 +4,85 @@ import "../Lottery.sol";
 
 contract LotteryMock is Lottery {
 
-    bytes32 public random;
-
-
     constructor(uint256 _duration, uint256 _lotteryValue, address _lastLotteryAddress) public 
     Lottery(_duration,  _lotteryValue,  _lastLotteryAddress){
         
     }
 
-    function playTheLottery() external {
-        random = keccak256("1");        
-        bytes memory _number6 = new bytes(6);
+    function playTheLottery() external onlyOwner {
+        bytes32 random = keccak256("1");
+        bytes memory winner = new bytes(6);
         uint256 size = 0;
         while(size < 6){
             if(size==6) break;
             uint256 pair = uint256(bytes2(random)) % 45;
             if(pair == 0) pair = 45;
-            if(_isNotRepeated(bytes1(pair), _number6) && pair != 0){
-                _number6[size] = bytes1(pair);
+            if(winner.isNotRepeated(bytes1(pair)) && pair != 0){
+                winner[size] = bytes1(pair);
                 size++;
             } 
             random = random << 16;
         }
-        _number6 = _sortArray(_number6);
-        winningNumbers.winningNumber = _convertBytesToBytes6(_number6);
-        winningNumbers.winningNumbers5 = _setCombinations5(_number6);
-        winningNumbers.winningNumbers4 = _setCombinations4(_number6); 
-        winningNumbers.winningNumbers3 = _setCombinations3(_number6); 
-         
+        winner = winner.sortArray();
+        winningNumber = winner.convertBytesToBytes6();
     }
 
-    function _isNotRepeated(bytes1 _pair, bytes memory _number6) private pure returns(bool) {
-        for(uint256 i = 0; i < _number6.length; i++){
-            if(_pair == _number6[i]) return false;
-        }
-        return true;
-    }
-
-    function _sortArray(bytes memory _number6) private pure returns (bytes) {
-        uint256 l = _number6.length;
-        for(uint256 i = 0; i < l; i++) {
-            for(uint256 j = i+1; j < l ;j++) {
-                if(_number6[i] > _number6[j]) {
-                    bytes1 temp = _number6[i];
-                    _number6[i] = _number6[j];
-                    _number6[j] = temp;
+    function setWinners() external {
+        for(; index < tickets.length; index++) {
+            Ticket storage savedTicket = tickets[index];
+            bytes6 ticket = savedTicket.ticket;
+            uint256 found = 0;
+            uint256 lastFound = 0;
+            for(uint256 j = 0; j < winningNumber.length; j++) {
+                bytes1 chunk = winningNumber[j];
+                for(uint256 k = lastFound; k < ticket.length; k++){
+                    if((found==0 && k >= 3) || (found==1 && k >= 4)) break;
+                    if(chunk == ticket[k]){
+                        lastFound = k+1;
+                        found++;
+                        break;
+                    } 
                 }
             }
-        }
-        return _number6;
-    }
-
-    function convertBytesToBytes6(bytes memory _number6) private pure returns (bytes6 outBytes6) {
-        for (uint256 i = 0; i < _number6.length; i++) {
-            bytes6 tempBytes6 = _number6[i];
-            tempBytes6 = tempBytes6 >> (8 * i);
-            outBytes6 = outBytes6 | tempBytes6;
-        }
-    }
-
-    function _convertBytesToBytes6(bytes memory _number6) private pure returns (bytes6 outBytes6) {
-        for (uint256 i = 0; i < _number6.length; i++) {
-            bytes6 tempBytes6 = _number6[i];
-            tempBytes6 = tempBytes6 >> (8 * i);
-            outBytes6 = outBytes6 | tempBytes6;
-        }
-    }
-
-    function _setCombinations5(bytes memory _number6) private pure returns (bytes5[6]) {
-        uint256 k = 5;
-        uint256 n = 6;
-        uint256[] memory combination = new uint256[](k);
-        uint256 r = 0;
-        uint256 index = 0;
-        uint256 nIndex = 0;
-        bytes5[6] memory _numbers5;
-        while(r >= 0) {
-            if(index <= (n + (r - k))){
-                combination[r] = index;
-                if(r == k-1){
-                    bytes memory _number5 = new bytes(k);
-                    for(uint256 j = 0; j < combination.length; j++) {
-                        _number5[j] = _number6[combination[j]];
-                    }
-                    _numbers5[nIndex] = _convertBytesToBytes5(_number5);
-                    nIndex++;
-                    index++;
-                    if(nIndex == 6) return _numbers5;
-                } else {
-                    index = combination[r] + 1;
-                    r++;
-                }
-            } else {
-                r--;
-                if(r > 0) index = combination[r] + 1;
-                else index = combination[0] + 1;
+            if(found >= 3 && !savedTicket.number3) {
+                savedTicket.number3 = true;
+                winners3.numberOfWinners ++;
+            } 
+            if(found >= 4 && !savedTicket.number4) {
+                savedTicket.number4 = true;
+                winners4.numberOfWinners ++;
+            } 
+            if(found >= 5 && !savedTicket.number5) {
+                savedTicket.number5 = true;
+                winners5.numberOfWinners ++;              
+            } 
+            if(found == 6 && !savedTicket.number6) {
+                savedTicket.number6 = true;
+                winners6.numberOfWinners ++;                
             }
+            if(gasleft() <= 200000 && index < tickets.length - 1) break;
         }
-    }
-
-    function _convertBytesToBytes5(bytes memory _number5) private pure returns (bytes5 outBytes5) {
-        for (uint256 i = 0; i < _number5.length; i++) {
-            bytes5 tempBytes5 = _number5[i];
-            tempBytes5 = tempBytes5 >> (8 * i);
-            outBytes5 = outBytes5 | tempBytes5;
-        }
-    }
-
-    function _setCombinations4(bytes memory _number6) private pure returns (bytes4[15] _numbers4) {
-        uint256 k = 4;
-        uint256 n = 6;
-        uint256[] memory combination = new uint256[](k);
-        uint256 r = 0;
-        uint256 index = 0;
-        uint256 nIndex = 0;
-        while(r >= 0) {
-            if(index <= (n + (r - k))){
-                combination[r] = index;
-                if(r == k-1){
-                    bytes memory _number4 = new bytes(k);
-                    for(uint256 j = 0; j < combination.length; j++) {
-                        _number4[j] = _number6[combination[j]];
-                    }
-                    _numbers4[nIndex] = _convertBytesToBytes4(_number4);
-                    nIndex++;
-                    index++;
-                    if(nIndex == 15) break;
-                } else {
-                    index = combination[r] + 1;
-                    r++;
-                }
-            } else {
-                r--;
-                if(r > 0) index = combination[r] + 1;
-                else index = combination[0] + 1;
+        if(index == tickets.length - 1) {
+            if(winners3.numberOfWinners > 0 && winners3.allocated == 0){
+                uint256 allocation3 = jackPot.mul(25).div(100);
+                jackPot = jackPot.sub(allocation3);
+                winners3.allocated = allocation3;
             }
-        }
-    }
-
-    function _convertBytesToBytes4(bytes memory _number4) private pure returns (bytes4 outBytes4) {
-        for (uint256 i = 0; i < _number4.length; i++) {
-            bytes4 tempBytes4 = _number4[i];
-            tempBytes4 = tempBytes4 >> (8 * i);
-            outBytes4 = outBytes4 | tempBytes4;
-        }
-    }
-
-    function _setCombinations3(bytes memory _number6) private pure returns (bytes3[20]) {
-        uint256 k = 3;
-        uint256 n = 6;
-        uint256[] memory combination = new uint256[](k);
-        uint256 r = 0;
-        uint256 index = 0;
-        uint256 nIndex = 0;
-        bytes3[20] memory _numbers3;
-        while(r >= 0) {
-            if(index <= (n + (r - k))){
-                combination[r] = index;
-                if(r == k-1){
-                    bytes memory _number3 = new bytes(k);
-                    for(uint256 j = 0; j < combination.length; j++) {
-                        _number3[j] = _number6[combination[j]];
-                    }
-                    _numbers3[nIndex] = _convertBytesToBytes3(_number3);
-                    nIndex++;
-                    index++;
-                    if(nIndex == 20) return _numbers3;
-                } else {
-                    index = combination[r] + 1;
-                    r++;
-                }
-            } else {
-                r--;
-                if(r > 0) index = combination[r] + 1;
-                else index = combination[0] + 1;
+            if(winners4.numberOfWinners > 0 && winners4.allocated == 0){
+                uint256 allocation4 = jackPot.mul(25).div(100);
+                jackPot = jackPot.sub(allocation4);
+                winners4.allocated = allocation4;
             }
-        }
-    }
-
-    function _convertBytesToBytes3(bytes memory _number3) private pure returns (bytes3 outBytes3) {
-        for (uint256 i = 0; i < _number3.length; i++) {
-            bytes3 tempBytes3 = _number3[i];
-            tempBytes3 = tempBytes3 >> (8 * i);
-            outBytes3 = outBytes3 | tempBytes3;
+            if(winners5.numberOfWinners > 0 && winners5.allocated == 0){
+                uint256 allocation5 = jackPot.mul(25).div(100);
+                jackPot = jackPot.sub(allocation5);
+                winners5.allocated = allocation5;
+            }
+            if(winners6.numberOfWinners > 0 && winners6.allocated == 0){
+                uint256 allocation6 = jackPot.mul(25).div(100);
+                jackPot = jackPot.sub(allocation6);
+                winners6.allocated = allocation6;
+            }
         }
     }
 }
