@@ -6,7 +6,26 @@ let accounts;
 let lottery;
 const lotteryValue = web3.utils.toWei('0.001', 'ether');
 
-let number6 = '';
+let winners = [];
+let winnersBC = [];
+let playerTickets = {};
+let ticketPlayers = {};
+let tickets = [];
+const winningNumber =  "0x03060d202c2d";
+const mockNumber =  "0x03060d212c2d";
+let jackPot;
+let index = 0;
+const numOfTickets = 10;
+for(let j = 0; j < 4; j++) {
+    let winner = {};
+    winner["numberOfWinners"] = 0;
+    winner["allocated"] = 0;
+    winner["payed"] = 0;
+    winner["winners"] = [];
+    winner["tickets"] = [];
+    winners.push(winner);
+}
+
 
 beforeEach(async () =>{
     accounts = await web3.eth.getAccounts();
@@ -116,84 +135,236 @@ contract('Lottery', () =>{
     })
     */
     
-    it('checks the winning number', async() => {
+   
+
+    it('checks the lottery playing with random numbers', async() => {
         lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
             .deploy({
                 data: LotteryMock.bytecode,
-                arguments: [600, lotteryValue, 0x0]
+                arguments: [60000, lotteryValue, 0x0]
             })
             .send({
                 from: accounts[0], 
                 gas: '5000000'
         });
-        let accs = [];
-        let numbers = [];
-        let finalNumbers = [3,6,13,32,44,45];
-        const number6Winner = convertToBytes(finalNumbers);
 
-        try{
-            const enter = await lottery.methods.enter(number6Winner).send({
-                from: accounts[1],
-                value: lotteryValue,
-                gas: '300000'
-            })
-            console.log("Good  "+finalNumbers + " "+number6Winner + " "+enter.gasUsed);
-            accs.push(accounts[1]);
-            numbers.push(number6Winner);
-        
-        } catch(e) {
-            console.log("bad  "+finalNumbers + " "+number6Winner);
-        }
-       
-        for(let i = 0; i<100; i++){
+        for(let i = 0; i<numOfTickets; i++){
             const nums = createRandomEntry(6, 45);
             finalNumbers = nums.sort(function (a, b) {  return a - b;  });
             let number6 = convertToBytes(finalNumbers);
+            if(i == 0) number6 = mockNumber;
+            const acc = Math.floor((Math.random() * 9) + 1);
+            saveLocalTickets(number6, acc);
             try{
                 const enter = await lottery.methods.enter(number6).send({
-                    from: accounts[1],
+                    from: accounts[acc],
                     value: lotteryValue,
                     gas: '300000'
                 })
                 console.log("Good "+i+" "+finalNumbers + " "+number6 + " "+enter.gasUsed); 
-                accs.push(accounts[1]);
-                numbers.push(number6);         
             } catch(e) {
                 console.log("bad "+i+" "+nums + " "+number6);
             }
         }
+        jackPot = await lottery.methods.jackPot().call();
+        assert.equal(lotteryValue*numOfTickets, jackPot);
 
         const play = await lottery.methods.playTheLottery().send({
             from: accounts[0],
             gas: '4000000'
         });
-        const winnerNumber = await lottery.methods.winningNumber().call();
-        assert.equal(number6Winner, winnerNumber);
-        let index = 0;
-        while(index < 101){
+        const winningNumberBC = await lottery.methods.winningNumber().call();
+        assert.equal(winningNumberBC, winningNumber);
+
+        const ticketsLength = await lottery.methods.getTicketsLength().call();
+        console.log("length "+ticketsLength);
+
+        
+        let indexBC = 0;
+        getLocalWinners();
+        while(parseInt(indexBC) < parseInt(ticketsLength)){            
             try {
                 const setWinners = await lottery.methods.setWinners().send({
                     from: accounts[1],
-                    gas: '500000'
+                    gas: '6000000'
                 });
+                indexBC = await lottery.methods.index().call();
+                console.log(indexBC + " "+setWinners.gasUsed);
+
             } catch (e) {
                 console.log(e);
-            
             }
-            index = await lottery.methods.index().call();
-            console.log(index);
         }
         
         
+        for(let j = 3; j <= 6; j++) {
+            const winnerBC = await lottery.methods.getWinners(j).call();
+            winnersBC.push(winnerBC);            
+        }     
+        await checkValidity(lottery);
     })
-    
 })
 
-async function setWinners(lottery, acc) {
-    
+function getLocalWinners() {
+    while(index < numOfTickets) {
+        const winningNumberArr = convertToArray(winningNumber);
+        let savedTicket = tickets[index];
+        let ticket = savedTicket["ticket"];
+        let found = 0;
+        let offset = 0;
+        for(let j = 0; j < winningNumberArr.length; j++) {
+            let chunk = winningNumberArr[j];
+            let ticketArr = convertToArray(ticket);
+            for(let k = offset; k < ticketArr.length; k++){
+                if((found == 0 && k >= 3) || (found == 1 && k >=4)) break;
+                if(chunk == ticketArr[k]) {
+                    offset = k + 1;
+                    found++;
+                    break;
+                }
+            }
+        }
+        if(found >= 3 && !savedTicket["number3"]){
+            savedTicket["number3"] = true;
+            saveValues(0, ticket);
+        }
+        if(found >= 4 && !savedTicket["number4"]){
+            savedTicket["number4"] = true;
+            saveValues(1, ticket);
+        }
+        if(found >= 5 && !savedTicket["number5"]){
+            savedTicket["number5"] = true;
+            saveValues(2, ticket);
+        }
+        if(found == 6 && !savedTicket["number6"]){
+            savedTicket["number6"] = true;
+            saveValues(3, ticket);
+        }
+        index++;
+        const allocation = jackPot/4;
+        
+        
+        if(index == numOfTickets) {
+            if(winners[0]["numberOfWinners"] > 0 && winners[0]["allocated"] == 0) {
+                jackPot = jackPot - allocation;
+                winners[0]["allocated"] = allocation;
+            }
+            if(winners[1]["numberOfWinners"] > 0 && winners[1]["allocated"] == 0) {
+                jackPot = jackPot - allocation;
+                winners[1]["allocated"] = allocation;
+            }
+            if(winners[2]["numberOfWinners"] > 0 && winners[2]["allocated"] == 0) {
+                jackPot = jackPot - allocation;
+                winners[2]["allocated"] = allocation;
+            }
+            if(winners[3]["numberOfWinners"] > 0 && winners[3]["allocated"] == 0) {
+                jackPot = jackPot - allocation;
+                winners[3]["allocated"] = allocation;
+            }
+        }
+    }
 }
 
+function saveValues(pos, ticket) {
+    winners[pos]["numberOfWinners"]++;
+    winners[pos]["tickets"].push(ticket);
+    const players = ticketPlayers[ticket];
+    for(let l = 0; l < players.length; l++) {
+        winners[pos]["winners"].push(players[l]);
+    }   
+}
 
+function saveLocalTickets(number6, acc) {
+    let ticket = {};
+    ticket["ticket"] = number6;
+    ticket["user"] = accounts[acc];
+    ticket["number3"] = false;
+    ticket["number4"] = false;
+    ticket["number5"] = false;
+    ticket["number6"] = false;
+    ticket["processed"] = false;
+    if(playerTickets[accounts[acc]] == null){
+        playerTickets[accounts[acc]] = [];
+    }
+    playerTickets[accounts[acc]].push(ticket);
+    if(ticketPlayers[number6] == null) {
+        ticketPlayers[number6] = [];
+    }
+    ticketPlayers[number6].push(accounts[acc]);
+    tickets.push(ticket);
+}
+
+async function checkValidity(lottery) {
+    for(let j = 0; j < winnersBC.length; j++) {
+        const winnerBC = winnersBC[j];
+        const winner = winners[j];
+        assert.equal(winnerBC["0"], winner["numberOfWinners"]);
+        assert.equal(winnerBC["1"], winner["allocated"]);
+        assert.equal(winnerBC["2"], winner["payed"]);
+        assert.equal(winnerBC["3"].length, winner["winners"].length);
+        assert.equal(winnerBC["4"].length, winner["tickets"].length);
+        for(let i = 0; i < winnerBC["3"].length; i++){
+            const playerBC = winnerBC["3"][i];
+            const player = winner["winners"][i];
+            assert.equal(playerBC, player);
+        }
+        for(let k = 0; k < winnerBC["4"].length; k++){
+            const ticketBC = winnerBC["4"][k];
+            const ticket = winner["tickets"][k];
+            assert.equal(ticketBC, ticket);
+        }
+        //assert.equal(winnerBC["3"], winner["winners"]);
+        //assert.equal(winnerBC["4"], winner["tickets"]);
+        //console.log(winnerBC["0"]);
+        //console.log("BC "+winnerBC["0"]);
+        //console.log("LO "+winner["numberOfWinners"]);
+    }
+    console.log(winners);
+    console.log(winnersBC);
+   
+}
+
+/*
+const nOfWinners = winners[0];
+    const amountAllocated = winners[1];
+    const payed = winners[2];
+    const winnersAddress = winners[3];
+    const winnersTickets = winners[4];
+    assert.equal(nOfWinners, winnersAddress.length);
+    assert.equal(nOfWinners, winnersTickets.length);
+    for(let j = 0; j < nOfWinners; j++){
+        const address = winnersAddress[j];
+        const ticket = winnersTickets[j];
+        const playerTicketsSize = await lottery.methods.getNumberOfTickets(address).call();
+        for(let i = 0; i < playerTicketsSize; i++){
+            const playerTicket = await lottery.methods.getPlayerTicket(address, i).call();
+            if(playerTicket == ticket){
+                console.log("t found "+j + " "+playerTicket + " "+address);
+            }
+        }
+        
+        const ticketAddresses = await lottery.methods.getPlayers(ticket).call();
+        for(let k = 0; k < ticketAddresses.length; k++){
+            const player = await lottery.methods.ticketPlayers(ticket, k).call();
+            if(player == address){
+                console.log("a found "+k +" " +ticket + " "+player);
+            }
+        }
+        
+    }
+*/
+function convertToArray(data) {
+    arr = [];
+    data = data.split("0x")[1];
+    let j = 0;
+    let pos = 0;
+    while(j < 12) {
+        arr[pos] = data.slice(j, j+2);
+        j = j +2;
+        pos++;
+    }
+    return arr;
+}
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));

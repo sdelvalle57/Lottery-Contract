@@ -28,17 +28,17 @@ contract LotteryMock is Lottery {
     }
 
     function setWinners() external {
-        for(; index < tickets.length; index++) {
+        while(index < tickets.length) {
             Ticket storage savedTicket = tickets[index];
             bytes6 ticket = savedTicket.ticket;
             uint256 found = 0;
-            uint256 lastFound = 0;
+            uint256 offset = 0;
             for(uint256 j = 0; j < winningNumber.length; j++) {
                 bytes1 chunk = winningNumber[j];
-                for(uint256 k = lastFound; k < ticket.length; k++){
-                    if((found==0 && k >= 3) || (found==1 && k >= 4)) break;
-                    if(chunk == ticket[k]){
-                        lastFound = k+1;
+                for(uint256 k = offset; k < ticket.length; k++){
+                    if((found == 0 && k >= 3) || (found == 1 && k >= 4)) break;
+                    if(chunk == ticket[k]) {
+                        offset = k + 1;
                         found++;
                         break;
                     } 
@@ -46,43 +46,55 @@ contract LotteryMock is Lottery {
             }
             if(found >= 3 && !savedTicket.number3) {
                 savedTicket.number3 = true;
-                winners3.numberOfWinners ++;
+                _saveValues(0, ticket);
             } 
             if(found >= 4 && !savedTicket.number4) {
                 savedTicket.number4 = true;
-                winners4.numberOfWinners ++;
+                _saveValues(1, ticket);
             } 
             if(found >= 5 && !savedTicket.number5) {
                 savedTicket.number5 = true;
-                winners5.numberOfWinners ++;              
+                _saveValues(2, ticket);        
             } 
             if(found == 6 && !savedTicket.number6) {
                 savedTicket.number6 = true;
-                winners6.numberOfWinners ++;                
+                _saveValues(3, ticket);              
             }
-            if(gasleft() <= 200000 && index < tickets.length - 1) break;
+            index ++;
+            if(gasleft() <= 300000 && index < tickets.length) break;
         }
-        if(index == tickets.length - 1) {
-            if(winners3.numberOfWinners > 0 && winners3.allocated == 0){
-                uint256 allocation3 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation3);
-                winners3.allocated = allocation3;
+        uint256 allocation = jackPot.div(4);
+        if(index == tickets.length) {
+            if(winners[0].numberOfWinners > 0 && winners[0].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[0].allocated = allocation;
             }
-            if(winners4.numberOfWinners > 0 && winners4.allocated == 0){
-                uint256 allocation4 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation4);
-                winners4.allocated = allocation4;
+            if(winners[1].numberOfWinners > 0 && winners[1].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[1].allocated = allocation;
             }
-            if(winners5.numberOfWinners > 0 && winners5.allocated == 0){
-                uint256 allocation5 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation5);
-                winners5.allocated = allocation5;
+            if(winners[2].numberOfWinners > 0 && winners[2].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[2].allocated = allocation;
             }
-            if(winners6.numberOfWinners > 0 && winners6.allocated == 0){
-                uint256 allocation6 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation6);
-                winners6.allocated = allocation6;
+            if(winners[3].numberOfWinners > 0 && winners[3].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[3].allocated = allocation;
             }
         }
+    }
+
+    function _saveValues(uint256 _pos, bytes6 _ticket) private {
+        Winners storage _winners = winners[_pos];
+        _winners.numberOfWinners ++;
+        _winners.tickets.push(_ticket);
+        address[] memory players = ticketPlayers[_ticket];
+        for(uint256 l = 0; l < players.length; l++){
+            _winners.winners.push(players[l]);
+        }
+    }
+
+    function getTicketsLength() external view returns (uint256) {
+        return tickets.length;
     }
 }

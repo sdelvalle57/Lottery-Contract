@@ -50,17 +50,12 @@ class NumberPicker extends Component {
         const finalNumbers = this.state.numbers.sort(function (a, b) {  return a - b;  });
         this.setState({finalNumbers});
         if(finalNumbers.length<6){
-            this.props.callback({numbers6: '', numbers5: [], numbers4: []});
+            this.props.callback({number6: ''});
             return;
         }
-        const numbers6 = this.convertToBytes(finalNumbers);
-        const numbers5 = this.convertEachToBytes(this.k_combinations(finalNumbers, 5));
-        const numbers4 = this.convertEachToBytes(this.k_combinations(finalNumbers, 4));
+        const number6 = this.convertToBytes(finalNumbers);
         console.log(finalNumbers);
-        console.log(numbers6);
-        console.log(numbers5);
-        console.log(numbers4);
-        this.props.callback(numbers6, numbers5, numbers4);
+        this.props.callback(number6);
     }
 
     convertToBytes(numbers) {
@@ -72,48 +67,7 @@ class NumberPicker extends Component {
         }
         return '0x'+final;
     }
-
-    convertEachToBytes(combs) {
-        const combsBytes = [];
-        for(let i= 0; i < combs.length; i++){
-            combsBytes[i] = this.convertToBytes(combs[i]);
-        }
-        return combsBytes;
-    }
-
-    k_combinations(set, k) {
-        let i, j, combs, head, tailcombs;
-        if (k > set.length || k <= 0) {
-            return [];
-        }
-        if (k == set.length) {
-            return [set];
-        }
-        if (k == 1) {
-            combs = [];
-            for (i = 0; i < set.length; i++) {
-                combs.push([set[i]]);
-            }
-            return combs;
-        }
-        combs = [];
-        for (i = 0; i < set.length - k + 1; i++) {
-            head = set.slice(i, i + 1);
-            tailcombs = this.k_combinations(set.slice(i + 1), k - 1);
-            for (j = 0; j < tailcombs.length; j++) {
-                let comb = head.concat(tailcombs[j]);
-                comb = comb.sort(function (a, b) {  return a - b;  });
-                combs.push(comb);
-            }
-
-        }
-        return combs;
-    }
-
     
-
-    
-
     render() {
         return (
             <Table celled textAlign='center'>

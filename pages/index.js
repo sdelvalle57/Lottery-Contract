@@ -8,7 +8,7 @@ import web3 from '../ethereum/web3'
 class LotteryIndex extends Component {
     static async getInitialProps() {
         
-        const factoryAddress = "0x93206b9548772d918249b8aeaf9ebe1f5914598a";
+        const factoryAddress = "0x72a39fd98dcd72a557083251000c270dfde17d42";
         let lotteryFactory = lotteryFactoryAt(factoryAddress);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         return { lotteries, factoryAddress };

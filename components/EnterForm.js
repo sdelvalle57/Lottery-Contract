@@ -16,13 +16,13 @@ class EnterForm extends Component {
 
     onSubmit = async event =>{  
         event.preventDefault();
-        const {numbers6, numbers5, numbers4} = this.props;
+        const {number6} = this.props;
         const lottery = lotteryAt(this.props.address);
         if(this.props.canBuyLottery){
             this.setState({ loading: true, errroMessage: '' });
             try {
                 const accounts = await web3.eth.getAccounts();
-                await lottery.methods.enter(numbers6, numbers5, numbers4).send({
+                await lottery.methods.enter(number6).send({
                     from: accounts[0],
                     value: this.props.lotteryValue
                 });

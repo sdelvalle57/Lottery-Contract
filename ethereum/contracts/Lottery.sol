@@ -17,7 +17,6 @@ contract Lottery is Ownable {
     using BytesConvertLib for bytes6;
 
     event TransferJackPot(uint256 value);
-    event Debug(uint val);
 
     struct Ticket {
         bytes6 ticket;
@@ -33,16 +32,14 @@ contract Lottery is Ownable {
         uint256 numberOfWinners;
         uint256 allocated;
         uint256 payed;
+        address[] winners;
+        bytes6[] tickets;
     }
 
     uint256 public deadline;
     uint256 public lotteryValue;
     uint256 public jackPot;
     uint256 public index = 0;
-    Winners public winners3;
-    Winners public winners4;
-    Winners public winners5;
-    Winners public winners6;
 
     bytes6 public winningNumber;
 
@@ -51,6 +48,7 @@ contract Lottery is Ownable {
     mapping(bytes6 => address[]) public ticketPlayers;
 
     Ticket[] public tickets;
+    Winners[4] public winners;
 
     bool public lotteryHasPlayed = false;
 
@@ -132,20 +130,33 @@ contract Lottery is Ownable {
         winningNumber = winner.convertBytesToBytes6();
     }
 
+    /**
+    * @dev this function can consume a lot of gas, this is why we set an
+    * index as global if we run out of gas during this call
+    * We go through each ticket that was bought and we check if
+    * each byte of each ticket is equal to each bytes of the winning 
+    * number, if we get more than 3 results we have a winner, then we
+    * call the _saveValues method for each winner found
+    * After this, we check if all of the tickets have been checked
+    * if so, we allocated the corresponding to each winner struct, 
+    * the first position of winners is a struct defining the number
+    * of winners who scored 3 numbers, the second is for 4 numbers
+    * and so on.
+    */
     function setWinners() external onlyOwner {
         require(deadline > now, "deadline has to be over");
         require(lotteryHasPlayed, "lottery has played");
-        for(; index < tickets.length; index++) {
+        while(index < tickets.length) {
             Ticket storage savedTicket = tickets[index];
             bytes6 ticket = savedTicket.ticket;
             uint256 found = 0;
-            uint256 lastFound = 0;
+            uint256 offset = 0;
             for(uint256 j = 0; j < winningNumber.length; j++) {
                 bytes1 chunk = winningNumber[j];
-                for(uint256 k = lastFound; k < ticket.length; k++){
-                    if((found==0 && k >= 3) || (found==1 && k >= 4)) break;
-                    if(chunk == ticket[k]){
-                        lastFound = k+1;
+                for(uint256 k = offset; k < ticket.length; k++){
+                    if((found == 0 && k >= 3) || (found == 1 && k >= 4)) break;
+                    if(chunk == ticket[k]) {
+                        offset = k + 1;
                         found++;
                         break;
                     } 
@@ -153,43 +164,57 @@ contract Lottery is Ownable {
             }
             if(found >= 3 && !savedTicket.number3) {
                 savedTicket.number3 = true;
-                winners3.numberOfWinners ++;
+                _saveValues(0, ticket);
             } 
             if(found >= 4 && !savedTicket.number4) {
                 savedTicket.number4 = true;
-                winners4.numberOfWinners ++;
+                _saveValues(1, ticket);
             } 
             if(found >= 5 && !savedTicket.number5) {
                 savedTicket.number5 = true;
-                winners5.numberOfWinners ++;              
+                _saveValues(2, ticket);        
             } 
             if(found == 6 && !savedTicket.number6) {
                 savedTicket.number6 = true;
-                winners6.numberOfWinners ++;                
+                _saveValues(3, ticket);              
             }
-            if(gasleft() <= 200000 && index < tickets.length - 1) break;
+            index ++;
+            if(gasleft() <= 300000 && index < tickets.length) break;
         }
-        if(index == tickets.length - 1) {
-            if(winners3.numberOfWinners > 0 && winners3.allocated == 0){
-                uint256 allocation3 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation3);
-                winners3.allocated = allocation3;
+        uint256 allocation = jackPot.div(4);
+        if(index == tickets.length) {
+            if(winners[0].numberOfWinners > 0 && winners[0].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[0].allocated = allocation;
             }
-            if(winners4.numberOfWinners > 0 && winners4.allocated == 0){
-                uint256 allocation4 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation4);
-                winners4.allocated = allocation4;
+            if(winners[1].numberOfWinners > 0 && winners[1].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[1].allocated = allocation;
             }
-            if(winners5.numberOfWinners > 0 && winners5.allocated == 0){
-                uint256 allocation5 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation5);
-                winners5.allocated = allocation5;
+            if(winners[2].numberOfWinners > 0 && winners[2].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[2].allocated = allocation;
             }
-            if(winners6.numberOfWinners > 0 && winners6.allocated == 0){
-                uint256 allocation6 = jackPot.mul(25).div(100);
-                jackPot = jackPot.sub(allocation6);
-                winners6.allocated = allocation6;
+            if(winners[3].numberOfWinners > 0 && winners[3].allocated == 0){
+                jackPot = jackPot.sub(allocation);
+                winners[3].allocated = allocation;
             }
+        }
+    }
+
+    /**
+    * @dev we save the ticket if scored more than 3 numbers
+    * @param _pos the position of the winner struct, 0 for 3 numbers,
+    * 1 for 4 numbers, and so on
+    * @param _ticket the winner ticket
+    */
+    function _saveValues(uint256 _pos, bytes6 _ticket) private {
+        Winners storage _winners = winners[_pos];
+        _winners.numberOfWinners ++;
+        _winners.tickets.push(_ticket);
+        address[] memory players = ticketPlayers[_ticket];
+        for(uint256 l = 0; l < players.length; l++){
+            _winners.winners.push(players[l]);
         }
     }
 
@@ -233,7 +258,42 @@ contract Lottery is Ownable {
         );
     }
 
+    function getWinners(uint256 _n) external view returns (
+        uint256, uint256, uint256, address[],bytes6[]) {
+        uint256 _numberOfWinners = winners[_n - 3].numberOfWinners;
+        uint256 _allocated = winners[_n - 3].allocated;
+        uint256 _payed = winners[_n - 3].payed;
+        address[] memory _winners = winners[_n - 3].winners;
+        bytes6[] memory _tickets = winners[_n - 3].tickets;
+        return(
+            _numberOfWinners, 
+            _allocated, 
+            _payed,
+            _winners,
+            _tickets
+            );
+    }
+
+    function getPlayerTicket(address _address, uint256 _index) external view returns (bytes6 outTicket){
+        outTicket = playerTickets[_address][_index].ticket;
+    }
+
+    function getNumberOfTickets(address _address) external view returns (uint256 size) {
+        size = playerTickets[_address].length;
+    }
+
+    function getPlayers(bytes6 _ticket) external view returns (address[]) {
+        return ticketPlayers[_ticket];
+    }
+
 /*
+bytes6 ticket;
+        address user;
+        bool number3;
+        bool number4;
+        bool number5;
+        bool number6;
+        bool processed;
     function getWinner() external view returns(bytes6 winningNumber6) {
         winningNumber6 = winningNumbers.winningNumber;
     }
