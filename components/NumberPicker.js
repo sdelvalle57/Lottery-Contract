@@ -50,12 +50,11 @@ class NumberPicker extends Component {
         const finalNumbers = this.state.numbers.sort(function (a, b) {  return a - b;  });
         this.setState({finalNumbers});
         if(finalNumbers.length<6){
-            this.props.callback({number6: ''});
+            this.props.callback({numbers6: ''});
             return;
         }
-        const number6 = this.convertToBytes(finalNumbers);
-        console.log(finalNumbers);
-        this.props.callback(number6);
+        const numbers6 = this.convertToBytes(finalNumbers);
+        this.props.callback(numbers6);
     }
 
     convertToBytes(numbers) {

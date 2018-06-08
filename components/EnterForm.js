@@ -9,20 +9,21 @@ class EnterForm extends Component {
         value: '',
         errroMessage:'',
         loading: false,
-        numbers: ''
+        numbers6: ''
     }
 
     
 
     onSubmit = async event =>{  
         event.preventDefault();
-        const {number6} = this.props;
+        const numbers6 = this.props.numbers6;
+        
         const lottery = lotteryAt(this.props.address);
         if(this.props.canBuyLottery){
             this.setState({ loading: true, errroMessage: '' });
             try {
                 const accounts = await web3.eth.getAccounts();
-                await lottery.methods.enter(number6).send({
+                await lottery.methods.enter(numbers6).send({
                     from: accounts[0],
                     value: this.props.lotteryValue
                 });
@@ -37,7 +38,7 @@ class EnterForm extends Component {
     renderButton() {
         if(this.props.canBuyLottery){
             return <Button 
-                positive = {this.props.numbers.length==14} 
+                positive = {this.props.numbers6.length==14} 
                 loading={this.state.loading}>Buy</Button>
         }else{
             return <Button negative>Ended</Button>

@@ -17,6 +17,7 @@ contract Lottery is Ownable {
     using BytesConvertLib for bytes6;
 
     event TransferJackPot(uint256 value);
+    event TicketBuy(address indexed buyer);
 
     struct Ticket {
         bytes6 ticket;
@@ -100,6 +101,7 @@ contract Lottery is Ownable {
         playerTickets[msg.sender].push(newTicket);
         ticketPlayers[_ticket].push(msg.sender);
         tickets.push(newTicket);
+        emit TicketBuy(msg.sender);
     }
 
     /** 
@@ -245,7 +247,8 @@ contract Lottery is Ownable {
 
     //@dev Getters
     function getSummary() external view returns (
-        uint256, uint256, uint256, uint256, bool, address, address, address) {
+        uint256, uint256, uint256, uint256, bool, 
+        address, address, address, bytes6) {
         return (
             lotteryValue,
             deadline,
@@ -254,7 +257,8 @@ contract Lottery is Ownable {
             lotteryHasPlayed,
             lastLottery,
             factoryAddress, 
-            owner
+            owner,
+            winningNumber
         );
     }
 

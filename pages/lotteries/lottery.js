@@ -24,7 +24,6 @@ class Lottery extends Component {
             jackPot: '',
             winningNumber: '',
             playersLenght: '',
-            winnersLenght: '',
             lotteryHasPlayed: '',
             lastLotery: '',
             factoryAddress: '',
@@ -33,42 +32,64 @@ class Lottery extends Component {
             canBuyLottery: '',
             canPickWinner: '',
             loading: true,
-            number6: '',
+            numbers6: ''
+
         }
     }
 
-    numberPickerCallback = (number6) => {
-        this.setState({number6});
+    numberPickerCallback = (numbers6) => {
+        this.setState({numbers6});
     }
 
     async componentDidMount() {
-        this.setLotteryValues();
+        const lottery = lotteryAt(this.props.url.query.address);
+        this.setLotteryValues(lottery);
         this.intervalId = setInterval(this.timer.bind(this), 30000);
+        
+        /*
+        let event = lottery.events.TicketBuy({}, (error, data) => {
+            if (error)
+              console.log("Error: " + error);
+            else 
+              console.log("Log data: " + data);
+        });
+        
+       /*
+       web3.eth.subscribe('logs', {
+            address: '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0',  // EOS token is popular atm.
+            topics: [], // A token transfer log would be good for now.
+          }, function (err, result) {
+            if (err) throw err
+            console.log('Success!', result)
+          })
+          */
     }
 
+    
 
-    setLotteryValues = async () => {
+    setLotteryValues = async (lottery) => {
         const lotteryAddress = this.state.lotteryAddress;
-        const lottery = lotteryAt(lotteryAddress);
         const summary = await lottery.methods.getSummary().call();
         const accounts = await web3.eth.getAccounts(); 
         const lotteryValue = summary[0];
         const deadline = summary[1];
         const jackPot = summary[2];
-        const winningNumber = summary[3];
-        const playersLenght = summary[4];
-        const winnersLenght = summary[5];
-        const lotteryHasPlayed = summary[6];
-        const lastLotery = summary[7];
-        const factoryAddress = summary[8];
-        const owner = summary[9];
+        const playersLenght = summary[3];
+        const lotteryHasPlayed = summary[4];
+        const lastLotery = summary[5];
+        const factoryAddress = summary[6];
+        const owner = summary[7];
+        const winningNumber = summary[8];
         const userAccount = accounts[0];
         const canBuyLottery = !lotteryHasPlayed && deadline - Date.now()/1000 > 0;
         const canPickWinner = !lotteryHasPlayed && deadline - Date.now()/1000 < 0;
+        //const ticketBuyEvent = this.setTicketBuyEvent(lottery);
         this.setState({lotteryValue, deadline, jackPot, winningNumber,
-            playersLenght, winnersLenght, lotteryHasPlayed, lastLotery, factoryAddress,
+            playersLenght, lotteryHasPlayed, lastLotery, factoryAddress,
             owner, userAccount, canBuyLottery, canPickWinner, loading:false})
     }
+
+   
 
     renderCards() {
         const items = [
@@ -100,12 +121,6 @@ class Lottery extends Component {
                 header: this.state.winningNumber,
                 meta: 'And the winner is...',
                 description: 'This is the lottery winner number',
-                style: { overflowWrap: 'break-word' }
-            },
-            {
-                header: this.state.winnersLenght,
-                meta: 'Winners',
-                description: 'Number of winners',
                 style: { overflowWrap: 'break-word' }
             },
             {
@@ -146,7 +161,7 @@ class Lottery extends Component {
                                 address={this.state.lotteryAddress} 
                                 canBuyLottery = {this.state.canBuyLottery}
                                 lotteryValue = {this.state.lotteryValue}
-                                number6/>
+                                numbers6 = {this.state.numbers6} />
                             <NumberPicker callback={this.numberPickerCallback} />
                         </Segment>
                         <PickWinnerForm
