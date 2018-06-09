@@ -10,6 +10,8 @@ contract LotteryMock is Lottery {
     }
 
     function playTheLottery() external onlyOwner {
+        //require(deadline > now, "deadline has to be over");
+        //require(!lotteryHasPlayed, "lottery has played");
         bytes32 random = keccak256("1");
         bytes memory winner = new bytes(6);
         uint256 size = 0;
@@ -25,9 +27,13 @@ contract LotteryMock is Lottery {
         }
         winner = winner.sortArray();
         winningNumber = winner.convertBytesToBytes6();
+        emit WinningNumber(winningNumber);
     }
 
     function setWinners() external {
+        lotteryHasPlayed = true;
+        //require(deadline > now, "deadline has to be over");
+        //require(lotteryHasPlayed, "lottery has played");
         while(index < tickets.length) {
             Ticket storage savedTicket = tickets[index];
             bytes6 ticket = savedTicket.ticket;

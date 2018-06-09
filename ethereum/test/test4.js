@@ -1,11 +1,13 @@
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 const LotteryMock = artifacts.require('./LotteryMock.sol');
+const LotteryFactoryMock = artifacts.require('./LotteryFactoryMock.sol');
 
 let accounts;
-let lottery;
 const lotteryValue = web3.utils.toWei('0.001', 'ether');
 
+let lotteryFactory;
+let lotteryAddress;
 let winners = [];
 let winnersBC = [];
 let playerTickets = {};
@@ -15,7 +17,8 @@ const winningNumber =  "0x03060d202c2d";
 const mockNumber =  "0x03060d212c2d";
 let jackPot;
 let index = 0;
-const numOfTickets = 10;
+const numOfTickets = 200;
+const numOfLotteries = 100;
 for(let j = 0; j < 4; j++) {
     let winner = {};
     winner["numberOfWinners"] = 0;
@@ -29,181 +32,91 @@ for(let j = 0; j < 4; j++) {
 
 beforeEach(async () =>{
     accounts = await web3.eth.getAccounts();
-    lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
+    lotteryFactory = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryFactoryMock.abi)))
         .deploy({
-            data: LotteryMock.bytecode,
-            arguments: [5, lotteryValue, 0x0]
+            data: LotteryFactoryMock.bytecode
         })
         .send({
             from: accounts[0], 
-            gas: '5000000'
-        });  
-    const nums = createRandomEntry(6, 45);
-    const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
-    number6 = convertToBytes(finalNumbers);
+            gas: '6500000'
+    });
+    console.log(lotteryFactory.options.address);
+    
+    console.log(lotteryAddress);
+    
 });
 
 contract('Lottery', () =>{  
-        
-    /*
-    it('deploys a Lottery', ()=>{
-        assert.ok(lottery.options.address);
-    });
-
-    it('checks arguments', async () => {
-        const thisLotteryValue = await lottery.methods.lotteryValue().call();
-        assert.equal(lotteryValue, thisLotteryValue);
-        const factoryAddress = await lottery.methods.factoryAddress().call();
-        assert.equal(accounts[0], factoryAddress);
-        const lastLotteryAddress = await lottery.methods.lastLottery().call();
-        assert.equal(0x0, lastLotteryAddress);
-        const jackPot = await lottery.methods.jackPot().call();
-        assert.equal(0, jackPot);
-    });
-    
-    it('checks enter function requirements with bad numbers', async () => {
-        lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
-            .deploy({
-                data: LotteryMock.bytecode,
-                arguments: [600, lotteryValue, 0x0]
-            })
-            .send({
-                from: accounts[0], 
-                gas: '4000000'
-        });
-        for(let i = 0; i<50; i++){
-            const finalNumbers = createRandomEntry(6, 45);
-            number6 = convertToBytes(finalNumbers);
-            const acc = Math.floor((Math.random() * 9) + 1);
-            
-            try{
-                await lottery.methods.enter(number6).send({
-                    from: accounts[acc],
-                    value: lotteryValue,
-                    gas: '300000'
-                })
-                const jackPot = await lottery.methods.jackPot().call();
-                assert.equal(lotteryValue*(i+1), jackPot);
-                console.log("Good "+i+" "+finalNumbers + " "+number6);
-            
-            } catch(e) {
-                console.log("bad "+i+" "+finalNumbers + " "+number6);
-            }
-        }
-    })
-    
-    it('checks enter function requirements', async () => {
-        lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
-            .deploy({
-                data: LotteryMock.bytecode,
-                arguments: [600, lotteryValue, 0x0]
-            })
-            .send({
-                from: accounts[0], 
-                gas: '4000000'
-        });
-        let accs = [];
-        let numbers = [];
-        for(let i = 0; i<50; i++){
-            const nums = createRandomEntry(6, 45);
-            const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
-            number6 = convertToBytes(finalNumbers);
-            const acc = Math.floor((Math.random() * 9) + 1);
-            
-            try{
-                const enter = await lottery.methods.enter(number6).send({
-                    from: accounts[acc],
-                    value: lotteryValue,
-                    gas: '600000'
-                })
-                numbers.push(number6);
-                accs.push(accounts[acc]);
-                const jackPot = await lottery.methods.jackPot().call();
-                assert.equal(lotteryValue*(i+1), jackPot);
-                console.log("Good "+i+" "+nums + " "+number6 + " "+enter.gasUsed);
-            } catch(e) {
-                console.log(e);
-                console.log("bad "+i+" "+finalNumbers + " "+number6);
-            }
-        }
-        for(let i = 0; i < accs.length; i++){
-            const ticket = await lottery.methods.tickets(i).call();
-            assert.equal(accs[i], ticket['user']);
-            assert.equal(numbers[i], ticket['ticket']);
-        }
-        
-    })
-    */
-    
-   
-
     it('checks the lottery playing with random numbers', async() => {
-        lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
-            .deploy({
-                data: LotteryMock.bytecode,
-                arguments: [60000, lotteryValue, 0x0]
-            })
-            .send({
-                from: accounts[0], 
-                gas: '5000000'
-        });
-
-        for(let i = 0; i<numOfTickets; i++){
-            const nums = createRandomEntry(6, 45);
-            finalNumbers = nums.sort(function (a, b) {  return a - b;  });
-            let number6 = convertToBytes(finalNumbers);
-            if(i == 0) number6 = mockNumber;
-            const acc = Math.floor((Math.random() * 9) + 1);
-            saveLocalTickets(number6, acc);
-            try{
-                const enter = await lottery.methods.enter(number6).send({
-                    from: accounts[acc],
-                    value: lotteryValue,
-                    gas: '300000'
-                })
-                console.log("Good "+i+" "+finalNumbers + " "+number6 + " "+enter.gasUsed); 
-            } catch(e) {
-                console.log("bad "+i+" "+nums + " "+number6);
+        for(let h = 0; h < numOfLotteries; h++) {
+            await createLottery();
+            let lottery = new web3.eth.Contract(LotteryMock.abi, lotteryAddress);
+            for(let i = 0; i<numOfTickets; i++){
+                const nums = createRandomEntry(6, 45);
+                finalNumbers = nums.sort(function (a, b) {  return a - b;  });
+                let number6 = convertToBytes(finalNumbers);
+                //if(i == 0) number6 = mockNumber;
+                const acc = Math.floor((Math.random() * 9) + 1);
+                //saveLocalTickets(number6, acc);
+                try{
+                    const enter = await lottery.methods.enter(number6).send({
+                        from: accounts[acc],
+                        value: lotteryValue,
+                        gas: '300000'
+                    })
+                    console.log("Good "+i+" "+finalNumbers + " "+number6 + " "+enter.gasUsed); 
+                } catch(e) {
+                    console.log("bad "+i+" "+nums + " "+number6);
+                }
             }
-        }
-        jackPot = await lottery.methods.jackPot().call();
-        assert.equal(lotteryValue*numOfTickets, jackPot);
+            //jackPot = await lottery.methods.jackPot().call();
+            //assert.equal(lotteryValue*numOfTickets, jackPot);
 
-        const play = await lottery.methods.playTheLottery().send({
-            from: accounts[0],
-            gas: '4000000'
-        });
-        const winningNumberBC = await lottery.methods.winningNumber().call();
-        assert.equal(winningNumberBC, winningNumber);
+            const play = await lottery.methods.playTheLottery().send({
+                from: accounts[0],
+                gas: '4000000'
+            });
+            const winningNumberBC = await lottery.methods.winningNumber().call();
+            assert.equal(winningNumberBC, winningNumber);
 
-        const ticketsLength = await lottery.methods.getTicketsLength().call();
-        console.log("length "+ticketsLength);
+            const ticketsLength = await lottery.methods.getTicketsLength().call();
+            console.log("length "+ticketsLength);
 
-        
-        let indexBC = 0;
-        getLocalWinners();
-        while(parseInt(indexBC) < parseInt(ticketsLength)){            
-            try {
-                const setWinners = await lottery.methods.setWinners().send({
-                    from: accounts[1],
-                    gas: '6000000'
-                });
-                indexBC = await lottery.methods.index().call();
-                console.log(indexBC + " "+setWinners.gasUsed);
+            let indexBC = 0;
+            //getLocalWinners();
+            while(parseInt(indexBC) < parseInt(ticketsLength)){            
+                try {
+                    const setWinners = await lottery.methods.setWinners().send({
+                        from: accounts[1],
+                        gas: '6000000'
+                    });
+                    indexBC = await lottery.methods.index().call();
+                    console.log(indexBC + " "+setWinners.gasUsed);
 
-            } catch (e) {
-                console.log(e);
+                } catch (e) {
+                    console.log(e);
+                }
             }
+            
+            for(let j = 3; j <= 6; j++) {
+                const winnerBC = await lottery.methods.getWinners(j).call();
+                winnersBC.push(winnerBC);            
+            }     
+            //await checkValidity();
         }
-        
-        
-        for(let j = 3; j <= 6; j++) {
-            const winnerBC = await lottery.methods.getWinners(j).call();
-            winnersBC.push(winnerBC);            
-        }     
-        await checkValidity(lottery);
     })
 })
+
+async function createLottery() {
+    const createLottery = await lotteryFactory.methods
+        .createNewLottery(6000, lotteryValue)
+        .send({
+            from: accounts[0],
+            gas: '6000000'
+        });
+    const lotteries = await lotteryFactory.methods.getLotteries().call();
+    lotteryAddress = lotteries[lotteries.length-1];
+}
 
 function getLocalWinners() {
     while(index < numOfTickets) {
@@ -294,7 +207,7 @@ function saveLocalTickets(number6, acc) {
     tickets.push(ticket);
 }
 
-async function checkValidity(lottery) {
+async function checkValidity() {
     for(let j = 0; j < winnersBC.length; j++) {
         const winnerBC = winnersBC[j];
         const winner = winners[j];
@@ -313,46 +226,12 @@ async function checkValidity(lottery) {
             const ticket = winner["tickets"][k];
             assert.equal(ticketBC, ticket);
         }
-        //assert.equal(winnerBC["3"], winner["winners"]);
-        //assert.equal(winnerBC["4"], winner["tickets"]);
-        //console.log(winnerBC["0"]);
-        //console.log("BC "+winnerBC["0"]);
-        //console.log("LO "+winner["numberOfWinners"]);
     }
     console.log(winners);
     console.log(winnersBC);
    
 }
 
-/*
-const nOfWinners = winners[0];
-    const amountAllocated = winners[1];
-    const payed = winners[2];
-    const winnersAddress = winners[3];
-    const winnersTickets = winners[4];
-    assert.equal(nOfWinners, winnersAddress.length);
-    assert.equal(nOfWinners, winnersTickets.length);
-    for(let j = 0; j < nOfWinners; j++){
-        const address = winnersAddress[j];
-        const ticket = winnersTickets[j];
-        const playerTicketsSize = await lottery.methods.getNumberOfTickets(address).call();
-        for(let i = 0; i < playerTicketsSize; i++){
-            const playerTicket = await lottery.methods.getPlayerTicket(address, i).call();
-            if(playerTicket == ticket){
-                console.log("t found "+j + " "+playerTicket + " "+address);
-            }
-        }
-        
-        const ticketAddresses = await lottery.methods.getPlayers(ticket).call();
-        for(let k = 0; k < ticketAddresses.length; k++){
-            const player = await lottery.methods.ticketPlayers(ticket, k).call();
-            if(player == address){
-                console.log("a found "+k +" " +ticket + " "+player);
-            }
-        }
-        
-    }
-*/
 function convertToArray(data) {
     arr = [];
     data = data.split("0x")[1];
@@ -364,10 +243,6 @@ function convertToArray(data) {
         pos++;
     }
     return arr;
-}
-
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 function createRandomEntry(size, max){
@@ -384,14 +259,6 @@ function createRandomEntry(size, max){
     return nums;
 }
 
-function convertEachToBytes(combs) {
-	const combsBytes = [];
-	for(let i= 0; i < combs.length; i++){
-		combsBytes[i] = convertToBytes(combs[i]);
-	}
-	return combsBytes;
-}
-
 function convertToBytes(numbers) {
 	let final='';
 	for(let i=0; i < numbers.length; i++){
@@ -400,67 +267,4 @@ function convertToBytes(numbers) {
 		final+=hexNumber;
 	}
 	return '0x'+final;
-}
-
-function k_combinations(set, k) {
-	let i, j, combs, head, tailcombs;
-	if (k > set.length || k <= 0) {
-		return [];
-	}
-	if (k == set.length) {
-        return [set];
-	}
-	if (k == 1) {
-		combs = [];
-		for (i = 0; i < set.length; i++) {
-			combs.push([set[i]]);
-        }
-		return combs;
-	}
-	combs = [];
-	for (i = 0; i < set.length - k + 1; i++) {
-        head = set.slice(i, i + 1);
-        tailcombs = k_combinations(set.slice(i + 1), k - 1);
-		for (j = 0; j < tailcombs.length; j++) {
-            let comb = head.concat(tailcombs[j]);
-            comb = comb.sort(function (a, b) {  return a - b;  });
-			combs.push(comb);
-		}
-    }
-    return combs;
-}
-
-function k_combinations2(elements, K){
-    let combs = [];
-    let N = elements.length;
-    let combination = [K];
-    let r = 0;      
-    let index = 0;
-    let nIndex = 0;
-    while(r >= 0){
-        if(index <= (N + (r - K))){
-            combination[r] = index;
-            if(r == K-1){
-                let comb = [];
-                for(let j = 0; j < combination.length; j++){
-                    comb.push(elements[combination[j]]);
-                }
-                combs.push(comb);
-                nIndex++;
-                index++;     
-            }
-            else{
-                index = combination[r]+1;
-                r++;                                        
-            }
-        }
-        else{
-            r--;
-            if(r > 0)
-                index = combination[r]+1;
-            else
-                index = combination[0]+1;   
-        }           
-    }
-    return combs;
 }

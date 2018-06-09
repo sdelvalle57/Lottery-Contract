@@ -12,12 +12,9 @@ class EnterForm extends Component {
         numbers6: ''
     }
 
-    
-
     onSubmit = async event =>{  
         event.preventDefault();
         const numbers6 = this.props.numbers6;
-        
         const lottery = lotteryAt(this.props.address);
         if(this.props.canBuyLottery){
             this.setState({ loading: true, errroMessage: '' });

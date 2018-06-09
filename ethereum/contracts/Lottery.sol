@@ -16,8 +16,9 @@ contract Lottery is Ownable {
     using BytesConvertLib for bytes;
     using BytesConvertLib for bytes6;
 
-    event TransferJackPot(uint256 value);
-    event TicketBuy(address indexed buyer);
+    event TicketBuy(address indexed buyer, uint256 jackPot, uint256 playersLength);
+    event WinningNumber(bytes6 winningNumber);
+    event WinnersResult();
 
     struct Ticket {
         bytes6 ticket;
@@ -40,8 +41,8 @@ contract Lottery is Ownable {
     uint256 public deadline;
     uint256 public lotteryValue;
     uint256 public jackPot;
+    uint256 public finalJackPot;
     uint256 public index = 0;
-
     bytes6 public winningNumber;
 
     // @dev mapping of the sender => tickets, when user enters the lottery we save his tickets
@@ -89,6 +90,7 @@ contract Lottery is Ownable {
         require(!lotteryHasPlayed, "Lottery has already played");
         require(_ticket.areValidNumbers(), "No repeated numbers inside the ticket");
         jackPot = jackPot.add(lotteryValue);
+        finalJackPot = jackPot;
         Ticket memory newTicket = Ticket({
             ticket: _ticket,
             user: msg.sender,
@@ -101,7 +103,7 @@ contract Lottery is Ownable {
         playerTickets[msg.sender].push(newTicket);
         ticketPlayers[_ticket].push(msg.sender);
         tickets.push(newTicket);
-        emit TicketBuy(msg.sender);
+        emit TicketBuy(msg.sender, jackPot, tickets.length);
     }
 
     /** 
@@ -130,6 +132,7 @@ contract Lottery is Ownable {
         }
         winner = winner.sortArray();
         winningNumber = winner.convertBytesToBytes6();
+        emit WinningNumber(winningNumber);
     }
 
     /**
@@ -202,6 +205,7 @@ contract Lottery is Ownable {
                 winners[3].allocated = allocation;
             }
         }
+        emit WinnersResult();
     }
 
     /**
@@ -228,7 +232,6 @@ contract Lottery is Ownable {
         require(deadline > now, "deadline is over");
         require(msg.value>0);
         jackPot = jackPot.add(msg.value);
-        emit TransferJackPot(jackPot);
     }
 
      /** 
@@ -239,10 +242,10 @@ contract Lottery is Ownable {
         require(jackPot > 0, "Jackpot sohuld be more than 0");
         require(lotteryHasPlayed, "lottery has played");
         require(_newLottery != address(0), "new lottery address should not be 0");
-        uint256 _jackPot = jackPot;
+        finalJackPot = jackPot;
         jackPot = 0;
         Lottery lottery = Lottery(_newLottery);
-        lottery.addJackPot.value(_jackPot)();  
+        lottery.addJackPot.value(finalJackPot)();  
     }
 
     //@dev Getters
@@ -252,7 +255,7 @@ contract Lottery is Ownable {
         return (
             lotteryValue,
             deadline,
-            jackPot,
+            finalJackPot,
             tickets.length,
             lotteryHasPlayed,
             lastLottery,
@@ -288,6 +291,10 @@ contract Lottery is Ownable {
 
     function getPlayers(bytes6 _ticket) external view returns (address[]) {
         return ticketPlayers[_ticket];
+    }
+
+    function getNumberOfPlayers() public view returns (uint256) {
+        return tickets.length;
     }
 
 /*

@@ -8,6 +8,7 @@ import { Link } from '../../routes';
 import Layout from '../../components/Layout';
 import lotteryAt from '../../ethereum/lottery';
 import web3 from '../../ethereum/web3';
+import web3At from '../../ethereum/web3At';
 import EnterForm from '../../components/EnterForm';
 import PickWinnerForm from '../../components/PickWinnerForm';
 import NumberPicker from '../../components/NumberPicker'
@@ -32,8 +33,8 @@ class Lottery extends Component {
             canBuyLottery: '',
             canPickWinner: '',
             loading: true,
-            numbers6: ''
-
+            numbers6: '',
+            allWinners: []
         }
     }
 
@@ -42,17 +43,15 @@ class Lottery extends Component {
     }
 
     async componentDidMount() {
-        const lottery = lotteryAt(this.props.url.query.address);
-        this.setLotteryValues(lottery);
-        this.intervalId = setInterval(this.timer.bind(this), 30000);
-        
+        const lotteryAddress = this.props.url.query.address;
         /*
-        let event = lottery.events.TicketBuy({}, (error, data) => {
-            if (error)
-              console.log("Error: " + error);
-            else 
-              console.log("Log data: " + data);
-        });
+        window.addEventListener('load', () => {
+            this.handleLoad(lotteryAddress);
+        }, false);
+        */
+        const lottery = lotteryAt(lotteryAddress, web3);
+        this.setLotteryValues(lottery);
+        this.setEventsListeners(lottery);
         
        /*
        web3.eth.subscribe('logs', {
@@ -65,7 +64,46 @@ class Lottery extends Component {
           */
     }
 
-    
+    handleLoad = (lotteryAddress) => {
+        //const lottery = lotteryAt(lotteryAddress, web3At(window));
+        
+    }
+
+    setEventsListeners =  (lottery) => {
+        lottery.events.TicketBuy({}, async (error, data) => {
+            if (error == null) {
+                const jackPot = await lottery.methods.finalJackPot().call();
+                const playersLenght = await lottery.methods.getNumberOfPlayers().call();
+                this.setState({ jackPot, playersLenght })
+            }
+        });
+        lottery.events.WinningNumber({}, async (error, data) => {
+            if (error == null) {
+                const winningNumber = await lottery.methods.winningNumber().call();
+                this.setState({ winningNumber, canBuyLottery: false });
+            }
+        });
+        lottery.events.WinnersResult({}, async (error, data) => {
+            if (error == null) {
+                console.log("event winners");
+                const allWinners = await this.getAllWinners(lottery);
+                this.setState({canBuyLottery: false, allWinners });
+            }
+        });
+        
+    }
+
+    getAllWinners = async (lottery) => {
+        const allWinners = [];
+        for(let j = 3; j <= 6; j++) {
+            const winners = {};
+            const winnersSummary = await lottery.methods.getWinners(j).call();
+            winners.number = winnersSummary[0];
+            winners.allocated = winnersSummary[1];
+            allWinners.push(winners);
+        }
+        return allWinners;
+    }
 
     setLotteryValues = async (lottery) => {
         const lotteryAddress = this.state.lotteryAddress;
@@ -83,15 +121,17 @@ class Lottery extends Component {
         const userAccount = accounts[0];
         const canBuyLottery = !lotteryHasPlayed && deadline - Date.now()/1000 > 0;
         const canPickWinner = !lotteryHasPlayed && deadline - Date.now()/1000 < 0;
-        //const ticketBuyEvent = this.setTicketBuyEvent(lottery);
+        const allWinners = await this.getAllWinners(lottery);
         this.setState({lotteryValue, deadline, jackPot, winningNumber,
             playersLenght, lotteryHasPlayed, lastLotery, factoryAddress,
-            owner, userAccount, canBuyLottery, canPickWinner, loading:false})
+            owner, userAccount, canBuyLottery, canPickWinner, loading:false,
+            allWinners})
     }
 
    
 
     renderCards() {
+        
         const items = [
             {
                 header: web3.utils.fromWei(this.state.lotteryValue, 'ether') + " Ether",
@@ -106,7 +146,11 @@ class Lottery extends Component {
                 style: { overflowWrap: 'break-word' }
             },
             {
-                header: web3.utils.fromWei(this.state.jackPot, 'ether') + " Ether",
+                header: <NumberFormat 
+                            value={ web3.utils.fromWei(this.state.jackPot, 'ether') + " Ether" } 
+                            displayType={'text'} 
+                            thousandSeparator={true}
+                            decimalScale={5} />,
                 meta: 'Lottery Jackpot',
                 description: 'This jackpot will be release to the winners',
                 style: { overflowWrap: 'break-word' }
@@ -128,10 +172,40 @@ class Lottery extends Component {
                 header: this.state.lastLotery,
                 meta: 'Address of previous lottery',
                 style: { overflowWrap: 'break-word' }
+            },
+            {
+                header: "Winners who scored 3 numbers",
+                description: this.state.allWinners[0]!=null ? web3.utils.fromWei(
+                    this.state.allWinners[0].allocated, 'ether') + " Ether Prize" : "0",
+                meta: this.state.allWinners[0]!=null ? this.state.allWinners[0].number + " winners": "0 winners"
+            },
+            {
+                header: "Winners who scored 4 numbers",
+                description: this.state.allWinners[1]!=null ? web3.utils.fromWei(
+                    this.state.allWinners[1].allocated, 'ether') + " Ether Prize" : "0",
+                meta: this.state.allWinners[1]!=null ? this.state.allWinners[1].number + " winners": "0 winners"
+            },
+            {
+                header: "Winners who scored 5 numbers",
+                description: this.state.allWinners[2]!=null ? web3.utils.fromWei(
+                    this.state.allWinners[2].allocated, 'ether') + " Ether Prize" : "0",
+                meta: this.state.allWinners[2]!=null ? this.state.allWinners[2].number + " winners": "0 winners"
+            },
+            {
+                header: "Winners who scored 6 numbers",
+                description: this.state.allWinners[3]!=null ? web3.utils.fromWei(
+                    this.state.allWinners[3].allocated, 'ether') + " Ether Prize" : "0",
+                meta: this.state.allWinners[3]!=null ? this.state.allWinners[3].number + " winners": "0 winners"
             }
+            
         ];
 
         return <Card.Group items={ items } />;
+        
+    }
+
+    getNumberOfPlayers(i) {
+        return this.state.allWinners[i]['number'];
     }
 
     getDeadline(deadline) {
@@ -139,10 +213,6 @@ class Lottery extends Component {
         const ans = humanize(deadline-Date.now(), { largest: 2 });
         return (deadline - Date.now()) < 0 ? 'ended '+ans+' ago':'ends in '+ans;
     }
-
-    timer = () => {
-        this.setLotteryValues();
-      }
 
     render() {
         return (

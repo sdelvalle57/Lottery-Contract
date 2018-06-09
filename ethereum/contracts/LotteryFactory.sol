@@ -27,6 +27,7 @@ contract LotteryFactory is Ownable {
         } else { 
             Lottery lottery = Lottery(lotteries[lotteries.length-1]);
             require(lottery.lotteryHasPlayed(), "Checks if the previous lottery has already played");
+            require(lottery.getNumberOfPlayers() == lottery.index(), "Checks if setWinners function ran completly");            
             _createLottery(_duration, _lotteryValue, lottery);
         }
     }
@@ -40,11 +41,9 @@ contract LotteryFactory is Ownable {
     function _createLottery(uint256 _duration, uint256 _lotteryValue, Lottery _lastLottery) private {
         Lottery newLottery = new Lottery(_duration, _lotteryValue, address(_lastLottery));
         _setLotteryData(newLottery);
-        /*
-        if (address(_lastLottery) != 0 && _lastLottery.getWinners().length == 0 && _lastLottery.jackPot() > 0) {
+        if (address(_lastLottery) != 0 && _lastLottery.jackPot() > 0) {
             _lastLottery.transferJackPot(address(newLottery)); 
         } 
-        */
     }
 
     /** 

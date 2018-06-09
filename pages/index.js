@@ -6,16 +6,35 @@ import { Link } from '../routes';
 import web3 from '../ethereum/web3'
 
 class LotteryIndex extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            lotteries: props.lotteries,
+        }
+    }
+
     static async getInitialProps() {
-        
-        const factoryAddress = "0xe3d3d857af31acb196f35b04ab057de8f8664010";
-        let lotteryFactory = lotteryFactoryAt(factoryAddress);
+        const factoryAddress = "0x6bFcF6E2Ce867C935490f1F96088946a70DBef61";
+        const lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
-        return { lotteries, factoryAddress };
+        return { factoryAddress, lotteries };
+    }
+
+    componentDidMount() {
+        const lotteryFactory = lotteryFactoryAt(this.props.factoryAddress, web3);
+        let event = lotteryFactory.events.LotteryDeployed({}, async (error, data) => {
+            if (error == null) {
+                const lotteries = await lotteryFactory.methods.getLotteries().call();
+                this.setState({ lotteries });
+            }
+              
+        });
+        
     }
 
     renderLotteries() {
-        const items = this.props.lotteries.map(address => {
+        const items = this.state.lotteries.map(address => {
             return {
                 header: address,
                 description: (
