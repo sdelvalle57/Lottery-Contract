@@ -6,9 +6,8 @@ let accounts;
 let lottery;
 const lotteryValue = web3.utils.toWei('0.001', 'ether');
 
-let number6 = '';
-let numbers5 = [];
-let numbers4 = [];
+let number4 = '';
+let numbers3 = [];
 
 beforeEach(async () =>{
     accounts = await web3.eth.getAccounts();
@@ -21,7 +20,7 @@ beforeEach(async () =>{
             from: accounts[0], 
             gas: '5000000'
         });  
-    const nums = createRandomEntry(6, 45);
+    const nums = createRandomEntry(4, 99);
     const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
     //number6 = convertToBytes(finalNumbers);
     //numbers5 = convertEachToBytes(k_combinations(finalNumbers, 5));
@@ -29,17 +28,11 @@ beforeEach(async () =>{
 });
 
 contract('Lottery', () =>{
-    const numberOfLottery1 = 1;
-    const numberOfLottery2 = 2;
-    const numberOfLottery3 = 3;
-    const numberOfLottery4 = 4;
-   
-    
+    /*
     it('deploys a Lottery', ()=>{
         assert.ok(lottery.options.address);
     });
 
-    
     it('checks arguments', async () => {
         const thisLotteryValue = await lottery.methods.lotteryValue().call();
         assert.equal(lotteryValue, thisLotteryValue);
@@ -63,15 +56,14 @@ contract('Lottery', () =>{
                 from: accounts[0], 
                 gas: '4000000'
         });
-        for(let i = 0; i<500; i++){
-            const finalNumbers = createRandomEntry(6, 45);
-            number6 = convertToBytes(finalNumbers);
-            numbers5 = convertEachToBytes(k_combinations(finalNumbers, 5));
-            numbers4 = convertEachToBytes(k_combinations(finalNumbers, 4));
+        for(let i = 0; i<1000; i++){
+            const finalNumbers = createRandomEntry(4, 99);
+            number4 = convertToBytes(finalNumbers);
+            numbers3 = convertEachToBytes(k_combinations(finalNumbers, 3));
             const acc = Math.floor((Math.random() * 9) + 1);
             
             try{
-                await lottery.methods.enter(number6, numbers5, numbers4).send({
+                await lottery.methods.enter(number4, numbers3).send({
                     from: accounts[acc],
                     value: lotteryValue,
                     gas: '300000'
@@ -79,15 +71,15 @@ contract('Lottery', () =>{
                 const jackPot = await lottery.methods.jackPot().call();
                 assert.equal(lotteryValue*(i+1), jackPot);
                 const players = await lottery.methods.getPlayers().call();
-                assert.equal(i+1, playerstruffle.length);
-                console.log("Good "+i+" "+finalNumbers + " "+number6);
+                assert.equal(i+1, players.length);
+                console.log("Good "+i+" "+finalNumbers + " "+number4);
             
             } catch(e) {
-                console.log("bad "+i+" "+finalNumbers + " "+number6);
+                console.log("bad "+i+" "+finalNumbers + " "+number4);
             }
         }
     })
-
+    
     it('checks enter function requirements', async () => {
         lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
             .deploy({
@@ -98,16 +90,15 @@ contract('Lottery', () =>{
                 from: accounts[0], 
                 gas: '4000000'
         });
-        for(let i = 0; i<200; i++){
-            const nums = createRandomEntry(6, 45);
+        for(let i = 0; i<50; i++){
+            const nums = createRandomEntry(4, 99);
             const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
-            number6 = convertToBytes(finalNumbers);
-            numbers5 = convertEachToBytes(k_combinations(finalNumbers, 5));
-            numbers4 = convertEachToBytes(k_combinations(finalNumbers, 4));
+            number4 = convertToBytes(finalNumbers);
+            numbers3 = convertEachToBytes(k_combinations(finalNumbers, 3));
             const acc = Math.floor((Math.random() * 9) + 1);
             
             try{
-                const enter = await lottery.methods.enter(number6, numbers5, numbers4).send({
+                const enter = await lottery.methods.enter(number4, numbers3).send({
                     from: accounts[acc],
                     value: lotteryValue,
                     gas: '3000000'
@@ -116,65 +107,38 @@ contract('Lottery', () =>{
                 assert.equal(lotteryValue*(i+1), jackPot);
                 const players = await lottery.methods.getPlayers().call();
                 assert.equal(i+1, players.length);
-                console.log("Good "+i+" "+nums + " "+number6 + " "+enter.gasUsed);
+                console.log("Good "+i+" "+nums + " "+number4 + " "+enter.gasUsed);
             
             } catch(e) {
-                console.log(number6);
-                console.log(numbers5);
-                console.log(numbers4);
+                console.log(number4);
+                console.log(numbers3);
                 console.log(e);
                 break;
             }
         }
         
     })
-    
-    it('checks numbers stored', async () => {
-       let allNumbers6 = {};
-       let allNumbers5 = [];
-       let allNumbers4 = [];
+*/
+    it('check stored numbers', async() => {
         lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
-            .deploy({
-                data: LotteryMock.bytecode,
-                arguments: [600, lotteryValue, 0x0]
-            })
-            .send({
-                from: accounts[0], 
-                gas: '4000000'
+        .deploy({
+            data: LotteryMock.bytecode,
+            arguments: [600, lotteryValue, 0x0]
+        })
+        .send({
+            from: accounts[0], 
+            gas: '4000000'
         });
-        for(let i = 0; i<10; i++){
-            const nums = createRandomEntry(6, 45);
-            //const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
-            const finalNumbers = [1,9,15,24,26,35];
-            number6 = convertToBytes(finalNumbers);
-            numbers5 = convertEachToBytes(k_combinations(finalNumbers, 5));
-            numbers4 = convertEachToBytes(k_combinations(finalNumbers, 4));
-            
-            if(allNumbers6[number6]==null){
-                allNumbers6[number6] = 1;
-            }else{
-                allNumbers6[number6]++;
-            }
-            for(let j = 0; j < numbers5.length; j++){
-                const number5 = numbers5[j];
-                if(allNumbers5[number5]==null){
-                    allNumbers5[number5] = 1;
-                }else{
-                    allNumbers5[number5]++;
-                }
-            }
-            for(let j = 0; j < numbers4.length; j++){
-                const number4 = numbers4[j];
-                if(allNumbers4[number4]==null){
-                    allNumbers4[number4] = 1;
-                }else{
-                    allNumbers4[number4]++;
-                }
-            }
-            
+        for(let i = 0; i<8; i++){
+            const nums = createRandomEntry(4, 99);
+            const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
+            number4 = convertToBytes(finalNumbers);
+            numbers3 = convertEachToBytes(k_combinations(finalNumbers, 3));
+            //const acc = i+1;
+            const acc = Math.floor((Math.random() * 9) + 1);
             try{
-                const enter = await lottery.methods.enter(number6, numbers5, numbers4).send({
-                    from: accounts[1],
+                const enter = await lottery.methods.enter(number4, numbers3).send({
+                    from: accounts[acc],
                     value: lotteryValue,
                     gas: '3000000'
                 })
@@ -182,39 +146,31 @@ contract('Lottery', () =>{
                 assert.equal(lotteryValue*(i+1), jackPot);
                 const players = await lottery.methods.getPlayers().call();
                 assert.equal(i+1, players.length);
-                console.log("Good "+i+" "+finalNumbers + " "+number6 + " "+enter.gasUsed);
-            
+                console.log("Good "+ " "+number4 + " "+  accounts[acc]);
+                console.log("-------------Numbers by player--------------")
+                const numbers4ByPlayer = await lottery.methods.getNumbers4ByPlayer().call({
+                    from: accounts[acc] 
+                });
+                const numbers3ByPlayer = await lottery.methods.getNumbers3ByPlayer().call({
+                    from: accounts[acc] 
+                });
+                console.log(numbers4ByPlayer);
+                console.log(numbers3ByPlayer);
+                console.log("-------------Players by number--------------");
+                const playersByNumber4 = await lottery.methods.getPlayersByNumber4(number4).call({
+                    from: accounts[acc] 
+                });
+                console.log(playersByNumber4);
             } catch(e) {
-                console.log("bad "+i+" "+nums + " "+number6);
+                console.log(e);
+                console.log("Bad " + number4 + " "+finalNumbers);
+                break;
             }
         }
-
-        Object.keys(allNumbers6).forEach(async function(key) {
-            const value = allNumbers6[key];
-            const storedNumber = await lottery.methods.getStoredNumbers6(key, accounts[1]).call({
-                from: accounts[1]
-            });
-            console.log(key + " "+value +" "+ storedNumber[0] + " "+storedNumber[1]);
-        });
-
-        Object.keys(allNumbers5).forEach(async function(key) {
-            const value = allNumbers5[key];
-            const storedNumber = await lottery.methods.getStoredNumbers5(key, accounts[1]).call({
-                from: accounts[1]
-            });
-            console.log(key + " "+value +" "+ storedNumber[0] + " "+storedNumber[1]);
-        });
-
-        Object.keys(allNumbers4).forEach(async function(key) {
-            const value = allNumbers4[key];
-            const storedNumber = await lottery.methods.getStoredNumbers4(key, accounts[1]).call({
-                from: accounts[1]
-            });
-            console.log(key + " "+value +" "+ storedNumber[0] + " "+storedNumber[1]);
-        });        
-    })
+    });
     
-
+    /*
+   const winningNumber =  "0x0f4c595d";
     it('checks the winning number', async() => {
         lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))
             .deploy({
@@ -225,72 +181,61 @@ contract('Lottery', () =>{
                 from: accounts[0], 
                 gas: '5000000'
         });
-        let finalNumbers = [3,6,13,32,44,45];
-        const number6Winner = convertToBytes(finalNumbers);
-        let numbers5winners = convertEachToBytes(k_combinations(finalNumbers, 5));
-        let numbers4winners = convertEachToBytes(k_combinations(finalNumbers, 4));
-        let numbers3winners = convertEachToBytes(k_combinations(finalNumbers, 3));
-
-         
-        try{
-            const enter = await lottery.methods.enter(number6Winner, numbers5winners, numbers4winners, numbers3winners).send({
-                from: accounts[1],
-                value: lotteryValue,
-                gas: '4000000'
-            })
-            console.log("Good  "+finalNumbers + " "+number6Winner + " "+enter.gasUsed);
         
-        } catch(e) {
-            console.log("bad  "+finalNumbers + " "+number6Winner);
-        }
-       
-
         for(let i = 0; i<10; i++){
-            const nums = createRandomEntry(6, 45);
+            const nums = createRandomEntry(4, 99);
             finalNumbers = nums.sort(function (a, b) {  return a - b;  });
-            let number6 = convertToBytes(finalNumbers);
-            let numbers5 = convertEachToBytes(k_combinations(finalNumbers, 5));
-            let numbers4 = convertEachToBytes(k_combinations(finalNumbers, 4));
+            let number4 = convertToBytes(finalNumbers);
+            let acc = Math.floor((Math.random() * 9) + 1);
+            if(i == 0){
+                //acc = 1;
+                finalNumbers = [15, 76, 89, 93];
+                number4 = winningNumber;
+            }
             let numbers3 = convertEachToBytes(k_combinations(finalNumbers, 3));
             try{
-                const enter = await lottery.methods.enter(number6, numbers5, numbers4, numbers3).send({
-                    from: accounts[1],
+                const enter = await lottery.methods.enter(number4, numbers3).send({
+                    from: accounts[acc],
                     value: lotteryValue,
                     gas: '5000000'
                 })
-                console.log("Good "+i+" "+finalNumbers + " "+number6 + " "+enter.gasUsed);          
+                console.log("Good "+i+" "+finalNumbers + " "+number4 + " "+enter.gasUsed+" "+accounts[acc]);          
             } catch(e) {
-                console.log("bad "+i+" "+nums + " "+number6);
+                console.log("bad "+i+" "+nums + " "+number4);
             }
-        }
 
+
+        }
+        
         
         const play = await lottery.methods.playTheLottery().send({
             from: accounts[0],
             gas: '4000000'
         });
-        console.log(play.gasUsed);
-        const winnerNumber = await lottery.methods.getWinner().call();
-        assert.equal(winnerNumber, number6Winner);
-        for(let j = 0; j < numbers5winners.length; j++){
-            const winnerNumber5 = await lottery.methods.getWinner5(j).call();
-            assert.equal(winnerNumber5, numbers5winners[j]);
-        }
-        for(let j = 0; j < numbers4winners.length; j++){
-            const winnerNumber4 = await lottery.methods.getWinner4(j).call();
-            assert.equal(winnerNumber4, numbers4winners[j]);
-        }
-        for(let j = 0; j < numbers3winners.length; j++){
-            const winnerNumber3 = await lottery.methods.getWinner3(j).call();
-            assert.equal(winnerNumber3, numbers3winners[j]);
-        }
         
-        //assert.equal(number6Winner, winnerNumber);
+        console.log("-----------winning numbers----------")
+        console.log(play.gasUsed);
+        const winnerNumbers = await lottery.methods.getWinningNumbers().call();
+        console.log(winnerNumbers);
+        const winners4 = await lottery
+        const playersByNumber = await lottery.methods.getPlayersByNumber(winningNumber).call();
+        console.log(playersByNumber);
+
+        let jackPot = await lottery.methods.jackPot().call();
+        console.log(jackPot);
+
+        const numberOfWinners3 = await lottery.methods.numberOfWinners().call();
+        console.log(numberOfWinners3);
+
+
     })
+    */
 })
 
 
+function saveLocal(number4, numbers3, acc) {
 
+}
 
 
 function sleep (time) {

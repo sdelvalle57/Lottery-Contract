@@ -7,18 +7,17 @@ import "./BytesConvertLib.sol";
 
 /**
  * @title Lottery
- * @dev Lottery with 6 numbers between 01-45. for each bet we store:
- * 1 bytes6 [ 14, 15, 16, 19, 32, 35 ] = 0x0e0f10132023
- * 6 bytes5 [ 14, 15, 16, 19, 35 ] = 0x0e0f101323, ..... 
- * 15 bytes4 [ 14, 15, 16, 19, 35 ] = 0x0e0f101323, ..... 
+ * @dev Lottery with 4 numbers between 01-99. for each bet we store:
+ * 1 bytes4 [ 16, 19, 66, 88 ] = 0x10134258
+ * 4 bytes3 [ 16, 19, 66 ] = 0x101342,  0x101358,  0x104258,  134258
  * according to the formula (n!/(k!(n-k)!)) where
- * for 5 numbers n = 6 and k = 5, for 4 numbers n = 6 and k = 4
+ * for 3 numbers n = 4 and k = 3
  */
 
 contract Lottery is Ownable {
     using SafeMath for uint256; 
     using BytesConvertLib for bytes;
-    using BytesConvertLib for bytes6;
+    using BytesConvertLib for bytes4;
 
     event Winners(address[] winners, uint256 jackPot);
     event TransferJackPot(uint256 value);
@@ -29,26 +28,23 @@ contract Lottery is Ownable {
     uint256 public jackPot;
    
     struct WinningNumbers { 
-        bytes6 winningNumber; 
-        bytes5[6] winningNumbers5;
-        bytes4[15] winningNumbers4;
-        bytes3[20] winningNumbers3;
+        bytes4 winningNumber; 
+        bytes3[4] winningNumbers3;
     } 
 
     WinningNumbers public winningNumbers;
 
     // @dev mapping of the sender => numbers, when user enters the lottery we save his numbers
-    mapping(address => bytes6[]) public playerNumbers6;
-    mapping(address => bytes5[]) public playerNumbers5;
     mapping(address => bytes4[]) public playerNumbers4;
     mapping(address => bytes3[]) public playerNumbers3;
 
     // @dev mapping of the numbers => players[], when user enters a number we save his 
     // number pointing to his address
-    mapping(bytes6 => address[]) public numbers6;
-    mapping(bytes5 => address[]) public numbers5;
     mapping(bytes4 => address[]) public numbers4;
     mapping(bytes3 => address[]) public numbers3;
+
+    // @dev mapping of player => allocation, when player is a winner we add the prize 
+    mapping(address => uint256) public winners;
 
     address[] public players;
 
@@ -81,49 +77,33 @@ contract Lottery is Ownable {
     }
 
     /** 
-    * @notice allows the player to enter (1500000 gas in testing)
-    * @param _number6 the main numbers in bytes [ 14, 15, 16, 19, 32, 35 ] = 0x0e0f10132023
-    * @param _numbers5 array[6] of bytes5, 6 possible combinations of 5 numbers
-    * [ 14, 15, 16, 19, 35 ] = 0x0e0f101323, ....
-    * @param _numbers4 array[15] of bytes4, 15 possible combinations of 4 numbers
-    * [ 14, 15, 16, 19 ] = 0x0e0f1013, ....
+    * @notice allows the player to enter 
+    * @param _number4 the main number in bytes [ 14, 15, 16, 19] = 0x0e0f1013
+    * @param _numbers3 array[4] of bytes3, 4 possible combinations of 3 numbers
+    * [ 14, 15, 16] = 0x0e0f10, ....
     */
-    function enter(bytes6 _number6, bytes5[6] _numbers5, bytes4[15] _numbers4, bytes3[20] _numbers3) external payable {
+    function enter(bytes4 _number4, bytes3[4] _numbers3) external payable {
         require(msg.value == lotteryValue, "value received is less than the lotteryValue");
         require(now < deadline, "Lottery has finalized");
-        require(!lotteryHasPlayed, "Lottery has already played");
-        require(_number6.areValidNumbers6(), "No repeated numbers inside the bet");
-        require(_number6.areInsideNumber6(_numbers5));
-        require(_number6.areInsideNumber6(_numbers4));
-        require(_number6.areInsideNumber6(_numbers3));
+        require(!lotteryHasPlayed, "Lottery has already played"); 
+        require(_number4.areValidNumbers4(), "No repeated numbers inside the bet");
+        require(_number4.areInsideNumber4(_numbers3));
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
-        _storeNumbers(_number6, _numbers5, _numbers4, _numbers3);
+        _storeNumbers(_number4, _numbers3);
     }
 
     /** 
-    * @notice we store one bytes6, 6 bytes5 and 15 bytes4, so when lottery plays
+    * @notice we store one bytes4 and 4 bytes3 so when lottery plays
     * we compare how many players played these numbers to know how much was won
     * and separate this money from the jackpot
-    * @param _number6 6 bytes containing the numbers
-    * @param _numbers5 array[6]  of bytes5
-    * @param _numbers4 array[15]  of bytes4 
-    * @param _numbers3 array[20]  of bytes3 
+    * @param _number4 4 bytes containing the numbers
+    * @param _numbers3 array[4] of bytes3 
     */
-    function _storeNumbers(bytes6 _number6, bytes5[6] memory _numbers5, bytes4[15] memory _numbers4, bytes3[20] memory _numbers3) private {
-        playerNumbers6[msg.sender].push(_number6);
-        numbers6[_number6].push(msg.sender);
-        for(uint256 i = 0; i < _numbers5.length; i++){
-            bytes5 _number5 = _numbers5[i];
-            playerNumbers5[msg.sender].push(_number5);
-            numbers5[_number5].push(msg.sender);
-        }
-        for(uint256 j = 0; j < _numbers4.length; j++){
-            bytes4 _number4 = _numbers4[j];
-            playerNumbers4[msg.sender].push(_number4);
-            numbers4[_number4].push(msg.sender);
-        }
-        for(uint256 k = 0; k < _numbers3.length; k++){
+    function _storeNumbers(bytes4 _number4, bytes3[4] memory _numbers3) private {
+        playerNumbers4[msg.sender].push(_number4);
+        numbers4[_number4].push(msg.sender);
+        for(uint256 k = 0; k < 4; k++){
             bytes3 _number3 = _numbers3[k];
             playerNumbers3[msg.sender].push(_number3);
             numbers3[_number3].push(msg.sender);
@@ -143,40 +123,61 @@ contract Lottery is Ownable {
 
     /** 
     * @notice play the lottery when is finished, we get a bytes32 keccak256 of the 
-    * random number, first 2 bytes are divided by 45 and we take the residous
-    * if the number is ok we put it in the first place of _number6, then we take
-    * the subsequent 2 bytes and do the same to put it in the second slot of _number6
-    * at the end _number 6 is the winning number
+    * random number, first 2 bytes are divided by 99 and we take the residous
+    * if the number is ok we put it in the first place of _number4, then we take
+    * the subsequent 2 bytes and do the same to put it in the second slot of _number4
+    * at the end _number 4 is the winning number
     */
     function playTheLottery() external onlyOwner {
-        require(deadline > now, "deadline has to be over");
+        require(deadline < now, "deadline has to be over");
         require(!lotteryHasPlayed, "lottery has played");
         lotteryHasPlayed = true;
         bytes32 random = keccak256(now);        
-        bytes memory _number6 = new bytes(6);
+        bytes memory _number4 = new bytes(4);
         uint256 size = 0;
-        while(size < 6){
-            if(size==6) break;
-            uint256 pair = uint256(bytes2(random)) % 45;
-            if(pair == 0) pair = 45;
-            if(_number6.isNotRepeated(bytes1(pair)) && pair != 0){
-                _number6[size] = bytes1(pair);
+        while(size < 4){
+            if(size==4) break;
+            uint256 pair = uint256(bytes2(random)) % 99;
+            if(pair == 0) pair = 99;
+            if(_number4.isNotRepeated(bytes1(pair)) && pair != 0){
+                _number4[size] = bytes1(pair);
                 size++;
             } 
             random = random << 16;
         }
-        _number6 = _number6.sortArray();
-        winningNumbers.winningNumber = _number6.convertBytesToBytes6();
-        winningNumbers.winningNumbers5 = _number6.setCombinations5();
-        winningNumbers.winningNumbers4 = _number6.setCombinations4();  
-        winningNumbers.winningNumbers3 = _number6.setCombinations3(); 
+        _number4 = _number4.sortArray();
+        winningNumbers.winningNumber = _number4.convertBytesToBytes4();
+        winningNumbers.winningNumbers3 = _number4.setCombinations3();
+        _setWinners();
+        //TODO check winners
+    }
+
+    uint256 public numberOfWinners;
+    function _setWinners() private {
+        uint256 allocation = jackPot.div(2);
+        address[] memory number4Winners = numbers4[winningNumbers.winningNumber];
+        if(number4Winners.length > 0){
+            jackPot = jackPot.sub(allocation);
+            uint256 allocationPerPlayer = allocation.div(number4Winners.length);
+            for(uint256 j = 0; j < number4Winners.length; j++) {
+                address winner4 = number4Winners[j];
+                winners[winner4] = winners[winner4].add(allocationPerPlayer);
+            }
+        }
+        //uint256 numberOfWinners;
+        for(uint256 i = 0; i < 4; i++) {
+            numberOfWinners = numberOfWinners.add(
+                numbers3[winningNumbers.winningNumbers3[i]].length);
+        }
+        if(numberOfWinners > 0) {
+            jackPot = jackPot.sub(allocation);
+        }
     }
 
      /** 
-    * @notice Transfer the jackpot nobody won the lottery to a the newLottery 
+    * @notice Transfer the jackpot after picking all winners
     */
     function transferJackPot(address _newLottery) external onlyFactory {
-        //require(winners.length == 0, "Must not be winners in order to transfer");
         require(jackPot > 0, "Jackpot sohuld be more than 0");
         require(lotteryHasPlayed, "lottery has played");
         require(_newLottery != address(0), "new lottery address should not be 0");
@@ -184,45 +185,21 @@ contract Lottery is Ownable {
         jackPot = 0;
         Lottery lottery = Lottery(_newLottery);
         lottery.addJackPot.value(_jackPot)();  
-    }
+    } 
 
     //@dev Getters
-    function getStoredNumbers6(bytes6 _number6, address user) public view returns(
-        uint256, uint256) {
-        return (
-            playerNumbers6[user].length,
-            numbers6[_number6].length
-        );
-    }
-
-    function getStoredNumbers5(bytes5 _number5, address user) public view returns(
-        uint256, uint256) {
-        return (
-            playerNumbers5[user].length,
-            numbers5[_number5].length
-        );
-    }
-
-    function getStoredNumbers4(bytes4 _numbers4, address user) public view returns(
-        uint256, uint256) {
-        return (
-            playerNumbers4[user].length,
-            numbers4[_numbers4].length
-        );
-    }
-
+    
     function getPlayers() external view returns(address[]){
         return players;
     }
 
     function getSummary() external view returns (
-        uint256, uint256, uint256, uint256, uint256, bool, address, address, address
+        uint256, uint256, uint256, uint256, bool, address, address, address
     ) {
         return (
             lotteryValue,
             deadline,
             jackPot,
-            players.length,
             players.length,
             lotteryHasPlayed,
             lastLottery,
@@ -231,20 +208,29 @@ contract Lottery is Ownable {
         );
     }
 
-    function getWinner() external view returns(bytes6 winningNumber6) {
-        winningNumber6 = winningNumbers.winningNumber;
+    function getWinningNumbers() external view returns(bytes4, bytes3, bytes3, bytes3, bytes3) {
+        return  (
+            winningNumbers.winningNumber,
+            winningNumbers.winningNumbers3[0],
+            winningNumbers.winningNumbers3[1],
+            winningNumbers.winningNumbers3[2],
+            winningNumbers.winningNumbers3[3]);
     }
 
-    function getWinner5(uint256 index) external view returns(bytes5) {
-        return  winningNumbers.winningNumbers5[index];
+    function getNumbers4ByPlayer() external view returns(bytes4[]) {
+        return playerNumbers4[msg.sender];
     }
 
-    function getWinner4(uint256 index) external view returns(bytes4) {
-        return  winningNumbers.winningNumbers4[index];
+    function getNumbers3ByPlayer() external view returns(bytes3[]) {
+        return playerNumbers3[msg.sender];
     }
 
-    function getWinner3(uint256 index) external view returns(bytes3) {
-        return  winningNumbers.winningNumbers3[index];
+    function getPlayersByNumber4(bytes4 _number) external view returns(address[]){
+        return numbers4[_number];
+    }
+
+    function getPlayersByNumber3(bytes3[4] _numbers3) external view returns(address[]){
+        return numbers4[_number];
     }
 }
 

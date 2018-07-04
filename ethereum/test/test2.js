@@ -8,23 +8,20 @@ contract('Combs', () =>{
     it('calculates probability', () => {
         let nums = [];
         i= 0;
-        while(i<6){
-            num =  Math.floor((Math.random() * 45) + 1);
+        while(i<4){
+            num =  Math.floor((Math.random() * 99) + 1);
             if(nums.indexOf(num) >-1){
                 continue;
             }
             nums[i]=num;
             i++;
 		}
-		nums = [4, 6, 16, 19, 37, 44];
-		let combs = k_combinations(nums, 5);
+		nums = [16, 19, 66, 88];
+		let combs = k_combinations(nums, 3);
 		console.log(combs); 
 		let combsBytes = convertEachToBytes(combs); 
 		console.log(combsBytes);    
-		combs = k_combinations(nums, 4);
-		console.log(combs); 
-		combsBytes = convertEachToBytes(combs); 
-		console.log(combsBytes); 
+		
 	});
 	/*
 	
