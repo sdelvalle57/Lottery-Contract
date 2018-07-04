@@ -21,12 +21,12 @@ contract LotteryFactoryMock is LotteryFactory {
         }
     }
 
-    function _createLottery(uint256 _duration, uint256 _lotteryValue, Lottery _lastLottery) private {
-        Lottery newLottery = new Lottery(_duration, _lotteryValue, address(_lastLottery));
+    function _createLottery(uint256 _duration, uint256 _lotteryValue, LotteryMock _lastLottery) private {
+        LotteryMock newLottery = new LotteryMock(_duration, _lotteryValue, address(_lastLottery));
         _setLotteryData(newLottery);
     }
 
-    function _setLotteryData(Lottery _newLottery) private {
+    function _setLotteryData(LotteryMock _newLottery) private {
         _newLottery.transferOwnership(owner);
         lotteries.push(address(_newLottery));
         emit LotteryDeployed(address(_newLottery)); 

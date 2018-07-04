@@ -34,11 +34,12 @@ contract('Lottery', () =>{
     const numberOfLottery3 = 3;
     const numberOfLottery4 = 4;
    
-    /*
+    
     it('deploys a Lottery', ()=>{
         assert.ok(lottery.options.address);
     });
 
+    
     it('checks arguments', async () => {
         const thisLotteryValue = await lottery.methods.lotteryValue().call();
         assert.equal(lotteryValue, thisLotteryValue);
@@ -212,7 +213,7 @@ contract('Lottery', () =>{
             console.log(key + " "+value +" "+ storedNumber[0] + " "+storedNumber[1]);
         });        
     })
-    */
+    
 
     it('checks the winning number', async() => {
         lottery = await new web3.eth.Contract(JSON.parse(JSON.stringify(LotteryMock.abi)))

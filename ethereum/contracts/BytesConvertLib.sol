@@ -7,7 +7,7 @@ library BytesConvertLib {
     * organized from lowest to highest
     * @param _number6 6 bytes containing the numbers
     */
-    function _areValidNumbers6(bytes6 _number6) internal pure returns(bool) {
+    function areValidNumbers6(bytes6 _number6) internal pure returns(bool) {
         if(_number6.length!=6) return false;
         for(uint256 i = 0; i < _number6.length; i++) {
             bytes1 num = _number6[i];
@@ -27,7 +27,7 @@ library BytesConvertLib {
     * organized from lowest to highest
     * @param _number5 5 bytes containing the numbers
     */
-    function _areValidNumbers5(bytes5 _number5) internal pure returns(bool) {
+    function _areValidNumbers5(bytes5 _number5) private pure returns(bool) {
         if(_number5.length!=5) return false;
         for(uint256 i = 0; i < _number5.length; i++) {
             bytes1 num = _number5[i];
@@ -47,7 +47,7 @@ library BytesConvertLib {
     * organized from lowest to highest
     * @param _number4 4 bytes containing the numbers
     */
-    function _areValidNumbers4(bytes4 _number4) internal pure returns(bool) {
+    function _areValidNumbers4(bytes4 _number4) private pure returns(bool) {
         if(_number4.length!=4) return false;
         for(uint256 i = 0; i < _number4.length; i++) {
             bytes1 num = _number4[i];
@@ -67,7 +67,7 @@ library BytesConvertLib {
     * organized from lowest to highest
     * @param _number3 3 bytes containing the numbers
     */
-    function _areValidNumbers3(bytes3 _number3) internal pure returns(bool) {
+    function _areValidNumbers3(bytes3 _number3) private pure returns(bool) {
         if(_number3.length!=3) return false;
         for(uint256 i = 0; i < _number3.length; i++) {
             bytes1 num = _number3[i];
@@ -90,7 +90,7 @@ library BytesConvertLib {
     * @param _number6 6 bytes containing the numbers
     * @param _numbers5 array[6] of bytes5
     */
-    function _areInsideNumber6(bytes6 _number6, bytes5[6] memory _numbers5) internal pure returns(bool) {
+    function areInsideNumber6(bytes6 _number6, bytes5[6] memory _numbers5) internal pure returns(bool) {
         uint256 numbersLength = 0;
         for(uint256 i = 0; i < _numbers5.length; i++){
             bytes5 number5 = _numbers5[i];
@@ -121,7 +121,7 @@ library BytesConvertLib {
     * @param _number6 6 bytes containing the numbers
     * @param _numbers4 array[15] of bytes4 
     */
-    function _areInsideNumber6(bytes6 _number6, bytes4[15] memory _numbers4) internal pure returns(bool) {
+    function areInsideNumber6(bytes6 _number6, bytes4[15] memory _numbers4) internal pure returns(bool) {
         uint256 numbersLength = 0;
         for(uint256 i = 0; i < _numbers4.length; i++){
             bytes4 number4 = _numbers4[i];
@@ -152,7 +152,7 @@ library BytesConvertLib {
     * @param _number6 6 bytes containing the numbers
     * @param _numbers3 array[20] of bytes3
     */
-    function _areInsideNumber6(bytes6 _number6, bytes3[20] memory _numbers3) internal pure returns(bool) {
+    function areInsideNumber6(bytes6 _number6, bytes3[20] memory _numbers3) internal pure returns(bool) {
         uint256 numbersLength = 0;
         for(uint256 i = 0; i < _numbers3.length; i++){
             bytes3 number3 = _numbers3[i];
@@ -179,7 +179,7 @@ library BytesConvertLib {
     * @param _pair the byte to check if is not inside the array of bytes
     * @param _number6 array of 6 bytes 
     */
-    function _isNotRepeated(bytes1 _pair, bytes memory _number6) internal pure returns(bool) {
+    function isNotRepeated(bytes memory _number6, bytes1 _pair) internal pure returns(bool) {
         for(uint256 i = 0; i < _number6.length; i++){
             if(_pair == _number6[i]) return false;
         }
@@ -190,7 +190,7 @@ library BytesConvertLib {
     * @notice sorts the array from the lowest to highest
     * @param _number6 array of 6 bytes 
     */
-    function _sortArray(bytes memory _number6) internal pure returns (bytes) {
+    function sortArray(bytes memory _number6) internal pure returns (bytes) {
         uint256 l = _number6.length;
         for(uint256 i = 0; i < l; i++) {
             for(uint256 j = i+1; j < l ;j++) {
@@ -208,7 +208,7 @@ library BytesConvertLib {
     * @notice outputs the 6 possible combinations
     * @param _number6 array of 6 bytes 
     */
-    function _setCombinations5(bytes memory _number6) internal pure returns (bytes5[6]) {
+    function setCombinations5(bytes memory _number6) internal pure returns (bytes5[6]) {
         uint256 k = 5;
         uint256 n = 6;
         uint256[] memory combination = new uint256[](k);
@@ -244,7 +244,7 @@ library BytesConvertLib {
     * @notice outputs the 15 possible combinations
     * @param _number6 array of 6 bytes 
     */
-    function _setCombinations4(bytes memory _number6) internal pure returns (bytes4[15]) {
+    function setCombinations4(bytes memory _number6) internal pure returns (bytes4[15]) {
         uint256 k = 4;
         uint256 n = 6;
         uint256[] memory combination = new uint256[](k);
@@ -280,7 +280,7 @@ library BytesConvertLib {
     * @notice outputs the 20 possible combinations
     * @param _number6 array of 6 bytes 
     */
-    function _setCombinations3(bytes memory _number6) internal pure returns (bytes3[20]) {
+    function setCombinations3(bytes memory _number6) internal pure returns (bytes3[20]) {
         uint256 k = 3;
         uint256 n = 6;
         uint256[] memory combination = new uint256[](k);
@@ -316,7 +316,7 @@ library BytesConvertLib {
     * @notice converts byte to readonly bytes6, this will be the final number
     * @param _number6 array of 6 bytes 
     */
-    function _convertBytesToBytes6(bytes memory _number6) internal pure returns (bytes6 outBytes6) {
+    function convertBytesToBytes6(bytes memory _number6) internal pure returns (bytes6 outBytes6) {
         for (uint256 i = 0; i < _number6.length; i++) {
             bytes6 tempBytes6 = _number6[i];
             tempBytes6 = tempBytes6 >> (8 * i);
@@ -328,7 +328,7 @@ library BytesConvertLib {
     * @notice converts byte to readonly bytes5, this will be one of the final numbers
     * @param _number5 array of 5 bytes 
     */
-    function _convertBytesToBytes5(bytes memory _number5) internal pure returns (bytes5 outBytes5) {
+    function _convertBytesToBytes5(bytes memory _number5) private pure returns (bytes5 outBytes5) {
         for (uint256 i = 0; i < _number5.length; i++) {
             bytes5 tempBytes5 = _number5[i];
             tempBytes5 = tempBytes5 >> (8 * i);
@@ -340,7 +340,7 @@ library BytesConvertLib {
     * @notice converts byte to readonly bytes4, this will be one of the final numbers
     * @param _number4 array of 4 bytes 
     */
-    function _convertBytesToBytes4(bytes memory _number4) internal pure returns (bytes4 outBytes4) {
+    function _convertBytesToBytes4(bytes memory _number4) private pure returns (bytes4 outBytes4) {
         for (uint256 i = 0; i < _number4.length; i++) {
             bytes4 tempBytes4 = _number4[i];
             tempBytes4 = tempBytes4 >> (8 * i);
@@ -352,7 +352,7 @@ library BytesConvertLib {
     * @notice converts byte to readonly bytes3, this will be one of the final numbers
     * @param _number3 array of 3 bytes 
     */
-    function _convertBytesToBytes3(bytes memory _number3) internal pure returns (bytes3 outBytes3) {
+    function _convertBytesToBytes3(bytes memory _number3) private pure returns (bytes3 outBytes3) {
         for (uint256 i = 0; i < _number3.length; i++) {
             bytes3 tempBytes3 = _number3[i];
             tempBytes3 = tempBytes3 >> (8 * i);

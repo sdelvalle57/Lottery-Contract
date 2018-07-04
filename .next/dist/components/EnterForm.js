@@ -75,52 +75,54 @@ var EnterForm = function (_Component) {
             numbers: ''
         }, _this.onSubmit = function () {
             var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(event) {
-                var lottery, accounts;
+                var _this$props, numbers6, numbers5, numbers4, lottery, accounts;
+
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 event.preventDefault();
+                                _this$props = _this.props, numbers6 = _this$props.numbers6, numbers5 = _this$props.numbers5, numbers4 = _this$props.numbers4;
                                 lottery = (0, _lottery2.default)(_this.props.address);
 
                                 if (!_this.props.canBuyLottery) {
-                                    _context.next = 17;
+                                    _context.next = 18;
                                     break;
                                 }
 
                                 _this.setState({ loading: true, errroMessage: '' });
-                                _context.prev = 4;
-                                _context.next = 7;
+                                _context.prev = 5;
+                                _context.next = 8;
                                 return _web2.default.eth.getAccounts();
 
-                            case 7:
+                            case 8:
                                 accounts = _context.sent;
-                                _context.next = 10;
-                                return lottery.methods.enter(_this.props.numbers).send({
+                                _context.next = 11;
+                                return lottery.methods.enter(numbers6, numbers5, numbers4).send({
                                     from: accounts[0],
                                     value: _this.props.lotteryValue
                                 });
 
-                            case 10:
+                            case 11:
                                 _routes.Router.replaceRoute('/lotteries/' + _this.props.address);
-                                _context.next = 16;
+                                _context.next = 17;
                                 break;
 
-                            case 13:
-                                _context.prev = 13;
-                                _context.t0 = _context['catch'](4);
+                            case 14:
+                                _context.prev = 14;
+                                _context.t0 = _context['catch'](5);
 
                                 _this.setState({ errroMessage: _context.t0.message.split("\n")[0] });
 
-                            case 16:
+                            case 17:
                                 _this.setState({ loading: false, value: '' });
 
-                            case 17:
+                            case 18:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, _this2, [[4, 13]]);
+                }, _callee, _this2, [[5, 14]]);
             }));
 
             return function (_x) {
@@ -137,13 +139,13 @@ var EnterForm = function (_Component) {
                     positive: this.props.numbers.length == 14,
                     loading: this.state.loading, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 38
+                        lineNumber: 39
                     }
                 }, 'Buy');
             } else {
                 return _react2.default.createElement(_semanticUiReact.Button, { negative: true, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 42
+                        lineNumber: 43
                     }
                 }, 'Ended');
             }
@@ -153,21 +155,21 @@ var EnterForm = function (_Component) {
         value: function render() {
             return _react2.default.createElement(_semanticUiReact.Form, { onSubmit: this.onSubmit, error: !!this.state.errroMessage, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 48
+                    lineNumber: 49
                 }
             }, _react2.default.createElement(_semanticUiReact.Form.Field, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 49
+                    lineNumber: 50
                 }
             }, _react2.default.createElement('label', {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 50
+                    lineNumber: 51
                 }
             }, 'Enter the lottery')), this.renderButton(), _react2.default.createElement(_semanticUiReact.Message, { error: true, header: 'Oops!', content: this.state.errroMessage, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 53
+                    lineNumber: 54
                 }
             }));
         }
@@ -177,4 +179,4 @@ var EnterForm = function (_Component) {
 }(_react.Component);
 
 exports.default = EnterForm;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXEVudGVyRm9ybS5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkZvcm0iLCJNZXNzYWdlIiwiQnV0dG9uIiwibG90dGVyeUF0Iiwid2ViMyIsIlJvdXRlciIsIkVudGVyRm9ybSIsInN0YXRlIiwidmFsdWUiLCJlcnJyb01lc3NhZ2UiLCJsb2FkaW5nIiwibnVtYmVycyIsIm9uU3VibWl0IiwiZXZlbnQiLCJwcmV2ZW50RGVmYXVsdCIsImxvdHRlcnkiLCJwcm9wcyIsImFkZHJlc3MiLCJjYW5CdXlMb3R0ZXJ5Iiwic2V0U3RhdGUiLCJldGgiLCJnZXRBY2NvdW50cyIsImFjY291bnRzIiwibWV0aG9kcyIsImVudGVyIiwic2VuZCIsImZyb20iLCJsb3R0ZXJ5VmFsdWUiLCJyZXBsYWNlUm91dGUiLCJtZXNzYWdlIiwic3BsaXQiLCJsZW5ndGgiLCJyZW5kZXJCdXR0b24iXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxBQUFPLEFBQVM7Ozs7QUFDaEIsQUFBUyxBQUFNLEFBQVM7O0FBQ3hCLEFBQU8sQUFBZTs7OztBQUN0QixBQUFPLEFBQVU7Ozs7QUFDakIsQUFBUyxBQUFjOzs7Ozs7O0ksQUFFakI7Ozs7Ozs7Ozs7Ozs7OztzTixBQUNGO21CQUFRLEFBQ0csQUFDUDswQkFGSSxBQUVTLEFBQ2I7cUJBSEksQUFHSyxBQUNUO3FCQUpJLEEsQUFJSztBQUpMLEFBQ0osaUJBUUosQTtpR0FBVyxpQkFBQSxBQUFNLE9BQU47NkJBQUE7OEVBQUE7OEJBQUE7eURBQUE7aUNBQ1A7c0NBQUEsQUFBTSxBQUNBO0FBRkMsMENBRVMsdUJBQVUsTUFBQSxBQUFLLE1BRnhCLEFBRVMsQUFBcUI7O3FDQUNsQyxNQUFBLEFBQUssTUFIRCxBQUdPLGVBSFA7b0RBQUE7QUFBQTtBQUlIOztzQ0FBQSxBQUFLLFNBQVMsRUFBRSxTQUFGLEFBQVcsTUFBTSxjQUo1QixBQUlILEFBQWMsQUFBK0I7Z0RBSjFDO2dEQUFBO3VDQU13QixjQUFBLEFBQUssSUFON0IsQUFNd0IsQUFBUzs7aUNBQTFCO0FBTlAsb0RBQUE7Z0RBQUE7K0NBT08sQUFBUSxRQUFSLEFBQWdCLE1BQU0sTUFBQSxBQUFLLE1BQTNCLEFBQWlDLFNBQWpDLEFBQTBDOzBDQUN0QyxTQUQyQyxBQUMzQyxBQUFTLEFBQ2Y7MkNBQU8sTUFBQSxBQUFLLE1BVGpCLEFBT08sQUFBK0MsQUFFL0I7QUFGK0IsQUFDakQsaUNBREU7O2lDQUlOOytDQUFBLEFBQU8sNkJBQTJCLE1BQUEsQUFBSyxNQVh4QyxBQVdDLEFBQTZDO2dEQVg5QztBQUFBOztpQ0FBQTtnREFBQTtnRUFhQzs7c0NBQUEsQUFBSyxTQUFTLEVBQUUsY0FBYyxZQUFBLEFBQUksUUFBSixBQUFZLE1BQVosQUFBa0IsTUFiakQsQUFhQyxBQUFjLEFBQWdCLEFBQXdCOztpQ0FFMUQ7c0NBQUEsQUFBSyxTQUFTLEVBQUUsU0FBRixBQUFXLE9BQU8sT0FmN0IsQUFlSCxBQUFjLEFBQXdCOztpQ0FmbkM7aUNBQUE7Z0RBQUE7O0FBQUE7eUNBQUE7QTs7Ozs7Ozs7Ozt1Q0FtQkksQUFDWDtnQkFBRyxLQUFBLEFBQUssTUFBUixBQUFjLGVBQWMsQUFDeEI7dUNBQU8sQUFBQzs4QkFDUSxLQUFBLEFBQUssTUFBTCxBQUFXLFFBQVgsQUFBbUIsVUFENUIsQUFDb0MsQUFDdkM7NkJBQVMsS0FBQSxBQUFLLE1BRlgsQUFFaUI7a0NBRmpCO29DQUFBO0FBQUE7QUFDSCxpQkFERyxFQUFQLEFBQU8sQUFHVjtBQUpELG1CQUlLLEFBQ0Q7dUNBQU8sQUFBQyx5Q0FBTyxVQUFSO2tDQUFBO29DQUFBO0FBQUE7aUJBQUEsRUFBUCxBQUFPLEFBQ1Y7QUFDSjs7OztpQ0FFUSxBQUNMO21DQUNJLEFBQUMsdUNBQUssVUFBVSxLQUFoQixBQUFxQixVQUFVLE9BQU8sQ0FBQyxDQUFDLEtBQUEsQUFBSyxNQUE3QyxBQUFtRDs4QkFBbkQ7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ssY0FBRCxzQkFBQSxBQUFNOzs4QkFBTjtnQ0FBQSxBQUNJO0FBREo7QUFBQSwrQkFDSSxjQUFBOzs4QkFBQTtnQ0FBQTtBQUFBO0FBQUEsZUFGUixBQUNJLEFBQ0ksQUFFSCw0QkFKTCxBQUlLLEFBQUssQUFDTixnQ0FBQSxBQUFDLDBDQUFRLE9BQVQsTUFBZSxRQUFmLEFBQXNCLFNBQVEsU0FBUyxLQUFBLEFBQUssTUFBNUMsQUFBa0Q7OEJBQWxEO2dDQU5SLEFBQ0ksQUFLSSxBQUlYO0FBSlc7Ozs7OztBQTlDUSxBLEFBb0R4Qjs7a0JBQUEsQUFBZSIsImZpbGUiOiJFbnRlckZvcm0uanMiLCJzb3VyY2VSb290IjoiRTovRXRoZXJldW0vV29ybGRwYXkvbG90dGVyeS1jb250cmFjdCJ9
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXEVudGVyRm9ybS5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkZvcm0iLCJNZXNzYWdlIiwiQnV0dG9uIiwibG90dGVyeUF0Iiwid2ViMyIsIlJvdXRlciIsIkVudGVyRm9ybSIsInN0YXRlIiwidmFsdWUiLCJlcnJyb01lc3NhZ2UiLCJsb2FkaW5nIiwibnVtYmVycyIsIm9uU3VibWl0IiwiZXZlbnQiLCJwcmV2ZW50RGVmYXVsdCIsInByb3BzIiwibnVtYmVyczYiLCJudW1iZXJzNSIsIm51bWJlcnM0IiwibG90dGVyeSIsImFkZHJlc3MiLCJjYW5CdXlMb3R0ZXJ5Iiwic2V0U3RhdGUiLCJldGgiLCJnZXRBY2NvdW50cyIsImFjY291bnRzIiwibWV0aG9kcyIsImVudGVyIiwic2VuZCIsImZyb20iLCJsb3R0ZXJ5VmFsdWUiLCJyZXBsYWNlUm91dGUiLCJtZXNzYWdlIiwic3BsaXQiLCJsZW5ndGgiLCJyZW5kZXJCdXR0b24iXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxBQUFPLEFBQVM7Ozs7QUFDaEIsQUFBUyxBQUFNLEFBQVM7O0FBQ3hCLEFBQU8sQUFBZTs7OztBQUN0QixBQUFPLEFBQVU7Ozs7QUFDakIsQUFBUyxBQUFjOzs7Ozs7O0lBRWpCLEE7Ozs7Ozs7Ozs7Ozs7OztzTkFDRixBO21CQUFRLEFBQ0csQUFDUDswQkFGSSxBQUVTLEFBQ2I7cUJBSEksQUFHSyxBQUNUO3FCQUpJLEFBSUssQTtBQUpMLEFBQ0osaUJBUUosQTtpR0FBVyxpQkFBQSxBQUFNLE9BQU47d0VBQUE7OzhFQUFBOzhCQUFBO3lEQUFBO2lDQUNQO3NDQURPLEFBQ1AsQUFBTTs4Q0FDaUMsTUFGaEMsQUFFcUMsT0FGckMsQUFFQSx1QkFGQSxBQUVBLFVBRkEsQUFFVSx1QkFGVixBQUVVLFVBRlYsQUFFb0IsdUJBRnBCLEFBRW9CLEFBQ3JCO0FBSEMsMENBR1MsdUJBQVUsTUFBQSxBQUFLLE1BSHhCLEFBR1MsQUFBcUI7O3FDQUNsQyxNQUFBLEFBQUssTUFKRCxBQUlPLGVBSlA7b0RBQUE7QUFBQTtBQUtIOztzQ0FBQSxBQUFLLFNBQVMsRUFBRSxTQUFGLEFBQVcsTUFBTSxjQUw1QixBQUtILEFBQWMsQUFBK0I7Z0RBTDFDO2dEQUFBO3VDQU93QixjQUFBLEFBQUssSUFQN0IsQUFPd0IsQUFBUzs7aUNBQTFCO0FBUFAsb0RBQUE7Z0RBQUE7K0NBUU8sQUFBUSxRQUFSLEFBQWdCLE1BQWhCLEFBQXNCLFVBQXRCLEFBQWdDLFVBQWhDLEFBQTBDLFVBQTFDLEFBQW9EOzBDQUNoRCxTQURxRCxBQUNyRCxBQUFTLEFBQ2Y7MkNBQU8sTUFBQSxBQUFLLE1BVmpCLEFBUU8sQUFBeUQsQUFFekM7QUFGeUMsQUFDM0QsaUNBREU7O2lDQUlOOytDQUFBLEFBQU8sNkJBQTJCLE1BQUEsQUFBSyxNQVp4QyxBQVlDLEFBQTZDO2dEQVo5QztBQUFBOztpQ0FBQTtnREFBQTtnRUFjQzs7c0NBQUEsQUFBSyxTQUFTLEVBQUUsY0FBYyxZQUFBLEFBQUksUUFBSixBQUFZLE1BQVosQUFBa0IsTUFkakQsQUFjQyxBQUFjLEFBQWdCLEFBQXdCOztpQ0FFMUQ7c0NBQUEsQUFBSyxTQUFTLEVBQUUsU0FBRixBQUFXLE9BQU8sT0FoQjdCLEFBZ0JILEFBQWMsQUFBd0I7O2lDQWhCbkM7aUNBQUE7Z0RBQUE7O0FBQUE7eUNBQUE7QTs7Ozs7Ozs7Ozt1Q0FvQkksQUFDWDtnQkFBRyxLQUFBLEFBQUssTUFBUixBQUFjLGVBQWMsQUFDeEI7dUNBQU8sQUFBQzs4QkFDUSxLQUFBLEFBQUssTUFBTCxBQUFXLFFBQVgsQUFBbUIsVUFENUIsQUFDb0MsQUFDdkM7NkJBQVMsS0FBQSxBQUFLLE1BRlgsQUFFaUI7a0NBRmpCO29DQUFBO0FBQUE7QUFDSCxpQkFERyxFQUFQLEFBQU8sQUFHVjtBQUpELG1CQUlLLEFBQ0Q7dUNBQU8sQUFBQyx5Q0FBTyxVQUFSO2tDQUFBO29DQUFBO0FBQUE7aUJBQUEsRUFBUCxBQUFPLEFBQ1Y7QUFDSjs7OztpQ0FFUSxBQUNMO21DQUNJLEFBQUMsdUNBQUssVUFBVSxLQUFoQixBQUFxQixVQUFVLE9BQU8sQ0FBQyxDQUFDLEtBQUEsQUFBSyxNQUE3QyxBQUFtRDs4QkFBbkQ7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ssY0FBRCxzQkFBQSxBQUFNOzs4QkFBTjtnQ0FBQSxBQUNJO0FBREo7QUFBQSwrQkFDSSxjQUFBOzs4QkFBQTtnQ0FBQTtBQUFBO0FBQUEsZUFGUixBQUNJLEFBQ0ksQUFFSCw0QkFKTCxBQUlLLEFBQUssQUFDTixnQ0FBQSxBQUFDLDBDQUFRLE9BQVQsTUFBZSxRQUFmLEFBQXNCLFNBQVEsU0FBUyxLQUFBLEFBQUssTUFBNUMsQUFBa0Q7OEJBQWxEO2dDQU5SLEFBQ0ksQUFLSSxBQUlYO0FBSlc7Ozs7OztBQS9DUSxBLEFBcUR4Qjs7a0JBQUEsQUFBZSIsImZpbGUiOiJFbnRlckZvcm0uanMiLCJzb3VyY2VSb290IjoiRTovRXRoZXJldW0vV29ybGRwYXkvbG90dGVyeS1jb250cmFjdCJ9

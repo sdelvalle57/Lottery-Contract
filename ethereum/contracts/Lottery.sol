@@ -17,6 +17,8 @@ import "./BytesConvertLib.sol";
 
 contract Lottery is Ownable {
     using SafeMath for uint256; 
+    using BytesConvertLib for bytes;
+    using BytesConvertLib for bytes6;
 
     event Winners(address[] winners, uint256 jackPot);
     event TransferJackPot(uint256 value);
@@ -90,10 +92,10 @@ contract Lottery is Ownable {
         require(msg.value == lotteryValue, "value received is less than the lotteryValue");
         require(now < deadline, "Lottery has finalized");
         require(!lotteryHasPlayed, "Lottery has already played");
-        require(BytesConvertLib._areValidNumbers6(_number6), "No repeated numbers inside the bet");
-        require(BytesConvertLib._areInsideNumber6(_number6, _numbers5));
-        require(BytesConvertLib._areInsideNumber6(_number6, _numbers4));
-        require(BytesConvertLib._areInsideNumber6(_number6, _numbers3));
+        require(_number6.areValidNumbers6(), "No repeated numbers inside the bet");
+        require(_number6.areInsideNumber6(_numbers5));
+        require(_number6.areInsideNumber6(_numbers4));
+        require(_number6.areInsideNumber6(_numbers3));
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
         _storeNumbers(_number6, _numbers5, _numbers4, _numbers3);
@@ -157,17 +159,17 @@ contract Lottery is Ownable {
             if(size==6) break;
             uint256 pair = uint256(bytes2(random)) % 45;
             if(pair == 0) pair = 45;
-            if(BytesConvertLib._isNotRepeated(bytes1(pair), _number6) && pair != 0){
+            if(_number6.isNotRepeated(bytes1(pair)) && pair != 0){
                 _number6[size] = bytes1(pair);
                 size++;
             } 
             random = random << 16;
         }
-        _number6 = BytesConvertLib._sortArray(_number6);
-        winningNumbers.winningNumber = BytesConvertLib._convertBytesToBytes6(_number6);
-        winningNumbers.winningNumbers5 = BytesConvertLib._setCombinations5(_number6);
-        winningNumbers.winningNumbers4 = BytesConvertLib._setCombinations4(_number6); 
-        winningNumbers.winningNumbers3 = BytesConvertLib._setCombinations3(_number6); 
+        _number6 = _number6.sortArray();
+        winningNumbers.winningNumber = _number6.convertBytesToBytes6();
+        winningNumbers.winningNumbers5 = _number6.setCombinations5();
+        winningNumbers.winningNumbers4 = _number6.setCombinations4();  
+        winningNumbers.winningNumbers3 = _number6.setCombinations3(); 
     }
 
      /** 
