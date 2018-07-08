@@ -12,8 +12,6 @@ class EnterForm extends Component {
         numbers: ''
     }
 
-    
-
     onSubmit = async event =>{  
         event.preventDefault();
         const {numbers6, numbers5, numbers4} = this.props;

@@ -19,14 +19,16 @@ contract Lottery is Ownable {
     using BytesConvertLib for bytes;
     using BytesConvertLib for bytes4;
 
-    event Winners(address[] winners, uint256 jackPot);
     event TransferJackPot(uint256 value);
-    event Debug(uint val);
+    event TicketBuy(address indexed buyer, uint256 jackPot, uint256 numOfPlayers);
+    event LotteryHasPlayed(uint256 numOfWinners, uint256 prize, bytes4 winningNumber, uint256 finalJackPot);
 
     uint256 public deadline;
     uint256 public lotteryValue;
     uint256 public jackPot;
-   
+    uint256 public finalJackPot;
+    uint256 public prize;
+
     struct WinningNumbers { 
         bytes4 winningNumber; 
         bytes3[4] winningNumbers3;
@@ -44,9 +46,10 @@ contract Lottery is Ownable {
     mapping(bytes3 => address[]) public numbers3;
 
     // @dev mapping of player => allocation, when player is a winner we add the prize 
-    mapping(address => uint256) public winners;
+    mapping(address => uint256) public winnersAllocation;
 
     address[] public players;
+    address[] public winners;
 
     bool public lotteryHasPlayed = false;
 
@@ -91,6 +94,7 @@ contract Lottery is Ownable {
         jackPot = jackPot.add(lotteryValue);
         players.push(msg.sender);
         _storeNumbers(_number4, _numbers3);
+        emit TicketBuy(msg.sender, jackPot, players.length);
     }
 
     /** 
@@ -132,7 +136,7 @@ contract Lottery is Ownable {
         require(deadline < now, "deadline has to be over");
         require(!lotteryHasPlayed, "lottery has played");
         lotteryHasPlayed = true;
-        bytes32 random = keccak256(now);        
+        bytes32 random = keccak256("1");        
         bytes memory _number4 = new bytes(4);
         uint256 size = 0;
         while(size < 4){
@@ -149,29 +153,66 @@ contract Lottery is Ownable {
         winningNumbers.winningNumber = _number4.convertBytesToBytes4();
         winningNumbers.winningNumbers3 = _number4.setCombinations3();
         _setWinners();
-        //TODO check winners
     }
 
-    uint256 public numberOfWinners;
     function _setWinners() private {
         uint256 allocation = jackPot.div(2);
         address[] memory number4Winners = numbers4[winningNumbers.winningNumber];
         if(number4Winners.length > 0){
+            prize = prize.add(allocation);
             jackPot = jackPot.sub(allocation);
             uint256 allocationPerPlayer = allocation.div(number4Winners.length);
             for(uint256 j = 0; j < number4Winners.length; j++) {
-                address winner4 = number4Winners[j];
-                winners[winner4] = winners[winner4].add(allocationPerPlayer);
+                allocateEth(number4Winners[j], allocationPerPlayer);
             }
         }
-        //uint256 numberOfWinners;
+
+        uint256 numberOfWinners;
         for(uint256 i = 0; i < 4; i++) {
-            numberOfWinners = numberOfWinners.add(
-                numbers3[winningNumbers.winningNumbers3[i]].length);
+            numberOfWinners = numberOfWinners.add(_getWinners3(i).length);
         }
         if(numberOfWinners > 0) {
+            prize = prize.add(allocation);
             jackPot = jackPot.sub(allocation);
+            allocationPerPlayer = allocation.div(numberOfWinners);
+            for(uint256 k = 0; k < 4; k++) {
+                address[] memory winners3 = _getWinners3(k); 
+                if(winners3.length > 0) {
+                    for(uint256 h = 0; h < winners3.length; h++) {
+                        allocateEth(winners3[h], allocationPerPlayer);
+                    }
+                }
+                
+            } 
         }
+        finalJackPot = jackPot;
+        emit LotteryHasPlayed(winners.length, prize, winningNumbers.winningNumber, finalJackPot);    
+    }
+
+    function allocateEth(address _winner, uint256 _allocation) private {
+        if(winnersAllocation[_winner] == 0) winners.push(_winner);
+        winnersAllocation[_winner] = winnersAllocation[_winner].add(_allocation);
+    }
+
+    function payWinners() external onlyOwner {
+        require(lotteryHasPlayed);
+        require(address(this).balance > 0);
+        require(winners.length > 0);
+        
+        for(uint256 j = 0; j < winners.length; j++) {
+            address winner = winners[j];
+            uint256 amount = winnersAllocation[winner];
+            if(amount > 0) {
+                winnersAllocation[winner] = 0;
+                winner.transfer(amount);
+            }
+        }
+    }
+
+    function _getWinners3(uint256 _index) private view returns(address[]) {
+        bytes3 thisNumber = winningNumbers.winningNumbers3[_index];
+        address[] memory theseWinners = numbers3[thisNumber];
+        return theseWinners;
     }
 
      /** 
@@ -194,17 +235,22 @@ contract Lottery is Ownable {
     }
 
     function getSummary() external view returns (
-        uint256, uint256, uint256, uint256, bool, address, address, address
+        uint256, uint256, uint256, uint256, uint256, uint256, 
+        uint256, bool, address, address, address, bytes4
     ) {
         return (
             lotteryValue,
             deadline,
             jackPot,
             players.length,
+            prize,
+            winners.length,
+            finalJackPot,
             lotteryHasPlayed,
             lastLottery,
             factoryAddress, 
-            owner
+            owner, 
+            winningNumbers.winningNumber
         );
     }
 
@@ -229,8 +275,8 @@ contract Lottery is Ownable {
         return numbers4[_number];
     }
 
-    function getPlayersByNumber3(bytes3[4] _numbers3) external view returns(address[]){
-        return numbers4[_number];
+    function getPlayersByNumber3(bytes3 _number3) external view returns(address[]){
+        return numbers3[_number3];
     }
 }
 

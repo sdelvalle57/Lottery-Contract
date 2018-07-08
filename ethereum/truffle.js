@@ -13,7 +13,7 @@ module.exports = {
         return new HDWalletProvider(privKey, "https://rinkeby.infura.io/qAudSy87uo2SByV57ETq")
       },
       network_id: '4',
-      gas: 6000000,
+      gas: 3000000,
     }
   }
 }

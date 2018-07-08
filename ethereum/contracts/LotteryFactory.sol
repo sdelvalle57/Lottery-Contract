@@ -20,7 +20,7 @@ contract LotteryFactory is Ownable {
     * @param _duration duration of the lottery
     * @param _lotteryValue value of the lottery
     */
-    function createNewLottery(uint256 _duration, uint256 _lotteryValue) external onlyOwner { 
+    function createNewLottery(uint256 _duration, uint256 _lotteryValue) external { 
         if (lotteries.length==0) {
             Lottery newLottery = new Lottery(_duration, _lotteryValue, address(0));        
             _setLotteryData(newLottery);
