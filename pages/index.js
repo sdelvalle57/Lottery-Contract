@@ -10,6 +10,7 @@ import web3Socket from '../ethereum/web3Socket'
 import lotteryAt from '../ethereum/lottery';
 import { Router } from '../routes';
 import { runInThisContext } from 'vm';
+import CardIndex from '../components/CardIndex';
 
 class LotteryIndex extends Component {
 
@@ -24,16 +25,20 @@ class LotteryIndex extends Component {
         finalJackPot: this.props.finalJackPot,
         lotteryPrice: this.props.lotteryPrice,
         deadline: this.props.deadline, 
-        lottery:''
+        lottery:'',
+        numOfLotteries: this.props.numOfLotteries, 
+        timeStarted: this.props.timeStarted,
+        lotteryAddress: this.props.lotteryAddress
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0x1B4C3151B92CDe20395d0E398AA0439BE4EC287B";
+        const factoryAddress = "0x5801511C38A978c72ECE5083D1feF40ad4D08106";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         const lotteries = await lotteryFactory.methods.getLotteries().call();
-        if(lotteries.length > 0) {
-            const lotteryAddress = lotteries[lotteries.length -1];
+        const numOfLotteries = lotteries.length;
+        if(numOfLotteries > 0) {
+            const lotteryAddress = lotteries[numOfLotteries -1];
             const lottery = lotteryAt(lotteryAddress, web3);
             const summary = await lottery.methods.getSummary().call();
             let lotteryPrice = summary[0];
@@ -45,13 +50,15 @@ class LotteryIndex extends Component {
             let finalJackPot = summary[6]
             const winningNumber = summary[11];
             const lotteryHasPlayed = summary[7];
+            const timeStarted = summary[12];
             lotteryPrice = web3.utils.fromWei(lotteryPrice, 'ether') ;
             lotteryJackPot = web3.utils.fromWei(lotteryJackPot, 'ether');
             finalJackPot = web3.utils.fromWei(finalJackPot, 'ether');
             prize = web3.utils.fromWei(prize, 'ether');
             return {lotteries, factoryAddress, lotteryPrice, lotteryJackPot,
                 deadline, numOfPlayers, lotteryFactory, lotteryAddress, owner,
-                prize, winningNumber, numOfWinners, finalJackPot };
+                prize, winningNumber, numOfWinners, finalJackPot, numOfLotteries,
+                timeStarted };
         } else {
             if (res) {
                 res.writeHead(302, {
@@ -72,15 +79,23 @@ class LotteryIndex extends Component {
         const lotteryHasPlayed = await lottery.methods.lotteryHasPlayed().call();
         this.setFactoryEventsListeners(lotteryFactory);
         this.setEventsListeners(lottery, lotteryFactory);
+        if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
+            const accounts = await web3.eth.getAccounts();
+            this.setState({accounts});
+        } else {
+            this.setWindowListener();
+        }
         this.setState({lotteryHasPlayed, lottery});
     }
 
     setFactoryEventsListeners = (lotteryFactory) => {
         lotteryFactory.events.LotteryDeployed({}, async (error, data) => {
             if(error == null) {
-                const newLotteryAddress = data.returnValues.deployedLottery;
-                const lottery = lotteryAt(newLotteryAddress, web3Socket);
+                const lotteryAddress = data.returnValues.deployedLottery;
+                const lottery = lotteryAt(lotteryAddress, web3Socket);
                 const summary = await lottery.methods.getSummary().call();
+                const lotteries = await lotteryFactory.methods.getLotteries().call();
+                const numOfLotteries = lotteries.length;
                 let lotteryPrice = summary[0];
                 const deadline = summary[1];
                 let lotteryJackPot = summary[2];
@@ -90,14 +105,15 @@ class LotteryIndex extends Component {
                 let finalJackPot = summary[6]
                 const winningNumber = summary[11];
                 const lotteryHasPlayed = summary[7];
+                const timeStarted = summary[12];
                 lotteryPrice = web3.utils.fromWei(lotteryPrice, 'ether') ;
                 lotteryJackPot = web3.utils.fromWei(lotteryJackPot, 'ether');
                 finalJackPot = web3.utils.fromWei(finalJackPot, 'ether');
                 prize = web3.utils.fromWei(prize, 'ether');
                 this.setEventsListeners(lottery);
                 this.setState({lotteryJackPot, numOfPlayers, lotteryHasPlayed, winningNumber,
-                    numOfWinners, prize, finalJackPot, lotteryPrice, deadline});
-                    
+                    numOfWinners, prize, finalJackPot, lotteryPrice, deadline, numOfLotteries,
+                    timeStarted, lotteryAddress});    
             }
         })
     }
@@ -122,14 +138,19 @@ class LotteryIndex extends Component {
                 finalJackPot =  web3.utils.fromWei(finalJackPot, 'ether');
                 this.setState({ lotteryHasPlayed: true, numOfWinners, 
                     winningNumber, prize, finalJackPot });
-
             }
         });
+    }
 
-        window.addEventListener('load', async () => {
+    setWindowListener = async () => {
+        if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
             const accounts = await web3.eth.getAccounts();
-            this.setState({accounts});
-        }, false);
+        } else {
+            window.addEventListener('load', async () => {
+                const accounts = await web3.eth.getAccounts();
+                this.setIntervalFunction();
+            }, false);
+        }
     }
 
     renderLotteries() {
@@ -149,7 +170,7 @@ class LotteryIndex extends Component {
 
     renderAdmin() {
         if(this.state.accounts.length > 0 && 
-            this.props.owner.toLowerCase() == this.state.accounts[0].toLowerCase()){
+            this.props.owner.toString() == this.state.accounts[0].toString()){
             return (
                 <Container style={{marginTop:'100px'}} > 
                     <Link route={ `/lotteries/new/${this.props.factoryAddress}`} >
@@ -171,7 +192,8 @@ class LotteryIndex extends Component {
             lotteryPrice = { this.state.lotteryPrice }
             lotteryJackPot = { this.state.lotteryJackPot } 
             deadline = { this.state.deadline }
-            numOfPlayers = { this.state.numOfPlayers }/>;
+            numOfPlayers = { this.state.numOfPlayers }
+            lotteryHasPlayed = { this.state.lotteryHasPlayed }/>;
     }
 
     renderModal() {
@@ -187,12 +209,29 @@ class LotteryIndex extends Component {
         return null;
     }
 
+    renderCardIndex() {
+        if(this.state.numOfLotteries > 0) {
+            return <CardIndex
+                lotteryPrice = {this.state.lotteryPrice}
+                lotteryJackPot = {this.state.lotteryJackPot}
+                deadline = {this.state.deadline}
+                numOfPlayers = {this.state.numOfPlayers}
+                lotteryHasPlayed = {this.state.lotteryHasPlayed}
+                numOfLotteries = {this.state.numOfLotteries}
+                timeStarted = {this.state.timeStarted}
+                lotteryAddress = {this.state.lotteryAddress}
+                />
+        }
+        return null;
+    }
+
     render() {
         return (
             <Layout >
                 <div>
                     {this.renderIndex()}
                     {this.renderModal()}
+                    {this.renderCardIndex()}
                     {this.renderAdmin()}
                 </div>
             </Layout>

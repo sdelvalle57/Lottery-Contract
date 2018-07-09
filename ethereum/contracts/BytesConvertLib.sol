@@ -44,7 +44,7 @@ library BytesConvertLib {
 
     /** 
     * @notice checks if each number(2nd for) inside each combination(1st for) is valid
-    * and is inside the main number(3rd for) or @param _number4 
+    * and is inside the main number(3rd for) or _number4 
     * so, we check for example a number4 in integers is [ 14, 15, 16, 19 ]
     * this in bytes is 0x0e0f1013, so one of the possible 4 combinations of 3 
     * numbers could be [ 14, 15, 16] where in bytes is 0x0e0f10 

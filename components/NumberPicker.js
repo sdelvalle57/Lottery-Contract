@@ -17,8 +17,9 @@ class NumberPicker extends Component {
         for(let j=0; j<9; j++){
             cells[j] = j;
         }
-        for(let i=1; i<=45; i++){
-            numbersObj[i] = {selected: false};
+        for(let i=1; i<=100; i++){
+            if(i!=100)
+                numbersObj[i] = {selected: false};
         }
         this.setState({cells, numbersObj});
     }
@@ -49,18 +50,13 @@ class NumberPicker extends Component {
     sortFinalNumbers = () =>{
         const finalNumbers = this.state.numbers.sort(function (a, b) {  return a - b;  });
         this.setState({finalNumbers});
-        if(finalNumbers.length<6){
-            this.props.callback({numbers6: '', numbers5: [], numbers4: []});
+        if(finalNumbers.length<4){
+            this.props.callback({number4: '', numbers3: []});
             return;
         }
-        const numbers6 = this.convertToBytes(finalNumbers);
-        const numbers5 = this.convertEachToBytes(this.k_combinations(finalNumbers, 5));
-        const numbers4 = this.convertEachToBytes(this.k_combinations(finalNumbers, 4));
-        console.log(finalNumbers);
-        console.log(numbers6);
-        console.log(numbers5);
-        console.log(numbers4);
-        this.props.callback(numbers6, numbers5, numbers4);
+        const number4 = this.convertToBytes(finalNumbers);
+        const numbers3 = this.convertEachToBytes(this.k_combinations(finalNumbers, 3));
+        this.props.callback(number4, numbers3);
     }
 
     convertToBytes(numbers) {
@@ -119,7 +115,7 @@ class NumberPicker extends Component {
             <Table celled textAlign='center'>
                 <Table.Header>
                     <Table.Row>
-                    <Table.HeaderCell colSpan='9'>Pick 6 Numbers</Table.HeaderCell>
+                    <Table.HeaderCell colSpan='9'>Pick 4 Numbers</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -178,6 +174,63 @@ class NumberPicker extends Component {
                                     <a href='#'>{i+this.state.cells.length*4+1}</a>
                             </Table.Cell>)}
                     </Table.Row>
+
+                    <Table.Row>
+                        {this.state.cells.map((i) => 
+                            <Table.Cell 
+                                onClick={this.cellClick.bind(this, i+this.state.cells.length*5+1)}
+                                warning={this.state.numbersObj[i+this.state.cells.length*5+1].selected}
+                                key={i+this.state.cells.length*5+1}
+                                selectable>
+                                    <a href='#'>{i+this.state.cells.length*5+1}</a>
+                            </Table.Cell>)}
+                    </Table.Row>
+
+                    <Table.Row>
+                        {this.state.cells.map((i) => 
+                            <Table.Cell 
+                                onClick={this.cellClick.bind(this, i+this.state.cells.length*7+1)}
+                                warning={this.state.numbersObj[i+this.state.cells.length*7+1].selected}
+                                key={i+this.state.cells.length*7+1}
+                                selectable>
+                                    <a href='#'>{i+this.state.cells.length*7+1}</a>
+                            </Table.Cell>)}
+                    </Table.Row>
+
+                    <Table.Row>
+                        {this.state.cells.map((i) => 
+                            <Table.Cell 
+                                onClick={this.cellClick.bind(this, i+this.state.cells.length*8+1)}
+                                warning={this.state.numbersObj[i+this.state.cells.length*8+1].selected}
+                                key={i+this.state.cells.length*8+1}
+                                selectable>
+                                    <a href='#'>{i+this.state.cells.length*8+1}</a>
+                            </Table.Cell>)}
+                    </Table.Row>
+
+                    <Table.Row>
+                        {this.state.cells.map((i) => 
+                            <Table.Cell 
+                                onClick={this.cellClick.bind(this, i+this.state.cells.length*9+1)}
+                                warning={this.state.numbersObj[i+this.state.cells.length*9+1].selected}
+                                key={i+this.state.cells.length*9+1}
+                                selectable>
+                                    <a href='#'>{i+this.state.cells.length*9+1}</a>
+                            </Table.Cell>)}
+                    </Table.Row>
+
+                    <Table.Row>
+                        {this.state.cells.map((i) => 
+                            <Table.Cell 
+                                onClick={this.cellClick.bind(this, i+this.state.cells.length*10+1)}
+                                warning={this.state.numbersObj[i+this.state.cells.length*10+1].selected}
+                                key={i+this.state.cells.length*10+1}
+                                selectable>
+                                    <a href='#'>{i+this.state.cells.length*10+1}</a>
+                            </Table.Cell>)}
+                    </Table.Row>
+
+                    
                 </Table.Body>
             
                 <Table.Footer>
@@ -188,10 +241,7 @@ class NumberPicker extends Component {
                             <Menu.Item >{this.state.finalNumbers[0]}</Menu.Item>
                             <Menu.Item >{this.state.finalNumbers[1]}</Menu.Item>
                             <Menu.Item >{this.state.finalNumbers[2]}</Menu.Item>
-                            <Menu.Item >{this.state.finalNumbers[3]}</Menu.Item>
-                            <Menu.Item >{this.state.finalNumbers[4]}</Menu.Item>
-                            <Menu.Item >{this.state.finalNumbers[5]}</Menu.Item>
-                        
+                            <Menu.Item >{this.state.finalNumbers[3]}</Menu.Item>                        
                         </Menu>
                     </Table.HeaderCell>
                     </Table.Row>

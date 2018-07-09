@@ -3,7 +3,6 @@ import { Icon, Image, Statistic, Container } from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
 import Timestamp from 'react-timestamp';
 
-
 class HeaderIndex extends Component {
     
     state = {
@@ -40,7 +39,10 @@ class HeaderIndex extends Component {
                             <Icon name='time' /> <br /> Deadline
                         </Statistic.Value>
                         <Statistic.Label >
-                            <Timestamp precision={3} autoUpdate time={this.state.deadline} />
+                            <Timestamp
+                                precision={3} 
+                                autoUpdate time={this.state.deadline} 
+                                actualSeconds />
                         </Statistic.Label>
                     </Statistic>
 

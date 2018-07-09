@@ -14,6 +14,7 @@ class LotteryNew extends Component {
         loading: false,
         factoryAddress: this.props.url.query.factoryAddress, 
         accounts: [],
+        lotteryFactory: ""
     }
 
     componentDidMount() {
@@ -26,7 +27,6 @@ class LotteryNew extends Component {
         const lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         const accounts = await  web3.eth.getAccounts();
-        console.log(accounts[0]);
         this.setState({ lotteryFactory, accounts, web3 });
     }
 

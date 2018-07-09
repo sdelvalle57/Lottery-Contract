@@ -69,14 +69,12 @@ var LotteryPlayedModal = function (_Component) {
     (0, _createClass3.default)(LotteryPlayedModal, [{
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            console.log(nextProps);
             this.setState({
                 open: nextProps.lotteryHasPlayed,
                 numOfWinners: nextProps.numOfWinners,
                 winningNumber: nextProps.winningNumber,
                 prize: nextProps.prize
             });
-            console.log(winningNumber);
         }
     }, {
         key: 'convertToNumbers',
@@ -107,7 +105,7 @@ var LotteryPlayedModal = function (_Component) {
             return _react2.default.createElement('div', {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 49
+                    lineNumber: 46
                 }
             }, _react2.default.createElement(_semanticUiReact.Modal, { closeOnEscape: false,
                 closeOnDimmerClick: true,
@@ -116,50 +114,50 @@ var LotteryPlayedModal = function (_Component) {
                 open: open,
                 onClose: this.close, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 50
+                    lineNumber: 47
                 }
             }, _react2.default.createElement(_semanticUiReact.Modal.Header, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 56
+                    lineNumber: 53
                 }
             }, 'Lottery Result'), _react2.default.createElement(_semanticUiReact.Modal.Content, { image: true, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 57
+                    lineNumber: 54
                 }
-            }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'smile', __source: {
+            }, _react2.default.createElement(_semanticUiReact.Image, { src: '/static/eth2.png', size: 'small', __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 58
+                    lineNumber: 55
                 }
             }), _react2.default.createElement(_semanticUiReact.Modal.Description, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 59
+                    lineNumber: 56
                 }
             }, _react2.default.createElement(_semanticUiReact.Header, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 60
+                    lineNumber: 57
                 }
             }, ' ', this.convertToNumbers(winningNumber), ' '), _react2.default.createElement('p', {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 61
+                    lineNumber: 58
                 }
             }, 'There are ', numOfWinners, ' winners '), _react2.default.createElement('p', {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 62
+                    lineNumber: 59
                 }
             }, 'Paid ', prize, ' ETH'), _react2.default.createElement('p', {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 63
+                    lineNumber: 60
                 }
             }, 'JackPot left ', finalJackPot, ' ETH'))), _react2.default.createElement(_semanticUiReact.Modal.Description, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 66
+                    lineNumber: 63
                 }
             }, 'Next Lottery coming soon!')));
         }
@@ -216,4 +214,4 @@ class LotteryPlayedModal extends Component {
 
 export default LotteryPlayedModal;
 */
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXExvdHRlcnlQbGF5ZWRNb2RhbC5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkJ1dHRvbiIsIkhlYWRlciIsIk1vZGFsIiwiSWNvbiIsIndlYjMiLCJMb3R0ZXJ5UGxheWVkTW9kYWwiLCJzdGF0ZSIsIm9wZW4iLCJwcm9wcyIsImxvdHRlcnlIYXNQbGF5ZWQiLCJudW1PZldpbm5lcnMiLCJ3aW5uaW5nTnVtYmVyIiwicHJpemUiLCJmaW5hbEphY2tQb3QiLCJzaG93Iiwic2V0U3RhdGUiLCJjbG9zZSIsIm5leHRQcm9wcyIsImNvbnNvbGUiLCJsb2ciLCJudW1CeXRlIiwibnVtYmVycyIsIm51bWJlcnNTdHJpbmciLCJzcGxpdCIsImsiLCJsZW5ndGgiLCJudW1iZXIiLCJwYXJzZUludCIsInB1c2giLCJjb252ZXJ0VG9OdW1iZXJzIl0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLEFBQU8sQUFBUTs7OztBQUNmLEFBQVMsQUFBUSxBQUFRLEFBQU87O0FBQ2hDLEFBQU8sQUFBVTs7Ozs7Ozs7O0ksQUFHWDs7Ozs7Ozs7Ozs7Ozs7d09BRUYsQTtrQkFDVSxNQUFBLEFBQUssTUFEUCxBQUNhLEFBQ2pCOzBCQUFjLE1BQUEsQUFBSyxNQUZmLEFBRXFCLEFBQ3pCOzJCQUFlLE1BQUEsQUFBSyxNQUhoQixBQUdzQixBQUMxQjttQkFBTyxNQUFBLEFBQUssTUFKUixBQUljLEFBQ2xCOzBCQUFjLE1BQUEsQUFBSyxNQUxmLEEsQUFLcUI7QUFMckIsQUFDSixpQkFtQkosQSxPQUFPLFlBQUE7bUJBQU0sTUFBQSxBQUFLLFNBQVMsRUFBQyxNQUFyQixBQUFNLEFBQWMsQUFBTztBLGlCQUNsQyxBLFFBQVEsWUFBQTttQkFBTSxNQUFBLEFBQUssU0FBUyxFQUFFLE1BQXRCLEFBQU0sQUFBYyxBQUFRO0E7Ozs7O2tEQWJWLEEsV0FBVyxBQUNqQztvQkFBQSxBQUFRLElBQVIsQUFBWSxBQUNaO2lCQUFBLEFBQUs7c0JBQ0ssVUFESSxBQUNNLEFBQ2hCOzhCQUFjLFVBRkosQUFFYyxBQUN4QjsrQkFBZSxVQUhMLEFBR2UsQUFDekI7dUJBQU8sVUFKWCxBQUFjLEFBSU8sQUFFckI7QUFOYyxBQUNWO29CQUtKLEFBQVEsSUFBUixBQUFZLEFBRWY7Ozs7eUNBS2dCLEEsU0FBUyxBQUN0QjtnQkFBSSxVQUFKLEFBQWMsQUFDZDtnQkFBSSxnQkFBSixBQUFvQixBQUNwQjtzQkFBVSxRQUFBLEFBQVEsTUFBUixBQUFjLE1BQXhCLEFBQVUsQUFBb0IsQUFDOUI7aUJBQUksSUFBSSxJQUFSLEFBQVksR0FBRyxJQUFJLFFBQW5CLEFBQTJCLFFBQVEsSUFBRSxJQUFyQyxBQUF1QyxHQUFFLEFBQ3JDO29CQUFNLFNBQVMsU0FBVSxRQUFBLEFBQVEsS0FBRyxRQUFRLElBQTdCLEFBQXFCLEFBQVUsSUFBOUMsQUFBZSxBQUFvQyxBQUNuRDt3QkFBQSxBQUFRLEtBQVIsQUFBYSxBQUNiO2lDQUFpQixTQUFqQixBQUF5QixBQUN6QjtBQUNIO0FBQ0Q7bUJBQUEsQUFBTyxBQUNWOzs7O2lDQUVRO3lCQUM0RCxLQUQ1RCxBQUNpRTtnQkFEakUsQUFDQyxjQURELEFBQ0M7Z0JBREQsQUFDTyxzQkFEUCxBQUNPO2dCQURQLEFBQ3FCLHVCQURyQixBQUNxQjtnQkFEckIsQUFDb0MsZUFEcEMsQUFDb0M7Z0JBRHBDLEFBQzJDLHNCQUQzQyxBQUMyQyxBQUNoRDs7b0JBQUEsQUFBUSxJQUFSLEFBQVksQUFFWjs7bUNBQ0EsY0FBQTs7OEJBQUE7Z0NBQUEsQUFDSTtBQURKO0FBQUEsYUFBQSxrQkFDSSxBQUFDLHdDQUFNLGVBQVAsQUFBd0IsQUFDcEI7b0NBREosQUFDMEIsQUFDdEI7c0JBRkosQUFFUyxBQUNMO3dCQUhKLEFBR1csQUFDUDtzQkFKSixBQUlVLEFBQ047eUJBQVMsS0FMYixBQUtrQjs4QkFMbEI7Z0NBQUEsQUFNQTtBQU5BOytCQU1DLGNBQUQsdUJBQUEsQUFBTzs7OEJBQVA7Z0NBQUE7QUFBQTtBQUFBLGVBTkEsQUFNQSxBQUNBLG1DQUFDLGNBQUQsdUJBQUEsQUFBTyxXQUFRLE9BQWY7OEJBQUE7Z0NBQUEsQUFDQTtBQURBOytCQUNBLEFBQUMsdUNBQUssTUFBTixBQUFXOzhCQUFYO2dDQURBLEFBQ0EsQUFDSTtBQURKO2dDQUNLLGNBQUQsdUJBQUEsQUFBTzs7OEJBQVA7Z0NBQUEsQUFDQTtBQURBO0FBQUEsK0JBQ0EsQUFBQzs7OEJBQUQ7Z0NBQUE7QUFBQTtBQUFBLGVBQVUsVUFBQSxBQUFLLGlCQUFmLEFBQVUsQUFBc0IsZ0JBRGhDLEFBQ0EsQUFDQSxzQkFBQSxjQUFBOzs4QkFBQTtnQ0FBQTtBQUFBO0FBQUEsZUFBYyxjQUFkLGNBRkEsQUFFQSxBQUNBLDhCQUFBLGNBQUE7OzhCQUFBO2dDQUFBO0FBQUE7QUFBQSxlQUFTLFNBQVQsT0FIQSxBQUdBLEFBQ0EseUJBQUEsY0FBQTs7OEJBQUE7Z0NBQUE7QUFBQTtBQUFBLGVBQWlCLGlCQUFqQixjQWJKLEFBT0EsQUFFSSxBQUlBLEFBR0EsMkJBQUMsY0FBRCx1QkFBQSxBQUFPOzs4QkFBUDtnQ0FBQTtBQUFBO0FBQUEsZUFsQlIsQUFDQSxBQUNJLEFBZ0JJLEFBSVg7Ozs7O0FBaEU0QixBLEFBb0VqQzs7a0JBQUEsQUFBZTs7QUFFZiIsImZpbGUiOiJMb3R0ZXJ5UGxheWVkTW9kYWwuanMiLCJzb3VyY2VSb290IjoiRTovRXRoZXJldW0vV29ybGRwYXkvbG90dGVyeS1jb250cmFjdCJ9
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXExvdHRlcnlQbGF5ZWRNb2RhbC5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkJ1dHRvbiIsIkhlYWRlciIsIk1vZGFsIiwiSWNvbiIsIkltYWdlIiwid2ViMyIsIkxvdHRlcnlQbGF5ZWRNb2RhbCIsInN0YXRlIiwib3BlbiIsInByb3BzIiwibG90dGVyeUhhc1BsYXllZCIsIm51bU9mV2lubmVycyIsIndpbm5pbmdOdW1iZXIiLCJwcml6ZSIsImZpbmFsSmFja1BvdCIsInNob3ciLCJzZXRTdGF0ZSIsImNsb3NlIiwibmV4dFByb3BzIiwibnVtQnl0ZSIsIm51bWJlcnMiLCJudW1iZXJzU3RyaW5nIiwic3BsaXQiLCJrIiwibGVuZ3RoIiwibnVtYmVyIiwicGFyc2VJbnQiLCJwdXNoIiwiY29uc29sZSIsImxvZyIsImNvbnZlcnRUb051bWJlcnMiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsQUFBTyxBQUFROzs7O0FBQ2YsQUFBUyxBQUFRLEFBQVEsQUFBTyxBQUFNOztBQUN0QyxBQUFPLEFBQVU7Ozs7Ozs7OztJQUdYLEE7Ozs7Ozs7Ozs7Ozs7O3dPLEFBRUY7a0JBQ1UsTUFBQSxBQUFLLE1BRFAsQUFDYSxBQUNqQjswQkFBYyxNQUFBLEFBQUssTUFGZixBQUVxQixBQUN6QjsyQkFBZSxNQUFBLEFBQUssTUFIaEIsQUFHc0IsQUFDMUI7bUJBQU8sTUFBQSxBQUFLLE1BSlIsQUFJYyxBQUNsQjswQkFBYyxNQUFBLEFBQUssTUFMZixBQUtxQixBO0FBTHJCLEFBQ0osaUJBZ0JKLEEsT0FBTyxZQUFBO21CQUFNLE1BQUEsQUFBSyxTQUFTLEVBQUMsTUFBckIsQUFBTSxBQUFjLEFBQU87QSxpQixBQUNsQyxRQUFRLFlBQUE7bUJBQU0sTUFBQSxBQUFLLFNBQVMsRUFBRSxNQUF0QixBQUFNLEFBQWMsQUFBUTtBOzs7OztrRCxBQVZWLFdBQVcsQUFDakM7aUJBQUEsQUFBSztzQkFDSyxVQURJLEFBQ00sQUFDaEI7OEJBQWMsVUFGSixBQUVjLEFBQ3hCOytCQUFlLFVBSEwsQUFHZSxBQUN6Qjt1QkFBTyxVQUpYLEFBQWMsQUFJTyxBQUV4QjtBQU5pQixBQUNWOzs7O3lDLEFBVVMsU0FBUyxBQUN0QjtnQkFBSSxVQUFKLEFBQWMsQUFDZDtnQkFBSSxnQkFBSixBQUFvQixBQUNwQjtzQkFBVSxRQUFBLEFBQVEsTUFBUixBQUFjLE1BQXhCLEFBQVUsQUFBb0IsQUFDOUI7aUJBQUksSUFBSSxJQUFSLEFBQVksR0FBRyxJQUFJLFFBQW5CLEFBQTJCLFFBQVEsSUFBRSxJQUFyQyxBQUF1QyxHQUFFLEFBQ3JDO29CQUFNLFNBQVMsU0FBVSxRQUFBLEFBQVEsS0FBRyxRQUFRLElBQTdCLEFBQXFCLEFBQVUsSUFBOUMsQUFBZSxBQUFvQyxBQUNuRDt3QkFBQSxBQUFRLEtBQVIsQUFBYSxBQUNiO2lDQUFpQixTQUFqQixBQUF5QixBQUN6QjtBQUNIO0FBQ0Q7bUJBQUEsQUFBTyxBQUNWOzs7O2lDQUVRO3lCQUM0RCxLQUQ1RCxBQUNpRTtnQkFEakUsQUFDQyxjQURELEFBQ0M7Z0JBREQsQUFDTyxzQkFEUCxBQUNPO2dCQURQLEFBQ3FCLHVCQURyQixBQUNxQjtnQkFEckIsQUFDb0MsZUFEcEMsQUFDb0M7Z0JBRHBDLEFBQzJDLHNCQUQzQyxBQUMyQyxBQUNoRDs7b0JBQUEsQUFBUSxJQUFSLEFBQVksQUFFWjs7bUNBQ0EsY0FBQTs7OEJBQUE7Z0NBQUEsQUFDSTtBQURKO0FBQUEsYUFBQSxrQkFDSSxBQUFDLHdDQUFNLGVBQVAsQUFBd0IsQUFDcEI7b0NBREosQUFDMEIsQUFDdEI7c0JBRkosQUFFUyxBQUNMO3dCQUhKLEFBR1csQUFDUDtzQkFKSixBQUlVLEFBQ047eUJBQVMsS0FMYixBQUtrQjs4QkFMbEI7Z0NBQUEsQUFNQTtBQU5BOytCQU1DLGNBQUQsdUJBQUEsQUFBTzs7OEJBQVA7Z0NBQUE7QUFBQTtBQUFBLGVBTkEsQUFNQSxBQUNBLG1DQUFDLGNBQUQsdUJBQUEsQUFBTyxXQUFRLE9BQWY7OEJBQUE7Z0NBQUEsQUFDSTtBQURKOytCQUNJLEFBQUMsd0NBQU0sS0FBUCxBQUFXLG9CQUFtQixNQUE5QixBQUFtQzs4QkFBbkM7Z0NBREosQUFDSSxBQUNBO0FBREE7Z0NBQ0MsY0FBRCx1QkFBQSxBQUFPOzs4QkFBUDtnQ0FBQSxBQUNBO0FBREE7QUFBQSwrQkFDQSxBQUFDOzs4QkFBRDtnQ0FBQTtBQUFBO0FBQUEsZUFBVSxVQUFBLEFBQUssaUJBQWYsQUFBVSxBQUFzQixnQkFEaEMsQUFDQSxBQUNBLHNCQUFBLGNBQUE7OzhCQUFBO2dDQUFBO0FBQUE7QUFBQSxlQUFjLGNBQWQsY0FGQSxBQUVBLEFBQ0EsOEJBQUEsY0FBQTs7OEJBQUE7Z0NBQUE7QUFBQTtBQUFBLGVBQVMsU0FBVCxPQUhBLEFBR0EsQUFDQSx5QkFBQSxjQUFBOzs4QkFBQTtnQ0FBQTtBQUFBO0FBQUEsZUFBaUIsaUJBQWpCLGNBYkosQUFPQSxBQUVJLEFBSUEsQUFHQSwyQkFBQyxjQUFELHVCQUFBLEFBQU87OzhCQUFQO2dDQUFBO0FBQUE7QUFBQSxlQWxCUixBQUNBLEFBQ0ksQUFnQkksQUFJWDs7Ozs7QUE3RDRCLEEsQUFpRWpDOztrQkFBQSxBQUFlOztBQUVmIiwiZmlsZSI6IkxvdHRlcnlQbGF5ZWRNb2RhbC5qcyIsInNvdXJjZVJvb3QiOiJFOi9FdGhlcmV1bS9Xb3JsZHBheS9sb3R0ZXJ5LWNvbnRyYWN0In0=

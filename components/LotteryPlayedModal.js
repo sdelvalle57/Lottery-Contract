@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Header, Modal, Icon } from 'semantic-ui-react';
+import { Button, Header, Modal, Icon, Image } from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
 
 
@@ -14,15 +14,12 @@ class LotteryPlayedModal extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
         this.setState({
             open: nextProps.lotteryHasPlayed,
             numOfWinners: nextProps.numOfWinners,
             winningNumber: nextProps.winningNumber,
             prize: nextProps.prize,
         })
-        console.log(winningNumber);
-
     }
 
     show = () => this.setState({open: true })
@@ -55,7 +52,7 @@ class LotteryPlayedModal extends Component {
                 onClose={this.close}>
             <Modal.Header>Lottery Result</Modal.Header>
             <Modal.Content image>
-            <Icon name='smile' />
+                <Image src='/static/eth2.png' size='small' />
                 <Modal.Description>
                 <Header> {this.convertToNumbers(winningNumber)} </Header>
                 <p>There are {numOfWinners} winners </p>

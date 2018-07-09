@@ -8,21 +8,37 @@ class PickWinnerForm extends Component {
     state = {
         value: '',
         errroMessage:'',
-        loading:false
+        loading: false,
+        canPickWinner: this.props.canPickWinner,
+        lotteryAddress: this.props.lotteryAddress
 
+    }
+
+    componentDidMount() {
+        console.log(this.state.canPickWinner);
+        console.log(this.state.lotteryAddress);
+
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        this.setState({
+            canPickWinner: nextProps.canPickWinner,
+            lotteryAddress: nextProps.lotteryAddress
+        })
     }
 
     onSubmit = async event =>{  
         event.preventDefault();
-        const lottery = lotteryAt(this.props.address);
-        if(this.props.canPickWinner){
+        const lottery = lotteryAt(this.state.lotteryAddress);
+        if(this.state.canPickWinner){
             this.setState({ loading: true, errroMessage: '' });
             try {
                 const accounts = await web3.eth.getAccounts();
                 await lottery.methods.pickWinner().send({
                     from: accounts[0]
                 });
-                Router.replaceRoute(`/lotteries/${this.props.address}`);
+                Router.replaceRoute(`/lotteries/${this.state.lotteryAddress}`);
             } catch (err) {
                 this.setState({ errroMessage: err.message.split("\n")[0] });
             }
@@ -32,13 +48,11 @@ class PickWinnerForm extends Component {
 
 
     render() {
-        if(this.props.canPickWinner){
+        if(this.state.canPickWinner){
             return (
                 <Form onSubmit={this.onSubmit} error={!!this.state.errroMessage}>
-                    <Form.Field>
-                        <label>Enter the lottery</label>
-                    </Form.Field>
-                    <Button positive loading={this.state.loading}>pickWinner</Button>
+                    
+                    <Button positive loading={this.state.loading}>Pick Winner</Button>
                     <Message error header="Oops!" content={this.state.errroMessage} />               
                     
                 </Form>

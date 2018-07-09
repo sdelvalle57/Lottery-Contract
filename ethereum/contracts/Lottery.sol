@@ -28,6 +28,7 @@ contract Lottery is Ownable {
     uint256 public jackPot;
     uint256 public finalJackPot;
     uint256 public prize;
+    uint256 public timeStarted;
 
     struct WinningNumbers { 
         bytes4 winningNumber; 
@@ -77,6 +78,7 @@ contract Lottery is Ownable {
         deadline = now + _duration;
         lotteryValue = _lotteryValue;
         lastLottery = _lastLotteryAddress;
+        timeStarted = now;
     }
 
     /** 
@@ -236,7 +238,7 @@ contract Lottery is Ownable {
 
     function getSummary() external view returns (
         uint256, uint256, uint256, uint256, uint256, uint256, 
-        uint256, bool, address, address, address, bytes4
+        uint256, bool, address, address, address, bytes4, uint256
     ) {
         return (
             lotteryValue,
@@ -250,7 +252,8 @@ contract Lottery is Ownable {
             lastLottery,
             factoryAddress, 
             owner, 
-            winningNumbers.winningNumber
+            winningNumbers.winningNumber,
+            timeStarted
         );
     }
 

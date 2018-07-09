@@ -28,7 +28,7 @@ contract('Lottery', () =>{
     it('deploys a Lottery', async ()=>{
         console.log(lotteryFactory.options.address);
         while(true) {
-            await lotteryFactory.methods.createNewLottery(60, lotteryValue).send({
+            await lotteryFactory.methods.createNewLottery(300, lotteryValue).send({
                 from: accounts[0],
                 gas: '5000000'
             });
@@ -37,7 +37,7 @@ contract('Lottery', () =>{
             let lottery = new web3.eth.Contract(Lottery.abi, lotteryAddress);
             let lotteryIsOpen = true;
             while(lotteryIsOpen) {
-                await sleep(5000);
+                await sleep(7000);
                 const deadline = await lottery.methods.deadline().call();
                 const blockNumber = await web3.eth.getBlockNumber();
                 const block = await web3.eth.getBlock(blockNumber);
@@ -46,7 +46,7 @@ contract('Lottery', () =>{
                 }
                 buyTicket(lottery);  
             }
-            await sleep(6000);
+            await sleep(60000);
             const playTheLottery = await lottery.methods.playTheLottery().send({
                 from: accounts[0],
                 gas: '3000000'
@@ -70,7 +70,7 @@ contract('Lottery', () =>{
             console.log("prize "+web3.utils.fromWei(summary[4]), 'ether');
             const balance = await web3.eth.getBalance(lotteryAddress);
             console.log("balance "+web3.utils.fromWei(balance), 'ether');
-            await sleep(10000);
+            //break;
         }
 
 
