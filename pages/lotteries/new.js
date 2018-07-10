@@ -3,6 +3,7 @@ import { Form, Button, Input, Message, Container } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import lotteryFactoryAt from '../../ethereum/factory';
 import web3 from '../../ethereum/web3';
+import web3Socket from '../../ethereum/web3Socket';
 import { Router } from '../../routes';
 
 class LotteryNew extends Component {
@@ -18,12 +19,31 @@ class LotteryNew extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('load', () => {
+        if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
             this.handleLoad(this.state.factoryAddress);
-        }, false);
+        } else {
+            window.addEventListener('load', () => {
+                this.handleLoad(this.state.factoryAddress);
+            }, false);
+        }
+    }
+
+    componentWillUnmount() {
+        this.LotteryDeployedEvent.unsubscribe();
+    }
+
+    setEventsListeners = () => {
+        const lotteryFactory = lotteryFactoryAt(this.state.factoryAddress, web3Socket);
+        this.LotteryDeployedEvent = lotteryFactory.events.LotteryDeployed({}, async (error, data) => {
+            if(error == null) {
+                const address = data.returnValues.deployedLottery;
+                Router.pushRoute(`/lotteries/${address}`);
+            }
+        })
     }
 
     handleLoad = async (factoryAddress) => {
+        this.setEventsListeners();
         const lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         const accounts = await  web3.eth.getAccounts();
@@ -36,15 +56,14 @@ class LotteryNew extends Component {
         const accounts = this.state.accounts;
 
         try {
-            this.setState({ loading:true, errorMessage:""});            
+            this.setState({ loading:true, errorMessage:""});
             await lotteryFactory.methods
                 .createNewLottery(this.state.duration, web3.utils.toWei(this.state.entranceValue, 'ether'))
                 .send({
                     from: accounts[0]
             });
-            Router.pushRoute('/');
+            
         } catch (err) {
-            console.log(err);
             this.setState({ errorMessage: err.message.split("\n")[0] });
         }
         this.setState({ loading:false });

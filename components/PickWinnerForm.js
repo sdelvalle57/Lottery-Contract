@@ -9,55 +9,33 @@ class PickWinnerForm extends Component {
         value: '',
         errroMessage:'',
         loading: false,
-        canPickWinner: this.props.canPickWinner,
         lotteryAddress: this.props.lotteryAddress
-
-    }
-
-    componentDidMount() {
-        console.log(this.state.canPickWinner);
-        console.log(this.state.lotteryAddress);
-
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-        this.setState({
-            canPickWinner: nextProps.canPickWinner,
-            lotteryAddress: nextProps.lotteryAddress
-        })
     }
 
     onSubmit = async event =>{  
         event.preventDefault();
-        const lottery = lotteryAt(this.state.lotteryAddress);
-        if(this.state.canPickWinner){
-            this.setState({ loading: true, errroMessage: '' });
-            try {
-                const accounts = await web3.eth.getAccounts();
-                await lottery.methods.pickWinner().send({
-                    from: accounts[0]
-                });
-                Router.replaceRoute(`/lotteries/${this.state.lotteryAddress}`);
-            } catch (err) {
-                this.setState({ errroMessage: err.message.split("\n")[0] });
-            }
-            this.setState({ loading: false, value:''});
+        const lottery = lotteryAt(this.state.lotteryAddress, web3);
+        this.setState({ loading: true, errroMessage: '' });
+        try {
+            const accounts = await web3.eth.getAccounts();
+            await lottery.methods.playTheLottery().send({
+                from: accounts[0]
+            });
+            //Router.replaceRoute(`/lotteries/${this.state.lotteryAddress}`);
+        } catch (err) {
+            this.setState({ errroMessage: err.message.split("\n")[0] });
         }
+        this.setState({ loading: false, value:''});
     }
 
 
     render() {
-        if(this.state.canPickWinner){
-            return (
-                <Form onSubmit={this.onSubmit} error={!!this.state.errroMessage}>
-                    
-                    <Button positive loading={this.state.loading}>Pick Winner</Button>
-                    <Message error header="Oops!" content={this.state.errroMessage} />               
-                    
-                </Form>
-            )
-        }else return null;
+        return (
+            <Form onSubmit={this.onSubmit} error={!!this.state.errroMessage}>
+                <Button positive loading={this.state.loading}>Pick Winner</Button>
+                <Message error header="Oops!" content={this.state.errroMessage} />               
+            </Form>
+        );
     }
 }
 export default PickWinnerForm;

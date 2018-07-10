@@ -22,6 +22,7 @@ contract Lottery is Ownable {
     event TransferJackPot(uint256 value);
     event TicketBuy(address indexed buyer, uint256 jackPot, uint256 numOfPlayers);
     event LotteryHasPlayed(uint256 numOfWinners, uint256 prize, bytes4 winningNumber, uint256 finalJackPot);
+    event WinnersPaid();
 
     uint256 public deadline;
     uint256 public lotteryValue;
@@ -52,7 +53,8 @@ contract Lottery is Ownable {
     address[] public players;
     address[] public winners;
 
-    bool public lotteryHasPlayed = false;
+    bool public lotteryHasPlayed;
+    bool public winnersPaid;
 
     // @dev we keep a reference of the last lottery
     address public lastLottery;
@@ -209,6 +211,8 @@ contract Lottery is Ownable {
                 winner.transfer(amount);
             }
         }
+        winnersPaid = true;
+        emit WinnersPaid();
     }
 
     function _getWinners3(uint256 _index) private view returns(address[]) {
@@ -238,22 +242,24 @@ contract Lottery is Ownable {
 
     function getSummary() external view returns (
         uint256, uint256, uint256, uint256, uint256, uint256, 
-        uint256, bool, address, address, address, bytes4, uint256
+        uint256, bool, address, address, address, bytes4, uint256,
+        bool
     ) {
         return (
-            lotteryValue,
-            deadline,
-            jackPot,
-            players.length,
-            prize,
-            winners.length,
-            finalJackPot,
-            lotteryHasPlayed,
-            lastLottery,
-            factoryAddress, 
-            owner, 
-            winningNumbers.winningNumber,
-            timeStarted
+            lotteryValue, //0
+            deadline, //1
+            jackPot, //2
+            players.length, //3
+            prize, //4
+            winners.length, //5
+            finalJackPot, //6
+            lotteryHasPlayed, //7
+            lastLottery, //8
+            factoryAddress,  //9
+            owner, //10
+            winningNumbers.winningNumber, //11
+            timeStarted, //12
+            winnersPaid //13
         );
     }
 

@@ -72,9 +72,7 @@ var PickWinnerForm = function (_Component) {
             value: '',
             errroMessage: '',
             loading: false,
-            canPickWinner: _this.props.canPickWinner,
             lotteryAddress: _this.props.lotteryAddress
-
         }, _this.onSubmit = function () {
             var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(event) {
                 var lottery, accounts;
@@ -83,45 +81,39 @@ var PickWinnerForm = function (_Component) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 event.preventDefault();
-                                lottery = (0, _lottery2.default)(_this.state.lotteryAddress);
-
-                                if (!_this.state.canPickWinner) {
-                                    _context.next = 17;
-                                    break;
-                                }
+                                lottery = (0, _lottery2.default)(_this.state.lotteryAddress, _web2.default);
 
                                 _this.setState({ loading: true, errroMessage: '' });
-                                _context.prev = 4;
-                                _context.next = 7;
+                                _context.prev = 3;
+                                _context.next = 6;
                                 return _web2.default.eth.getAccounts();
 
-                            case 7:
+                            case 6:
                                 accounts = _context.sent;
-                                _context.next = 10;
-                                return lottery.methods.pickWinner().send({
+                                _context.next = 9;
+                                return lottery.methods.playTheLottery().send({
                                     from: accounts[0]
                                 });
 
-                            case 10:
-                                _routes.Router.replaceRoute('/lotteries/' + _this.state.lotteryAddress);
-                                _context.next = 16;
+                            case 9:
+                                _context.next = 14;
                                 break;
 
-                            case 13:
-                                _context.prev = 13;
-                                _context.t0 = _context['catch'](4);
+                            case 11:
+                                _context.prev = 11;
+                                _context.t0 = _context['catch'](3);
 
                                 _this.setState({ errroMessage: _context.t0.message.split("\n")[0] });
 
-                            case 16:
+                            case 14:
                                 _this.setState({ loading: false, value: '' });
 
-                            case 17:
+                            case 15:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, _this2, [[4, 13]]);
+                }, _callee, _this2, [[3, 11]]);
             }));
 
             return function (_x) {
@@ -131,38 +123,21 @@ var PickWinnerForm = function (_Component) {
     }
 
     (0, _createClass3.default)(PickWinnerForm, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            console.log(this.state.canPickWinner);
-            console.log(this.state.lotteryAddress);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            console.log(nextProps);
-            this.setState({
-                canPickWinner: nextProps.canPickWinner,
-                lotteryAddress: nextProps.lotteryAddress
-            });
-        }
-    }, {
         key: 'render',
         value: function render() {
-            if (this.state.canPickWinner) {
-                return _react2.default.createElement(_semanticUiReact.Form, { onSubmit: this.onSubmit, error: !!this.state.errroMessage, __source: {
-                        fileName: _jsxFileName,
-                        lineNumber: 53
-                    }
-                }, _react2.default.createElement(_semanticUiReact.Button, { positive: true, loading: this.state.loading, __source: {
-                        fileName: _jsxFileName,
-                        lineNumber: 55
-                    }
-                }, 'Pick Winner'), _react2.default.createElement(_semanticUiReact.Message, { error: true, header: 'Oops!', content: this.state.errroMessage, __source: {
-                        fileName: _jsxFileName,
-                        lineNumber: 56
-                    }
-                }));
-            } else return null;
+            return _react2.default.createElement(_semanticUiReact.Form, { onSubmit: this.onSubmit, error: !!this.state.errroMessage, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 34
+                }
+            }, _react2.default.createElement(_semanticUiReact.Button, { positive: true, loading: this.state.loading, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 35
+                }
+            }, 'Pick Winner'), _react2.default.createElement(_semanticUiReact.Message, { error: true, header: 'Oops!', content: this.state.errroMessage, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 36
+                }
+            }));
         }
     }]);
 
@@ -170,4 +145,4 @@ var PickWinnerForm = function (_Component) {
 }(_react.Component);
 
 exports.default = PickWinnerForm;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXFBpY2tXaW5uZXJGb3JtLmpzIl0sIm5hbWVzIjpbIlJlYWN0IiwiQ29tcG9uZW50IiwiRm9ybSIsIk1lc3NhZ2UiLCJCdXR0b24iLCJsb3R0ZXJ5QXQiLCJ3ZWIzIiwiUm91dGVyIiwiUGlja1dpbm5lckZvcm0iLCJzdGF0ZSIsInZhbHVlIiwiZXJycm9NZXNzYWdlIiwibG9hZGluZyIsImNhblBpY2tXaW5uZXIiLCJwcm9wcyIsImxvdHRlcnlBZGRyZXNzIiwib25TdWJtaXQiLCJldmVudCIsInByZXZlbnREZWZhdWx0IiwibG90dGVyeSIsInNldFN0YXRlIiwiZXRoIiwiZ2V0QWNjb3VudHMiLCJhY2NvdW50cyIsIm1ldGhvZHMiLCJwaWNrV2lubmVyIiwic2VuZCIsImZyb20iLCJyZXBsYWNlUm91dGUiLCJtZXNzYWdlIiwic3BsaXQiLCJjb25zb2xlIiwibG9nIiwibmV4dFByb3BzIl0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsQUFBTyxBQUFTOzs7O0FBQ2hCLEFBQVMsQUFBTSxBQUFTOztBQUN4QixBQUFPLEFBQWU7Ozs7QUFDdEIsQUFBTyxBQUFVOzs7O0FBQ2pCLEFBQVMsQUFBYzs7Ozs7OztJQUVqQixBOzs7Ozs7Ozs7Ozs7Ozs7Z08sQUFDRjttQkFBUSxBQUNHLEFBQ1A7MEJBRkksQUFFUyxBQUNiO3FCQUhJLEFBR0ssQUFDVDsyQkFBZSxNQUFBLEFBQUssTUFKaEIsQUFJc0IsQUFDMUI7NEJBQWdCLE1BQUEsQUFBSyxNQUxqQixBLEFBS3VCOztBQUx2QixBQUNKLGlCLEFBc0JKO2lHQUFXLGlCQUFBLEFBQU0sT0FBTjs2QkFBQTs4RUFBQTs4QkFBQTt5REFBQTtpQ0FDUDtzQ0FBQSxBQUFNLEFBQ0E7QUFGQywwQ0FFUyx1QkFBVSxNQUFBLEFBQUssTUFGeEIsQUFFUyxBQUFxQjs7cUNBQ2xDLE1BQUEsQUFBSyxNQUhELEFBR08sZUFIUDtvREFBQTtBQUFBO0FBSUg7O3NDQUFBLEFBQUssU0FBUyxFQUFFLFNBQUYsQUFBVyxNQUFNLGNBSjVCLEFBSUgsQUFBYyxBQUErQjtnREFKMUM7Z0RBQUE7dUNBTXdCLGNBQUEsQUFBSyxJQU43QixBQU13QixBQUFTOztpQ0FBMUI7QUFOUCxvREFBQTtnREFBQTsrQ0FPTyxBQUFRLFFBQVIsQUFBZ0IsYUFBaEIsQUFBNkI7MENBQ3pCLFNBUlgsQUFPTyxBQUFrQyxBQUM5QixBQUFTO0FBRHFCLEFBQ3BDLGlDQURFOztpQ0FHTjsrQ0FBQSxBQUFPLDZCQUEyQixNQUFBLEFBQUssTUFWeEMsQUFVQyxBQUE2QztnREFWOUM7QUFBQTs7aUNBQUE7Z0RBQUE7Z0VBWUM7O3NDQUFBLEFBQUssU0FBUyxFQUFFLGNBQWMsWUFBQSxBQUFJLFFBQUosQUFBWSxNQUFaLEFBQWtCLE1BWmpELEFBWUMsQUFBYyxBQUFnQixBQUF3Qjs7aUNBRTFEO3NDQUFBLEFBQUssU0FBUyxFQUFFLFNBQUYsQUFBVyxPQUFPLE9BZDdCLEFBY0gsQUFBYyxBQUF3Qjs7aUNBZG5DO2lDQUFBO2dEQUFBOztBQUFBO3lDQUFBO0E7Ozs7Ozs7Ozs7NENBZFMsQUFDaEI7b0JBQUEsQUFBUSxJQUFJLEtBQUEsQUFBSyxNQUFqQixBQUF1QixBQUN2QjtvQkFBQSxBQUFRLElBQUksS0FBQSxBQUFLLE1BQWpCLEFBQXVCLEFBRTFCOzs7O2tEQUV5QixBLFdBQVcsQUFDakM7b0JBQUEsQUFBUSxJQUFSLEFBQVksQUFDWjtpQkFBQSxBQUFLOytCQUNjLFVBREwsQUFDZSxBQUN6QjtnQ0FBZ0IsVUFGcEIsQUFBYyxBQUVnQixBQUVqQztBQUppQixBQUNWOzs7O2lDQXdCQyxBQUNMO2dCQUFHLEtBQUEsQUFBSyxNQUFSLEFBQWMsZUFBYyxBQUN4Qjt1Q0FDSSxBQUFDLHVDQUFLLFVBQVUsS0FBaEIsQUFBcUIsVUFBVSxPQUFPLENBQUMsQ0FBQyxLQUFBLEFBQUssTUFBN0MsQUFBbUQ7a0NBQW5EO29DQUFBLEFBRUk7QUFGSjtpQkFBQSxrQkFFSSxBQUFDLHlDQUFPLFVBQVIsTUFBaUIsU0FBUyxLQUFBLEFBQUssTUFBL0IsQUFBcUM7a0NBQXJDO29DQUFBO0FBQUE7bUJBRkosQUFFSSxBQUNBLGdDQUFBLEFBQUMsMENBQVEsT0FBVCxNQUFlLFFBQWYsQUFBc0IsU0FBUSxTQUFTLEtBQUEsQUFBSyxNQUE1QyxBQUFrRDtrQ0FBbEQ7b0NBSlIsQUFDSSxBQUdJLEFBSVg7QUFKVzs7QUFMWixtQkFTTSxPQUFBLEFBQU8sQUFDaEI7Ozs7O0FBdER3QixBLEFBd0Q3Qjs7a0JBQUEsQUFBZSIsImZpbGUiOiJQaWNrV2lubmVyRm9ybS5qcyIsInNvdXJjZVJvb3QiOiJFOi9FdGhlcmV1bS9Xb3JsZHBheS9sb3R0ZXJ5LWNvbnRyYWN0In0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXFBpY2tXaW5uZXJGb3JtLmpzIl0sIm5hbWVzIjpbIlJlYWN0IiwiQ29tcG9uZW50IiwiRm9ybSIsIk1lc3NhZ2UiLCJCdXR0b24iLCJsb3R0ZXJ5QXQiLCJ3ZWIzIiwiUm91dGVyIiwiUGlja1dpbm5lckZvcm0iLCJzdGF0ZSIsInZhbHVlIiwiZXJycm9NZXNzYWdlIiwibG9hZGluZyIsImxvdHRlcnlBZGRyZXNzIiwicHJvcHMiLCJvblN1Ym1pdCIsImV2ZW50IiwicHJldmVudERlZmF1bHQiLCJsb3R0ZXJ5Iiwic2V0U3RhdGUiLCJldGgiLCJnZXRBY2NvdW50cyIsImFjY291bnRzIiwibWV0aG9kcyIsInBsYXlUaGVMb3R0ZXJ5Iiwic2VuZCIsImZyb20iLCJtZXNzYWdlIiwic3BsaXQiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxBQUFPLEFBQVM7Ozs7QUFDaEIsQUFBUyxBQUFNLEFBQVM7O0FBQ3hCLEFBQU8sQUFBZTs7OztBQUN0QixBQUFPLEFBQVU7Ozs7QUFDakIsQUFBUyxBQUFjOzs7Ozs7O0lBRWpCLEE7Ozs7Ozs7Ozs7Ozs7OztnTyxBQUNGO21CQUFRLEFBQ0csQUFDUDswQkFGSSxBQUVTLEFBQ2I7cUJBSEksQUFHSyxBQUNUOzRCQUFnQixNQUFBLEFBQUssTUFKakIsQSxBQUl1QjtBQUp2QixBQUNKLGlCLEFBTUo7aUdBQVcsaUJBQUEsQUFBTSxPQUFOOzZCQUFBOzhFQUFBOzhCQUFBO3lEQUFBO2lDQUNQO3NDQUFBLEFBQU0sQUFDQTtBQUZDLDBDQUVTLHVCQUFVLE1BQUEsQUFBSyxNQUZ4QixBQUVTLEFBQXFCLEFBQWdCLEFBQ3JEOztzQ0FBQSxBQUFLLFNBQVMsRUFBRSxTQUFGLEFBQVcsTUFBTSxjQUh4QixBQUdQLEFBQWMsQUFBK0I7Z0RBSHRDO2dEQUFBO3VDQUtvQixjQUFBLEFBQUssSUFMekIsQUFLb0IsQUFBUzs7aUNBQTFCO0FBTEgsb0RBQUE7Z0RBQUE7K0NBTUcsQUFBUSxRQUFSLEFBQWdCLGlCQUFoQixBQUFpQzswQ0FDN0IsU0FQUCxBQU1HLEFBQXNDLEFBQ2xDLEFBQVM7QUFEeUIsQUFDeEMsaUNBREU7O2lDQU5IO2dEQUFBO0FBQUE7O2lDQUFBO2dEQUFBO2dFQVdIOztzQ0FBQSxBQUFLLFNBQVMsRUFBRSxjQUFjLFlBQUEsQUFBSSxRQUFKLEFBQVksTUFBWixBQUFrQixNQVg3QyxBQVdILEFBQWMsQUFBZ0IsQUFBd0I7O2lDQUUxRDtzQ0FBQSxBQUFLLFNBQVMsRUFBRSxTQUFGLEFBQVcsT0FBTyxPQWJ6QixBQWFQLEFBQWMsQUFBd0I7O2lDQWIvQjtpQ0FBQTtnREFBQTs7QUFBQTt5Q0FBQTtBOzs7Ozs7Ozs7O2lDQWlCRixBQUNMO21DQUNJLEFBQUMsdUNBQUssVUFBVSxLQUFoQixBQUFxQixVQUFVLE9BQU8sQ0FBQyxDQUFDLEtBQUEsQUFBSyxNQUE3QyxBQUFtRDs4QkFBbkQ7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ksQUFBQyx5Q0FBTyxVQUFSLE1BQWlCLFNBQVMsS0FBQSxBQUFLLE1BQS9CLEFBQXFDOzhCQUFyQztnQ0FBQTtBQUFBO2VBREosQUFDSSxBQUNBLGdDQUFBLEFBQUMsMENBQVEsT0FBVCxNQUFlLFFBQWYsQUFBc0IsU0FBUSxTQUFTLEtBQUEsQUFBSyxNQUE1QyxBQUFrRDs4QkFBbEQ7Z0NBSFIsQUFDSSxBQUVJLEFBR1g7QUFIVzs7Ozs7O0FBN0JhLEEsQUFrQzdCOztrQkFBQSxBQUFlIiwiZmlsZSI6IlBpY2tXaW5uZXJGb3JtLmpzIiwic291cmNlUm9vdCI6IkU6L0V0aGVyZXVtL1dvcmxkcGF5L2xvdHRlcnktY29udHJhY3QifQ==

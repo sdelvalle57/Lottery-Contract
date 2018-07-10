@@ -9,6 +9,7 @@ import web3Socket from '../../ethereum/web3Socket';
 import EnterForm from '../../components/EnterForm';
 import PickWinnerForm from '../../components/PickWinnerForm';
 import NumberPicker from '../../components/NumberPicker';
+import LotteryPlayedModal from '../../components/LotteryPlayedModal';
 import { runInThisContext } from 'vm';
 
 
@@ -27,8 +28,13 @@ class Lottery extends Component {
         loading: true,
         timeStarted: '',
         number4:'',
-        numbers3:[]
+        numbers3:[],
+        prize:'',
+        numOfWinners:'',
+        winningNumber:'',
+        winnersPaid: true
     }
+
 
     async componentDidMount() {
         const lotteryAddress = this.props.url.query.lotteryAddress;
@@ -36,38 +42,39 @@ class Lottery extends Component {
             const lottery = lotteryAt(lotteryAddress, web3);
             await this.setLotteryValues(lottery);
             this.setIntervalFunction();
-        } else {
-            window.addEventListener('load', async () => {
-                const lottery = lotteryAt(lotteryAddress, web3);
-                await this.setLotteryValues(lottery);
-                this.setIntervalFunction();
-            }, false);
-        }
+        } 
         this.setEventsListeners(lotteryAt(lotteryAddress, web3Socket));
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     setLotteryValues = async (lottery) => {
-        const lotteryAddress = this.state.lotteryAddress;
         const summary = await lottery.methods.getSummary().call();
         const accounts = await web3.eth.getAccounts(); 
         const lotteryValue = summary[0];
         const deadline = summary[1];
-        const lotteryJackPot = summary[2];
+        let lotteryJackPot = summary[2];
         const lotteryHasPlayed = summary[7];
         const owner = summary[10];
         const timeStarted = summary[12];
         const canBuyLottery = !lotteryHasPlayed && Date.now()/1000 - deadline  < 0;
         const canPickWinner = !lotteryHasPlayed && Date.now()/1000 > deadline;
+        if(lotteryHasPlayed) lotteryJackPot = summary[6];
+        const prize = web3.utils.fromWei(summary[4], 'ether');
+        const numOfWinners = summary[5];
+        const winningNumber = summary[11];
+        const winnersPaid = summary[13];
+        console.log(summary);
         this.setState({lotteryValue, deadline, lotteryJackPot, lotteryHasPlayed, owner, 
-            accounts, canBuyLottery, canPickWinner, loading:false, timeStarted})
+            accounts, canBuyLottery, canPickWinner, loading:false, timeStarted, prize,
+            numOfWinners, winningNumber, winnersPaid})
     }
 
     numberPickerCallback = (number4, numbers3) => {
-        console.log("lt "+number4);
         this.setState({number4, numbers3});
     }
-
-    
 
     setIntervalFunction = () => {
         this.interval = setInterval(() => {
@@ -76,28 +83,37 @@ class Lottery extends Component {
     }
 
     setEventsListeners =  (lottery) => {
+        window.addEventListener('load', async () => {
+            await this.setLotteryValues(lotteryAt(lotteryAddress, web3));
+            this.setIntervalFunction();
+        }, false);
         lottery.events.TicketBuy({}, async (error, data) => {
             if (error == null) {
                 let lotteryJackPot = data.returnValues.jackPot;
                 this.setState({ lotteryJackPot })
             }
         });
-        lottery.events.LotteryHasPlayed({}, (error, data) => {
+        lottery.events.LotteryHasPlayed({}, async (error, data) => {
             if(error == null) {
+                const summary = await lottery.methods.getSummary().call();
+                const lotteryJackPot = summary[6];
+                const prize = web3.utils.fromWei(summary[4], 'ether');
+                const numOfWinners = summary[5];
+                const winningNumber = summary[11];
+                const winnersPaid = summary[13];
                 const lotteryHasPlayed = true;
                 const canBuyLottery = false;
                 const canPickWinner = false;
-                this.setState({ lotteryHasPlayed, canPickWinner, canBuyLottery });
+                this.setState({ lotteryHasPlayed, canPickWinner, canBuyLottery, lotteryJackPot,
+                    winningNumber, prize, numOfWinners, winnersPaid });
             }
-        })
+        });
     }
 
     isLotteryOpen = async () => {
         const {lotteryHasPlayed, deadline} = this.state;
         const canBuyLottery = !lotteryHasPlayed && Date.now()/1000 - deadline  < 0;
         const canPickWinner = !lotteryHasPlayed && Date.now()/1000 > deadline;
-        console.log(lotteryHasPlayed + " " + canBuyLottery + " "+canPickWinner)
-        
         this.setState({canBuyLottery, canPickWinner});
     }
 
@@ -142,24 +158,51 @@ class Lottery extends Component {
     }
 
     renderPickWinnerButton() {
-        const {lotteryAddress, canPickWinner} = this.state;
-        console.log(lotteryAddress);
-        console.log(canPickWinner);
-        return 
-            <PickWinnerForm
-                lotteryAddress
-                canPickWinner
-            />
+        const {lotteryAddress, canPickWinner, lotteryHasPlayed, owner, accounts} = this.state;
+        if(!lotteryHasPlayed && canPickWinner && accounts.length > 0 && 
+            owner.toString() == accounts[0].toString()) {
+            return (
+                <PickWinnerForm
+                    lotteryAddress = {lotteryAddress}
+                    canPickWinner = {canPickWinner}
+                    lotteryHasPlayed = {lotteryHasPlayed}
+                />);
+        }
+        return null;
+    }
+
+    renderModal() {
+        const { lotteryHasPlayed, numOfWinners, winningNumber, prize, lotteryJackPot, 
+            winnersPaid, lotteryAddress, owner, accounts} = this.state;
+        const jackPot = web3.utils.fromWei(lotteryJackPot, 'ether');
+        const isOwner = accounts.length > 0 && owner.toString() == accounts[0].toString();
+        if(lotteryHasPlayed) {
+            return <LotteryPlayedModal
+                lotteryHasPlayed = { lotteryHasPlayed }
+                numOfWinners = { numOfWinners }
+                winningNumber = { winningNumber }
+                prize = { prize }
+                finalJackPot = { jackPot }
+                showMessage = {false}
+                winnersPaid = {winnersPaid}
+                lotteryAddress = {lotteryAddress}
+                isOwner = {isOwner}
+                />;
+        }
+        return null;
     }
 
     render() {
-        const {canPickWinner, canBuyLottery, number4} = this.state;
+        const {canPickWinner, canBuyLottery, number4, lotteryHasPlayed,
+            lotteryValue, lotteryAddress, numbers3} = this.state;
         return (
             <Layout >
                 <Dimmer active = {this.state.loading}>
                     <Loader size='large'>Loading</Loader>
                 </Dimmer>
+                
                 <Container style={{marginTop:'100px'}}>
+                { this.renderModal() }
                     <Grid >
                         <Grid.Column width = { 10 } >
                             { this.renderCards() }
@@ -167,9 +210,12 @@ class Lottery extends Component {
                         <Grid.Column width = { 6 }>
                             <Segment>
                                 <EnterForm
-                                    number4
-                                    canPickWinner
-                                    canBuyLottery
+                                    number4 = {number4}
+                                    canPickWinner = {canPickWinner}
+                                    canBuyLottery = {canBuyLottery}
+                                    lotteryValue = {lotteryValue}
+                                    lotteryAddress = {lotteryAddress}
+                                    numbers3 = {numbers3}
                                     />
                                 <NumberPicker callback={this.numberPickerCallback} />
                             </Segment>

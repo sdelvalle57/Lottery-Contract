@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Button, Header, Modal, Icon, Image } from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
+import { Router } from '../routes';
+import lotteryAt from '../ethereum/lottery';
 
 
 class LotteryPlayedModal extends Component {
@@ -10,7 +12,13 @@ class LotteryPlayedModal extends Component {
         numOfWinners: this.props.numOfWinners,
         winningNumber: this.props.winningNumber,
         prize: this.props.prize, 
-        finalJackPot: this.props.finalJackPot
+        finalJackPot: this.props.finalJackPot, 
+        showMessage: this.props.showMessage,
+        winnersPaid: this.props.winnersPaid,
+        lotteryAddress: this.props.lotteryAddress,
+        loading: false,
+        errroMessage: '',
+        isOwner: this.props.isOwner
     }
 
     componentWillReceiveProps(nextProps) {
@@ -19,6 +27,8 @@ class LotteryPlayedModal extends Component {
             numOfWinners: nextProps.numOfWinners,
             winningNumber: nextProps.winningNumber,
             prize: nextProps.prize,
+            winnersPaid: nextProps.winnersPaid,
+            isOwner: nextProps.isOwner
         })
     }
 
@@ -33,19 +43,82 @@ class LotteryPlayedModal extends Component {
             const number = parseInt((numByte[k]+numByte[k+1]), 16);
             numbers.push(number);
             numbersString += number +" ";
-            //if(k!=numByte.length-1) numbersString += " - ";
         }
         return numbersString;
     }
 
-    render() {
-        let { open, numOfWinners, winningNumber, prize, finalJackPot } = this.state
-        console.log(prize);
+    goHome() {
+        Router.push(`/`)
+    }
 
+    payWinners = async () => {
+        this.setState({ loading: true, errroMessage: '' });
+        const lottery = lotteryAt(this.state.lotteryAddress, web3);
+        try {
+            const accounts = await web3.eth.getAccounts();
+            await lottery.methods.payWinners().send({
+                from: accounts[0]
+            });
+            this.setState({ winnersPaid: true });
+        } catch (err) {
+            this.setState({ errroMessage: err.message.split("\n")[0] });
+        }
+        this.setState({ loading: false });
+    }
+
+    showMessage(showMessage) {
+        if(showMessage) {
+            return("Next Lottery coming soon!");
+        }
+        return null;
+    }
+
+    renderPayButton(showMessage, winnersPaid) {
+        if(!showMessage && !winnersPaid && this.props.isOwner && this.props.numOfWinners>0 ) {
+            return(
+                <Button
+                    primary
+                    content="Pay Winners"
+                    onClick={this.payWinners}
+                    loading={this.state.loading}
+                />
+            )
+        }
+        return null;
+    }
+
+    renderMessage(){
+        if(!!this.state.errroMessage){
+            return(
+                <Modal.Content>
+                    {this.state.errroMessage}
+                </Modal.Content>
+            )
+        }
+        return null;
+    }
+
+    renderButton(showMessage) {
+        if(!showMessage){
+            return(
+                <Button
+                    positive
+                    icon='checkmark'
+                    labelPosition='right'
+                    content="Ok!"
+                    onClick={this.goHome}
+                />
+            )
+        }
+        return null;
+    }
+
+    render() {
+        let { open, numOfWinners, winningNumber, prize, finalJackPot, showMessage, winnersPaid } = this.state
         return (
         <div>
             <Modal closeOnEscape = {false}
-                closeOnDimmerClick = {true} 
+                closeOnDimmerClick = {showMessage} 
                 size='mini' 
                 dimmer='inverted' 
                 open={open} 
@@ -60,7 +133,13 @@ class LotteryPlayedModal extends Component {
                 <p>JackPot left {finalJackPot} ETH</p>
                 </Modal.Description>
             </Modal.Content>
-                <Modal.Description>Next Lottery coming soon!</Modal.Description>
+                <Modal.Description>{this.showMessage(showMessage)}</Modal.Description>
+                <Modal.Actions>
+                    {this.renderPayButton(showMessage, winnersPaid)}                    
+                    {this.renderButton(showMessage)}
+                </Modal.Actions>
+                    {this.renderMessage()}
+                
             </Modal>
         </div>
         )
@@ -69,50 +148,3 @@ class LotteryPlayedModal extends Component {
 
 
 export default LotteryPlayedModal;
-
-/*
-import React, {Component} from 'react';
-import { Button, Header, Image, Modal } from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
-
-
-class LotteryPlayedModal extends Component {
-
-    
-
-  show = dimmer => () => this.setState({ dimmer, open: true })
-  close = () => this.setState({ lotteryHasPlayed: false })
-
-  render() {
-    const { lotteryHasPlayed, dimmer } = this.state
-
-    return (
-      <div>
-        <Modal dimmer={dimmer} open={lotteryHasPlayed} onClose={this.close}>
-          <Modal.Header>Select a Photo</Modal.Header>
-          <Modal.Content image>
-            <Image wrapped size='medium' src='/images/lottery.jpg' />
-            <Modal.Description>
-              <Header>Default Profile Image</Header>
-              <p>We've found the following gravatar image associated with your e-mail address.</p>
-              <p>Is it okay to use this photo?</p>
-            </Modal.Description>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              positive
-              icon='checkmark'
-              labelPosition='right'
-              content="Ok"
-              onClick={this.close}
-            />
-          </Modal.Actions>
-        </Modal>
-      </div>
-    )
-  }
-}
-
-
-export default LotteryPlayedModal;
-*/

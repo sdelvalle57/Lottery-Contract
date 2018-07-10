@@ -32,9 +32,10 @@ class LotteryIndex extends Component {
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0x5801511C38A978c72ECE5083D1feF40ad4D08106";
+        const factoryAddress = "0xfdb6707990732b46121a15d0284bd77282a64632";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
+        console.log(owner);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         const numOfLotteries = lotteries.length;
         if(numOfLotteries > 0) {
@@ -88,8 +89,14 @@ class LotteryIndex extends Component {
         this.setState({lotteryHasPlayed, lottery});
     }
 
+    componentWillUnmount() {
+        this.TicketBuyEvent.unsubscribe();
+        this.LotteryHasPlayedEvent.unsubscribe();
+        this.LotteryDeployedEvent.unsubscribe();
+    }
+
     setFactoryEventsListeners = (lotteryFactory) => {
-        lotteryFactory.events.LotteryDeployed({}, async (error, data) => {
+        this.LotteryDeployedEvent = lotteryFactory.events.LotteryDeployed({}, async (error, data) => {
             if(error == null) {
                 const lotteryAddress = data.returnValues.deployedLottery;
                 const lottery = lotteryAt(lotteryAddress, web3Socket);
@@ -119,7 +126,7 @@ class LotteryIndex extends Component {
     }
 
     setEventsListeners =  (lottery) => {
-        lottery.events.TicketBuy({}, async (error, data) => {
+        this.TicketBuyEvent = lottery.events.TicketBuy({}, async (error, data) => {
             if (error == null) {
                 let lotteryJackPot = data.returnValues.jackPot;
                 lotteryJackPot = web3.utils.fromWei(lotteryJackPot, 'ether') ;
@@ -128,7 +135,7 @@ class LotteryIndex extends Component {
             }
         });
 
-        lottery.events.LotteryHasPlayed({}, async (error, data) => {
+        this.LotteryHasPlayedEvent = lottery.events.LotteryHasPlayed({}, async (error, data) => {
             if(error == null) {
                 const numOfWinners = data.returnValues.numOfWinners;
                 const winningNumber = data.returnValues.winningNumber;
@@ -169,8 +176,10 @@ class LotteryIndex extends Component {
     }
 
     renderAdmin() {
-        if(this.state.accounts.length > 0 && 
-            this.props.owner.toString() == this.state.accounts[0].toString()){
+        const { accounts, lotteryHasPlayed } = this.state;
+        if(accounts.length > 0 && 
+            this.props.owner.toString() == accounts[0].toString()
+        && lotteryHasPlayed){
             return (
                 <Container style={{marginTop:'100px'}} > 
                     <Link route={ `/lotteries/new/${this.props.factoryAddress}`} >
@@ -204,6 +213,8 @@ class LotteryIndex extends Component {
                 winningNumber = { this.state.winningNumber }
                 prize = { this.state.prize }
                 finalJackPot = { this.state.finalJackPot }
+                showMessage = {true}
+                winnersPaid = {true}
                 />;
         }
         return null;

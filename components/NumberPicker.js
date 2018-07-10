@@ -31,7 +31,7 @@ class NumberPicker extends Component {
         if(index > -1){
             numbers.splice(index, 1);
             numbersObj[item].selected = false;
-        } else if(numbers.length<6) {
+        } else if(numbers.length<4) {
             numbers.push(item);
             numbersObj[item].selected = true;
         }
@@ -105,10 +105,6 @@ class NumberPicker extends Component {
         }
         return combs;
     }
-
-    
-
-    
 
     render() {
         return (
