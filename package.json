@@ -3,9 +3,6 @@
   "version": "0.0.6",
   "description": "Worldpay Lottery",
   "main": "index.js",
-  "engines": {
-    "node": "9.11.1"
-  },
   "dependencies": {
     "next": "^4.2.0",
     "next-routes": "^1.4.2",
@@ -27,7 +24,7 @@
     "test": "mocha",
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node server.js" 
   },
   "repository": {
     "type": "git",
