@@ -50,9 +50,6 @@ var _routes = require('../routes');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _jsxFileName = 'E:\\Ethereum\\Worldpay\\lottery-contract\\components\\PickWinnerForm.js';
-
-
 var PickWinnerForm = function (_Component) {
     (0, _inherits3.default)(PickWinnerForm, _Component);
 
@@ -125,19 +122,7 @@ var PickWinnerForm = function (_Component) {
     (0, _createClass3.default)(PickWinnerForm, [{
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(_semanticUiReact.Form, { onSubmit: this.onSubmit, error: !!this.state.errroMessage, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 34
-                }
-            }, _react2.default.createElement(_semanticUiReact.Button, { positive: true, loading: this.state.loading, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 35
-                }
-            }, 'Pick Winner'), _react2.default.createElement(_semanticUiReact.Message, { error: true, header: 'Oops!', content: this.state.errroMessage, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 36
-                }
-            }));
+            return _react2.default.createElement(_semanticUiReact.Form, { onSubmit: this.onSubmit, error: !!this.state.errroMessage }, _react2.default.createElement(_semanticUiReact.Button, { positive: true, loading: this.state.loading }, 'Pick Winner'), _react2.default.createElement(_semanticUiReact.Message, { error: true, header: 'Oops!', content: this.state.errroMessage }));
         }
     }]);
 
@@ -145,4 +130,3 @@ var PickWinnerForm = function (_Component) {
 }(_react.Component);
 
 exports.default = PickWinnerForm;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXFBpY2tXaW5uZXJGb3JtLmpzIl0sIm5hbWVzIjpbIlJlYWN0IiwiQ29tcG9uZW50IiwiRm9ybSIsIk1lc3NhZ2UiLCJCdXR0b24iLCJsb3R0ZXJ5QXQiLCJ3ZWIzIiwiUm91dGVyIiwiUGlja1dpbm5lckZvcm0iLCJzdGF0ZSIsInZhbHVlIiwiZXJycm9NZXNzYWdlIiwibG9hZGluZyIsImxvdHRlcnlBZGRyZXNzIiwicHJvcHMiLCJvblN1Ym1pdCIsImV2ZW50IiwicHJldmVudERlZmF1bHQiLCJsb3R0ZXJ5Iiwic2V0U3RhdGUiLCJldGgiLCJnZXRBY2NvdW50cyIsImFjY291bnRzIiwibWV0aG9kcyIsInBsYXlUaGVMb3R0ZXJ5Iiwic2VuZCIsImZyb20iLCJtZXNzYWdlIiwic3BsaXQiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxBQUFPLEFBQVM7Ozs7QUFDaEIsQUFBUyxBQUFNLEFBQVM7O0FBQ3hCLEFBQU8sQUFBZTs7OztBQUN0QixBQUFPLEFBQVU7Ozs7QUFDakIsQUFBUyxBQUFjOzs7Ozs7O0lBRWpCLEE7Ozs7Ozs7Ozs7Ozs7OztnTyxBQUNGO21CQUFRLEFBQ0csQUFDUDswQkFGSSxBQUVTLEFBQ2I7cUJBSEksQUFHSyxBQUNUOzRCQUFnQixNQUFBLEFBQUssTUFKakIsQSxBQUl1QjtBQUp2QixBQUNKLGlCLEFBTUo7aUdBQVcsaUJBQUEsQUFBTSxPQUFOOzZCQUFBOzhFQUFBOzhCQUFBO3lEQUFBO2lDQUNQO3NDQUFBLEFBQU0sQUFDQTtBQUZDLDBDQUVTLHVCQUFVLE1BQUEsQUFBSyxNQUZ4QixBQUVTLEFBQXFCLEFBQWdCLEFBQ3JEOztzQ0FBQSxBQUFLLFNBQVMsRUFBRSxTQUFGLEFBQVcsTUFBTSxjQUh4QixBQUdQLEFBQWMsQUFBK0I7Z0RBSHRDO2dEQUFBO3VDQUtvQixjQUFBLEFBQUssSUFMekIsQUFLb0IsQUFBUzs7aUNBQTFCO0FBTEgsb0RBQUE7Z0RBQUE7K0NBTUcsQUFBUSxRQUFSLEFBQWdCLGlCQUFoQixBQUFpQzswQ0FDN0IsU0FQUCxBQU1HLEFBQXNDLEFBQ2xDLEFBQVM7QUFEeUIsQUFDeEMsaUNBREU7O2lDQU5IO2dEQUFBO0FBQUE7O2lDQUFBO2dEQUFBO2dFQVdIOztzQ0FBQSxBQUFLLFNBQVMsRUFBRSxjQUFjLFlBQUEsQUFBSSxRQUFKLEFBQVksTUFBWixBQUFrQixNQVg3QyxBQVdILEFBQWMsQUFBZ0IsQUFBd0I7O2lDQUUxRDtzQ0FBQSxBQUFLLFNBQVMsRUFBRSxTQUFGLEFBQVcsT0FBTyxPQWJ6QixBQWFQLEFBQWMsQUFBd0I7O2lDQWIvQjtpQ0FBQTtnREFBQTs7QUFBQTt5Q0FBQTtBOzs7Ozs7Ozs7O2lDQWlCRixBQUNMO21DQUNJLEFBQUMsdUNBQUssVUFBVSxLQUFoQixBQUFxQixVQUFVLE9BQU8sQ0FBQyxDQUFDLEtBQUEsQUFBSyxNQUE3QyxBQUFtRDs4QkFBbkQ7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ksQUFBQyx5Q0FBTyxVQUFSLE1BQWlCLFNBQVMsS0FBQSxBQUFLLE1BQS9CLEFBQXFDOzhCQUFyQztnQ0FBQTtBQUFBO2VBREosQUFDSSxBQUNBLGdDQUFBLEFBQUMsMENBQVEsT0FBVCxNQUFlLFFBQWYsQUFBc0IsU0FBUSxTQUFTLEtBQUEsQUFBSyxNQUE1QyxBQUFrRDs4QkFBbEQ7Z0NBSFIsQUFDSSxBQUVJLEFBR1g7QUFIVzs7Ozs7O0FBN0JhLEEsQUFrQzdCOztrQkFBQSxBQUFlIiwiZmlsZSI6IlBpY2tXaW5uZXJGb3JtLmpzIiwic291cmNlUm9vdCI6IkU6L0V0aGVyZXVtL1dvcmxkcGF5L2xvdHRlcnktY29udHJhY3QifQ==
