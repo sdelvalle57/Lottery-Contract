@@ -14,7 +14,8 @@ class CardIndex extends Component {
         lotteryHasPlayed: this.props.lotteryHasPlayed,
         numOfLotteries: this.props.numOfLotteries, 
         timeStarted: this.props.timeStarted, 
-        address: this.props.address
+        address: this.props.address,
+        lotteryAddress: this.props.lotteryAddress
     };  
 
     componentWillReceiveProps(nextProps) {

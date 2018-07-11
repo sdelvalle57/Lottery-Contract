@@ -160,20 +160,7 @@ class LotteryIndex extends Component {
         }
     }
 
-    renderLotteries() {
-        const items = this.props.lotteries.map(address => {
-            return {
-                header: address,
-                description: (
-                    <Link route={ `/lotteries/${address}`}>
-                        <a>View Lottery</a>
-                    </Link>
-                ),
-                fluid: true
-            };
-        });
-        return <Card.Group items={items} />;
-    }
+    
 
     renderAdmin() {
         const { accounts, lotteryHasPlayed } = this.state;
