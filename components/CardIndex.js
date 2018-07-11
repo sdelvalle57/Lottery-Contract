@@ -14,7 +14,8 @@ class CardIndex extends Component {
         lotteryHasPlayed: this.props.lotteryHasPlayed,
         numOfLotteries: this.props.numOfLotteries, 
         timeStarted: this.props.timeStarted, 
-        address: this.props.address
+        address: this.props.address,
+        lotteryAddress: this.props.lotteryAddress
     };  
 
     componentWillReceiveProps(nextProps) {
@@ -53,7 +54,7 @@ class CardIndex extends Component {
                     <Card.Description>Choose 4 numbers from 1 to 99</Card.Description>
                     </Card.Content>
                     <Card.Content extra>
-                    <Link route={ route } >
+                    <Link prefetch route={route} >
                         <a>
                             <Icon name='play' />
                             Play Lottery

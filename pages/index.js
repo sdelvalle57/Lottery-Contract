@@ -32,7 +32,7 @@ class LotteryIndex extends Component {
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0xfdb6707990732b46121a15d0284bd77282a64632";
+        const factoryAddress = "0x1f878cb46383ce6ee5ab989c9896ebd411b13ab0";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         console.log(owner);
@@ -90,9 +90,12 @@ class LotteryIndex extends Component {
     }
 
     componentWillUnmount() {
-        this.TicketBuyEvent.unsubscribe();
-        this.LotteryHasPlayedEvent.unsubscribe();
-        this.LotteryDeployedEvent.unsubscribe();
+        if(typeof this.TicketBuyEvent !== "undefined")
+            this.TicketBuyEvent.unsubscribe();
+        if(typeof this.LotteryHasPlayedEvent !== "undefined")
+            this.LotteryHasPlayedEvent.unsubscribe();
+        if(typeof this.LotteryDeployedEvent !== "undefined")            
+            this.LotteryDeployedEvent.unsubscribe();
     }
 
     setFactoryEventsListeners = (lotteryFactory) => {

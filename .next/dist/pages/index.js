@@ -334,9 +334,9 @@ var LotteryIndex = function (_Component) {
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            this.TicketBuyEvent.unsubscribe();
-            this.LotteryHasPlayedEvent.unsubscribe();
-            this.LotteryDeployedEvent.unsubscribe();
+            if (typeof this.TicketBuyEvent !== "undefined") this.TicketBuyEvent.unsubscribe();
+            if (typeof this.LotteryHasPlayedEvent !== "undefined") this.LotteryHasPlayedEvent.unsubscribe();
+            if (typeof this.LotteryDeployedEvent !== "undefined") this.LotteryDeployedEvent.unsubscribe();
         }
     }, {
         key: 'renderLotteries',
@@ -423,7 +423,7 @@ var LotteryIndex = function (_Component) {
                     while (1) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
-                                factoryAddress = "0xfdb6707990732b46121a15d0284bd77282a64632";
+                                factoryAddress = "0x1f878cb46383ce6ee5ab989c9896ebd411b13ab0";
                                 lotteryFactory = (0, _factory2.default)(factoryAddress, _web2.default);
                                 _context7.next = 4;
                                 return lotteryFactory.methods.owner().call();

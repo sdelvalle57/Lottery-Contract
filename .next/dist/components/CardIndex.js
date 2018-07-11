@@ -64,7 +64,8 @@ var CardIndex = function (_Component) {
             lotteryHasPlayed: _this.props.lotteryHasPlayed,
             numOfLotteries: _this.props.numOfLotteries,
             timeStarted: _this.props.timeStarted,
-            address: _this.props.address
+            address: _this.props.address,
+            lotteryAddress: _this.props.lotteryAddress
         }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
     }
 
@@ -99,7 +100,7 @@ var CardIndex = function (_Component) {
             if (lotteryHasPlayed) {
                 route = '/lotteries/' + lotteryAddress;
             }
-            return _react2.default.createElement(_semanticUiReact.Container, { style: { marginTop: '100px', display: 'flex', justifyContent: 'center' } }, _react2.default.createElement(_semanticUiReact.Card, null, _react2.default.createElement(_semanticUiReact.Image, { src: '/static/eth.png' }), _react2.default.createElement(_semanticUiReact.Card.Content, null, _react2.default.createElement(_semanticUiReact.Card.Header, null, 'Draw number ', numOfLotteries), _react2.default.createElement(_semanticUiReact.Card.Meta, null, _react2.default.createElement('span', { className: 'date' }, 'Sarted on ', _react2.default.createElement(_reactTimestamp2.default, { time: timeStarted, format: 'full' }))), _react2.default.createElement(_semanticUiReact.Card.Description, null, 'Choose 4 numbers from 1 to 99')), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true }, _react2.default.createElement(_routes.Link, { route: route }, _react2.default.createElement('a', null, _react2.default.createElement(_semanticUiReact.Icon, { name: 'play' }), 'Play Lottery')))));
+            return _react2.default.createElement(_semanticUiReact.Container, { style: { marginTop: '100px', display: 'flex', justifyContent: 'center' } }, _react2.default.createElement(_semanticUiReact.Card, null, _react2.default.createElement(_semanticUiReact.Image, { src: '/static/eth.png' }), _react2.default.createElement(_semanticUiReact.Card.Content, null, _react2.default.createElement(_semanticUiReact.Card.Header, null, 'Draw number ', numOfLotteries), _react2.default.createElement(_semanticUiReact.Card.Meta, null, _react2.default.createElement('span', { className: 'date' }, 'Sarted on ', _react2.default.createElement(_reactTimestamp2.default, { time: timeStarted, format: 'full' }))), _react2.default.createElement(_semanticUiReact.Card.Description, null, 'Choose 4 numbers from 1 to 99')), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true }, _react2.default.createElement(_routes.Link, { prefetch: true, route: route }, _react2.default.createElement('a', null, _react2.default.createElement(_semanticUiReact.Icon, { name: 'play' }), 'Play Lottery')))));
         }
     }]);
 
