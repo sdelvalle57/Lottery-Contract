@@ -42,6 +42,9 @@ var _routes = require('../routes');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var _jsxFileName = 'E:\\Ethereum\\Worldpay\\lottery-contract\\components\\CardIndex.js';
+
+
 var CardIndex = function (_Component) {
     (0, _inherits3.default)(CardIndex, _Component);
 
@@ -100,7 +103,65 @@ var CardIndex = function (_Component) {
             if (lotteryHasPlayed) {
                 route = '/lotteries/' + lotteryAddress;
             }
-            return _react2.default.createElement(_semanticUiReact.Container, { style: { marginTop: '100px', display: 'flex', justifyContent: 'center' } }, _react2.default.createElement(_semanticUiReact.Card, null, _react2.default.createElement(_semanticUiReact.Image, { src: '/static/eth.png' }), _react2.default.createElement(_semanticUiReact.Card.Content, null, _react2.default.createElement(_semanticUiReact.Card.Header, null, 'Draw number ', numOfLotteries), _react2.default.createElement(_semanticUiReact.Card.Meta, null, _react2.default.createElement('span', { className: 'date' }, 'Sarted on ', _react2.default.createElement(_reactTimestamp2.default, { time: timeStarted, format: 'full' }))), _react2.default.createElement(_semanticUiReact.Card.Description, null, 'Choose 4 numbers from 1 to 99')), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true }, _react2.default.createElement(_routes.Link, { prefetch: true, route: route }, _react2.default.createElement('a', null, _react2.default.createElement(_semanticUiReact.Icon, { name: 'play' }), 'Play Lottery')))));
+            return _react2.default.createElement(_semanticUiReact.Container, { style: { marginTop: '100px', display: 'flex', justifyContent: 'center' }, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 44
+                }
+            }, _react2.default.createElement(_semanticUiReact.Card, {
+                __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 45
+                }
+            }, _react2.default.createElement(_semanticUiReact.Image, { src: '/static/eth.png', __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 46
+                }
+            }), _react2.default.createElement(_semanticUiReact.Card.Content, {
+                __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 47
+                }
+            }, _react2.default.createElement(_semanticUiReact.Card.Header, {
+                __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 48
+                }
+            }, 'Draw number ', numOfLotteries), _react2.default.createElement(_semanticUiReact.Card.Meta, {
+                __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 49
+                }
+            }, _react2.default.createElement('span', { className: 'date', __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 50
+                }
+            }, 'Sarted on ', _react2.default.createElement(_reactTimestamp2.default, { time: timeStarted, format: 'full', __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 51
+                }
+            }))), _react2.default.createElement(_semanticUiReact.Card.Description, {
+                __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 54
+                }
+            }, 'Choose 4 numbers from 1 to 99')), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 56
+                }
+            }, _react2.default.createElement(_routes.Link, { prefetch: true, route: route, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 57
+                }
+            }, _react2.default.createElement('a', {
+                __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 58
+                }
+            }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'play', __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 59
+                }
+            }), 'Play Lottery')))));
         }
     }]);
 
@@ -108,3 +169,4 @@ var CardIndex = function (_Component) {
 }(_react.Component);
 
 exports.default = CardIndex;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXENhcmRJbmRleC5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkljb24iLCJJbWFnZSIsIkNvbnRhaW5lciIsIkNhcmQiLCJ3ZWIzIiwiVGltZXN0YW1wIiwiTGluayIsIkNhcmRJbmRleCIsInN0YXRlIiwibG90dGVyeVByaWNlIiwicHJvcHMiLCJsb3R0ZXJ5SmFja1BvdCIsImRlYWRsaW5lIiwibnVtT2ZQbGF5ZXJzIiwibG90dGVyeUhhc1BsYXllZCIsIm51bU9mTG90dGVyaWVzIiwidGltZVN0YXJ0ZWQiLCJhZGRyZXNzIiwibG90dGVyeUFkZHJlc3MiLCJuZXh0UHJvcHMiLCJzZXRTdGF0ZSIsInJvdXRlIiwibWFyZ2luVG9wIiwiZGlzcGxheSIsImp1c3RpZnlDb250ZW50Il0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLEFBQU8sQUFBUTs7OztBQUNmLEFBQVMsQUFBTSxBQUFPLEFBQVc7O0FBQ2pDLEFBQU8sQUFBVTs7OztBQUNqQixBQUFPOzs7O0FBQ1AsQUFBUyxBQUFZOzs7Ozs7O0ksQUFFZjs7Ozs7Ozs7Ozs7Ozs7c04sQUFFRjswQkFDa0IsTUFBQSxBQUFLLE1BRGYsQUFDcUIsQUFDekI7NEJBQWdCLE1BQUEsQUFBSyxNQUZqQixBQUV1QixBQUMzQjtzQkFBVSxNQUFBLEFBQUssTUFIWCxBQUdpQixBQUNyQjswQkFBYyxNQUFBLEFBQUssTUFKZixBQUlxQixBQUN6Qjs4QkFBa0IsTUFBQSxBQUFLLE1BTG5CLEFBS3lCLEFBQzdCOzRCQUFnQixNQUFBLEFBQUssTUFOakIsQUFNdUIsQUFDM0I7eUJBQWEsTUFBQSxBQUFLLE1BUGQsQUFPb0IsQUFDeEI7cUJBQVMsTUFBQSxBQUFLLE1BUlYsQUFRZ0IsQUFDcEI7NEJBQWdCLE1BQUEsQUFBSyxNQVRqQixBQVN1QixBO0FBVHZCLEFBQ0o7Ozs7O2tEQVdzQixBLFdBQVcsQUFDakM7aUJBQUEsQUFBSzs4QkFDYSxVQURKLEFBQ2MsQUFDeEI7Z0NBQWdCLFVBRk4sQUFFZ0IsQUFDMUI7MEJBQVUsVUFIQSxBQUdVLEFBQ3BCOzhCQUFjLFVBSkosQUFJYyxBQUN4QjtrQ0FBa0IsVUFMUixBQUtrQixBQUM1QjtnQ0FBZ0IsVUFOTixBQU1nQixBQUMxQjs2QkFBYSxVQVBILEFBT2EsQUFDdkI7Z0NBQWdCLEtBQUEsQUFBSyxNQVJ6QixBQUFjLEFBUWlCLEFBRWxDO0FBVmlCLEFBQ1Y7Ozs7aUNBWUM7eUJBR2lFLEtBSGpFLEFBR3NFO2dCQUh0RSxBQUVELHNCQUZDLEFBRUQ7Z0JBRkMsQUFFYSx3QkFGYixBQUVhO2dCQUZiLEFBRTZCLGtCQUY3QixBQUU2QjtnQkFGN0IsQUFFdUMsc0JBRnZDLEFBRXVDO2dCQUZ2QyxBQUdELDBCQUhDLEFBR0Q7Z0JBSEMsQUFHaUIsd0JBSGpCLEFBR2lCO2dCQUhqQixBQUdpQyxxQkFIakMsQUFHaUM7Z0JBSGpDLEFBRzhDLHdCQUg5QyxBQUc4QyxBQUMvQzs7Z0JBQUksd0JBQUosQUFBMEIsQUFDMUI7Z0JBQUEsQUFBRyxrQkFBa0IsQUFDakI7d0NBQUEsQUFBc0IsQUFDekI7QUFDTDttQ0FDSSxBQUFDLDRDQUFVLE9BQU8sRUFBQyxXQUFELEFBQVcsU0FBUyxTQUFwQixBQUE2QixRQUFRLGdCQUF2RCxBQUFrQixBQUFxRDs4QkFBdkU7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ksQUFBQzs7OEJBQUQ7Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksQUFBQyx3Q0FBTSxLQUFQLEFBQVc7OEJBQVg7Z0NBREosQUFDSSxBQUNBO0FBREE7Z0NBQ0MsY0FBRCxzQkFBQSxBQUFNOzs4QkFBTjtnQ0FBQSxBQUNBO0FBREE7QUFBQSwrQkFDQyxjQUFELHNCQUFBLEFBQU07OzhCQUFOO2dDQUFBO0FBQUE7QUFBQSxlQUEwQixnQkFEMUIsQUFDQSxBQUNBLGlDQUFDLGNBQUQsc0JBQUEsQUFBTTs7OEJBQU47Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksY0FBQSxVQUFNLFdBQU4sQUFBZ0I7OEJBQWhCO2dDQUFBO0FBQUE7ZUFDYyw4QkFBQSxBQUFDLDBDQUFVLE1BQVgsQUFBaUIsYUFBYSxRQUE5QixBQUFxQzs4QkFBckM7Z0NBSmxCLEFBRUEsQUFDSSxBQUNjLEFBR2xCO0FBSGtCO2tDQUdqQixjQUFELHNCQUFBLEFBQU07OzhCQUFOO2dDQUFBO0FBQUE7QUFBQSxlQVRKLEFBRUksQUFPQSxBQUVBLG1EQUFDLGNBQUQsc0JBQUEsQUFBTSxXQUFRLE9BQWQ7OEJBQUE7Z0NBQUEsQUFDQTtBQURBOytCQUNBLEFBQUMsOEJBQUssVUFBTixNQUFlLE9BQWYsQUFBc0I7OEJBQXRCO2dDQUFBLEFBQ0k7QUFESjsrQkFDSSxjQUFBOzs4QkFBQTtnQ0FBQSxBQUNJO0FBREo7QUFBQSwrQkFDSSxBQUFDLHVDQUFLLE1BQU4sQUFBVzs4QkFBWDtnQ0FESixBQUNJO0FBQUE7Z0JBaEJwQixBQUNJLEFBQ0ksQUFXSSxBQUNBLEFBQ0ksQUFTbkI7Ozs7O0FBNURtQixBLEFBZ0V4Qjs7a0JBQUEsQUFBZSIsImZpbGUiOiJDYXJkSW5kZXguanMiLCJzb3VyY2VSb290IjoiRTovRXRoZXJldW0vV29ybGRwYXkvbG90dGVyeS1jb250cmFjdCJ9

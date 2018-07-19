@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Container } from 'semantic-ui-react'
+import { Card, Button, Container, Header } from 'semantic-ui-react'
 import lotteryFactoryAt from '../ethereum/factory';
 import Layout from '../components/Layout';
 import HeaderIndex from '../components/HeaderIndex';
@@ -200,12 +200,16 @@ class LotteryIndex extends Component {
     }
 
     renderIndex() {
-        return <HeaderIndex
+        return(
+            <Header as='h1' block>
+                WORLDPAY LOTTERY
+            </Header>);
+        /* <HeaderIndex
             lotteryPrice = { this.state.lotteryPrice }
             lotteryJackPot = { this.state.lotteryJackPot } 
             deadline = { this.state.deadline }
             numOfPlayers = { this.state.numOfPlayers }
-            lotteryHasPlayed = { this.state.lotteryHasPlayed }/>;
+            lotteryHasPlayed = { this.state.lotteryHasPlayed }/>*/;
     }
 
     renderModal() {
@@ -241,7 +245,7 @@ class LotteryIndex extends Component {
 
     render() {
         return (
-            <Layout >
+            <Layout style={{marginTop:'100px'}}>
                 <div>
                     {this.renderIndex()}
                     {this.renderModal()}

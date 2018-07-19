@@ -1,0 +1,9 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@background: #CCCCCC;
+@borderRadius: 19px;
+//@minHeight: 60vh;
+@width: 25vw;
+@imageBackground: #CCCCCC;

@@ -4,6 +4,7 @@
   "description": "Worldpay Lottery",
   "main": "index.js",
   "dependencies": {
+    "gulp": "^3.9.1",
     "next": "^4.2.0",
     "next-routes": "^1.4.2",
     "react": "^16.3.2",
@@ -18,13 +19,16 @@
     "web3": "^1.0.0-beta.34"
   },
   "devDependencies": {
-    "file-loader": "^1.1.11"
+    "file-loader": "^1.1.11",
+    "semantic-ui": "^2.3.3"
   },
   "scripts": {
     "test": "mocha",
-    "dev": "node server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js" 
+    "dev": "npm run build-semantic && node server.js",
+    "build": "npm run build-semantic && next build",
+    "start": "npm run build-semantic && NODE_ENV=production node server.js",
+    "build-semantic": "cd static && gulp build-css build-assets",
+    "watch-semantic": "cd static && npm run build-semantic && gulp watch"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,7 @@
+/*******************************
+     User Global Variables
+*******************************/
+@primaryColor: #CDE77F;
+@fontName: 'Poppins';
+@pageBackground : radial-gradient(rgba(28, 50, 72, 1) , rgba(6, 16, 25, 1));
+@borderColor: rgba(34, 36, 38, 0.15);
