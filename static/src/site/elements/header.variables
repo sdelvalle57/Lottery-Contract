@@ -5,3 +5,7 @@
 @blockBackground:  none;
 @blockBorderRadius: 16px;
 @blockVerticalPadding: @tiny;
+@blockWidth: 600px;
+@blockMarginTop: 100px;
+@blockTextColor: white !important;
+@blockFontSize: 30px;

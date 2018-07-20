@@ -1,3 +1,14 @@
 /*******************************
          Site Overrides
 *******************************/
+#indexHeaderContainer {
+    margin-top: @indexContainerMarginTop;
+    display: @containerDisplay;
+    justify-content: @containerJustify;
+}
+
+#indexCardContainer {
+    margin-top: @indexCardContainerMarginTop;
+    display: @containerDisplay;
+    justify-content: @containerJustify; 
+}

@@ -11,6 +11,8 @@ import lotteryAt from '../ethereum/lottery';
 import { Router } from '../routes';
 import { runInThisContext } from 'vm';
 import CardIndex from '../components/CardIndex';
+import {getEthPriceNow} from 'get-eth-price';
+
 
 class LotteryIndex extends Component {
 
@@ -28,7 +30,8 @@ class LotteryIndex extends Component {
         lottery:'',
         numOfLotteries: this.props.numOfLotteries, 
         timeStarted: this.props.timeStarted,
-        lotteryAddress: this.props.lotteryAddress
+        lotteryAddress: this.props.lotteryAddress, 
+        ethPrice: this.props.ethPrice
     }
 
     static async getInitialProps({res}) {
@@ -38,6 +41,18 @@ class LotteryIndex extends Component {
         console.log(owner);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         const numOfLotteries = lotteries.length;
+
+        let ethPrice = await  getEthPriceNow();
+        let i = 0;
+        for (var [key, value] of Object.entries(ethPrice)) {
+            if(i == 0){
+                ethPrice = value.ETH.USD;
+                break
+            }
+        }
+        console.log(ethPrice);
+        
+        
         if(numOfLotteries > 0) {
             const lotteryAddress = lotteries[numOfLotteries -1];
             const lottery = lotteryAt(lotteryAddress, web3);
@@ -59,7 +74,7 @@ class LotteryIndex extends Component {
             return {lotteries, factoryAddress, lotteryPrice, lotteryJackPot,
                 deadline, numOfPlayers, lotteryFactory, lotteryAddress, owner,
                 prize, winningNumber, numOfWinners, finalJackPot, numOfLotteries,
-                timeStarted };
+                timeStarted, ethPrice };
         } else {
             if (res) {
                 res.writeHead(302, {
@@ -72,6 +87,10 @@ class LotteryIndex extends Component {
               }
             return;
         }
+    }
+
+    getEthPrice = async () => {
+     
     }
 
     async componentDidMount() {
@@ -201,9 +220,12 @@ class LotteryIndex extends Component {
 
     renderIndex() {
         return(
-            <Header as='h1' block>
-                WORLDPAY LOTTERY
-            </Header>);
+            <Container id='indexHeaderContainer'  >
+                <Header as='h1' id='indexHeader' block align='center'>
+                    WORLDPAY LOTTERY
+                </Header> 
+            </Container>
+            );
         /* <HeaderIndex
             lotteryPrice = { this.state.lotteryPrice }
             lotteryJackPot = { this.state.lotteryJackPot } 
@@ -217,7 +239,7 @@ class LotteryIndex extends Component {
             return <LotteryHasPlayedModal
                 lotteryHasPlayed = { this.state.lotteryHasPlayed }
                 numOfWinners = { this.state.numOfWinners }
-                winningNumber = { this.state.winningNumber }
+                winningNumber = { this.state.winningNumbery }
                 prize = { this.state.prize }
                 finalJackPot = { this.state.finalJackPot }
                 showMessage = {true}
@@ -238,6 +260,7 @@ class LotteryIndex extends Component {
                 numOfLotteries = {this.state.numOfLotteries}
                 timeStarted = {this.state.timeStarted}
                 lotteryAddress = {this.state.lotteryAddress}
+                ethPrice = {this.state.ethPrice}
                 />
         }
         return null;
@@ -248,7 +271,7 @@ class LotteryIndex extends Component {
             <Layout style={{marginTop:'100px'}}>
                 <div>
                     {this.renderIndex()}
-                    {this.renderModal()}
+                    {/*this.renderModal()*/}
                     {this.renderCardIndex()}
                     {this.renderAdmin()}
                 </div>

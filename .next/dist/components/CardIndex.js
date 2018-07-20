@@ -68,7 +68,8 @@ var CardIndex = function (_Component) {
             numOfLotteries: _this.props.numOfLotteries,
             timeStarted: _this.props.timeStarted,
             address: _this.props.address,
-            lotteryAddress: _this.props.lotteryAddress
+            lotteryAddress: _this.props.lotteryAddress,
+            ethPrice: _this.props.ethPrice
         }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
     }
 
@@ -83,8 +84,22 @@ var CardIndex = function (_Component) {
                 lotteryHasPlayed: nextProps.lotteryHasPlayed,
                 numOfLotteries: nextProps.numOfLotteries,
                 timeStarted: nextProps.timeStarted,
-                lotteryAddress: this.props.lotteryAddress
+                lotteryAddress: this.props.lotteryAddress,
+                ethPrice: nextProps.ethPrice
             });
+        }
+    }, {
+        key: 'renderMeta',
+        value: function renderMeta(lotteryJackPot, ethPrice) {
+            if (ethPrice >= 0) {
+                return _react2.default.createElement(_semanticUiReact.Card.Meta, {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 39
+                    }
+                }, lotteryJackPot * ethPrice, ' USD');
+            }
+            return null;
         }
     }, {
         key: 'render',
@@ -97,69 +112,65 @@ var CardIndex = function (_Component) {
                 lotteryHasPlayed = _state.lotteryHasPlayed,
                 numOfLotteries = _state.numOfLotteries,
                 timeStarted = _state.timeStarted,
-                lotteryAddress = _state.lotteryAddress;
+                lotteryAddress = _state.lotteryAddress,
+                ethPrice = _state.ethPrice;
 
             var route = '/lotteries/' + lotteryAddress;
             if (lotteryHasPlayed) {
                 route = '/lotteries/' + lotteryAddress;
             }
-            return _react2.default.createElement(_semanticUiReact.Container, { style: { marginTop: '100px', display: 'flex', justifyContent: 'center' }, __source: {
+            return _react2.default.createElement(_semanticUiReact.Container, { id: 'indexCardContainer', __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 44
+                    lineNumber: 57
                 }
             }, _react2.default.createElement(_semanticUiReact.Card, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 45
+                    lineNumber: 58
                 }
-            }, _react2.default.createElement(_semanticUiReact.Image, { src: '/static/eth.png', __source: {
+            }, _react2.default.createElement(_semanticUiReact.Image, { verticalAlign: 'middle', size: 'medium', centered: true, circular: true, src: '/static/lottery_icon.png', __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 46
+                    lineNumber: 59
                 }
             }), _react2.default.createElement(_semanticUiReact.Card.Content, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 47
+                    lineNumber: 60
                 }
             }, _react2.default.createElement(_semanticUiReact.Card.Header, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 48
+                    lineNumber: 61
                 }
-            }, 'Draw number ', numOfLotteries), _react2.default.createElement(_semanticUiReact.Card.Meta, {
+            }, lotteryJackPot, ' ETH'), this.renderMeta(lotteryJackPot, ethPrice), _react2.default.createElement(_semanticUiReact.Card.Description, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 49
+                    lineNumber: 64
                 }
             }, _react2.default.createElement('span', { className: 'date', __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 50
+                    lineNumber: 65
                 }
             }, 'Sarted on ', _react2.default.createElement(_reactTimestamp2.default, { time: timeStarted, format: 'full', __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 51
+                    lineNumber: 66
                 }
-            }))), _react2.default.createElement(_semanticUiReact.Card.Description, {
-                __source: {
+            })))), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 54
-                }
-            }, 'Choose 4 numbers from 1 to 99')), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 56
+                    lineNumber: 70
                 }
             }, _react2.default.createElement(_routes.Link, { prefetch: true, route: route, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 57
+                    lineNumber: 71
                 }
             }, _react2.default.createElement('a', {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 58
+                    lineNumber: 72
                 }
             }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'play', __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 59
+                    lineNumber: 73
                 }
             }), 'Play Lottery')))));
         }
@@ -169,4 +180,4 @@ var CardIndex = function (_Component) {
 }(_react.Component);
 
 exports.default = CardIndex;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXENhcmRJbmRleC5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkljb24iLCJJbWFnZSIsIkNvbnRhaW5lciIsIkNhcmQiLCJ3ZWIzIiwiVGltZXN0YW1wIiwiTGluayIsIkNhcmRJbmRleCIsInN0YXRlIiwibG90dGVyeVByaWNlIiwicHJvcHMiLCJsb3R0ZXJ5SmFja1BvdCIsImRlYWRsaW5lIiwibnVtT2ZQbGF5ZXJzIiwibG90dGVyeUhhc1BsYXllZCIsIm51bU9mTG90dGVyaWVzIiwidGltZVN0YXJ0ZWQiLCJhZGRyZXNzIiwibG90dGVyeUFkZHJlc3MiLCJuZXh0UHJvcHMiLCJzZXRTdGF0ZSIsInJvdXRlIiwibWFyZ2luVG9wIiwiZGlzcGxheSIsImp1c3RpZnlDb250ZW50Il0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLEFBQU8sQUFBUTs7OztBQUNmLEFBQVMsQUFBTSxBQUFPLEFBQVc7O0FBQ2pDLEFBQU8sQUFBVTs7OztBQUNqQixBQUFPOzs7O0FBQ1AsQUFBUyxBQUFZOzs7Ozs7O0ksQUFFZjs7Ozs7Ozs7Ozs7Ozs7c04sQUFFRjswQkFDa0IsTUFBQSxBQUFLLE1BRGYsQUFDcUIsQUFDekI7NEJBQWdCLE1BQUEsQUFBSyxNQUZqQixBQUV1QixBQUMzQjtzQkFBVSxNQUFBLEFBQUssTUFIWCxBQUdpQixBQUNyQjswQkFBYyxNQUFBLEFBQUssTUFKZixBQUlxQixBQUN6Qjs4QkFBa0IsTUFBQSxBQUFLLE1BTG5CLEFBS3lCLEFBQzdCOzRCQUFnQixNQUFBLEFBQUssTUFOakIsQUFNdUIsQUFDM0I7eUJBQWEsTUFBQSxBQUFLLE1BUGQsQUFPb0IsQUFDeEI7cUJBQVMsTUFBQSxBQUFLLE1BUlYsQUFRZ0IsQUFDcEI7NEJBQWdCLE1BQUEsQUFBSyxNQVRqQixBQVN1QixBO0FBVHZCLEFBQ0o7Ozs7O2tEQVdzQixBLFdBQVcsQUFDakM7aUJBQUEsQUFBSzs4QkFDYSxVQURKLEFBQ2MsQUFDeEI7Z0NBQWdCLFVBRk4sQUFFZ0IsQUFDMUI7MEJBQVUsVUFIQSxBQUdVLEFBQ3BCOzhCQUFjLFVBSkosQUFJYyxBQUN4QjtrQ0FBa0IsVUFMUixBQUtrQixBQUM1QjtnQ0FBZ0IsVUFOTixBQU1nQixBQUMxQjs2QkFBYSxVQVBILEFBT2EsQUFDdkI7Z0NBQWdCLEtBQUEsQUFBSyxNQVJ6QixBQUFjLEFBUWlCLEFBRWxDO0FBVmlCLEFBQ1Y7Ozs7aUNBWUM7eUJBR2lFLEtBSGpFLEFBR3NFO2dCQUh0RSxBQUVELHNCQUZDLEFBRUQ7Z0JBRkMsQUFFYSx3QkFGYixBQUVhO2dCQUZiLEFBRTZCLGtCQUY3QixBQUU2QjtnQkFGN0IsQUFFdUMsc0JBRnZDLEFBRXVDO2dCQUZ2QyxBQUdELDBCQUhDLEFBR0Q7Z0JBSEMsQUFHaUIsd0JBSGpCLEFBR2lCO2dCQUhqQixBQUdpQyxxQkFIakMsQUFHaUM7Z0JBSGpDLEFBRzhDLHdCQUg5QyxBQUc4QyxBQUMvQzs7Z0JBQUksd0JBQUosQUFBMEIsQUFDMUI7Z0JBQUEsQUFBRyxrQkFBa0IsQUFDakI7d0NBQUEsQUFBc0IsQUFDekI7QUFDTDttQ0FDSSxBQUFDLDRDQUFVLE9BQU8sRUFBQyxXQUFELEFBQVcsU0FBUyxTQUFwQixBQUE2QixRQUFRLGdCQUF2RCxBQUFrQixBQUFxRDs4QkFBdkU7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ksQUFBQzs7OEJBQUQ7Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksQUFBQyx3Q0FBTSxLQUFQLEFBQVc7OEJBQVg7Z0NBREosQUFDSSxBQUNBO0FBREE7Z0NBQ0MsY0FBRCxzQkFBQSxBQUFNOzs4QkFBTjtnQ0FBQSxBQUNBO0FBREE7QUFBQSwrQkFDQyxjQUFELHNCQUFBLEFBQU07OzhCQUFOO2dDQUFBO0FBQUE7QUFBQSxlQUEwQixnQkFEMUIsQUFDQSxBQUNBLGlDQUFDLGNBQUQsc0JBQUEsQUFBTTs7OEJBQU47Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksY0FBQSxVQUFNLFdBQU4sQUFBZ0I7OEJBQWhCO2dDQUFBO0FBQUE7ZUFDYyw4QkFBQSxBQUFDLDBDQUFVLE1BQVgsQUFBaUIsYUFBYSxRQUE5QixBQUFxQzs4QkFBckM7Z0NBSmxCLEFBRUEsQUFDSSxBQUNjLEFBR2xCO0FBSGtCO2tDQUdqQixjQUFELHNCQUFBLEFBQU07OzhCQUFOO2dDQUFBO0FBQUE7QUFBQSxlQVRKLEFBRUksQUFPQSxBQUVBLG1EQUFDLGNBQUQsc0JBQUEsQUFBTSxXQUFRLE9BQWQ7OEJBQUE7Z0NBQUEsQUFDQTtBQURBOytCQUNBLEFBQUMsOEJBQUssVUFBTixNQUFlLE9BQWYsQUFBc0I7OEJBQXRCO2dDQUFBLEFBQ0k7QUFESjsrQkFDSSxjQUFBOzs4QkFBQTtnQ0FBQSxBQUNJO0FBREo7QUFBQSwrQkFDSSxBQUFDLHVDQUFLLE1BQU4sQUFBVzs4QkFBWDtnQ0FESixBQUNJO0FBQUE7Z0JBaEJwQixBQUNJLEFBQ0ksQUFXSSxBQUNBLEFBQ0ksQUFTbkI7Ozs7O0FBNURtQixBLEFBZ0V4Qjs7a0JBQUEsQUFBZSIsImZpbGUiOiJDYXJkSW5kZXguanMiLCJzb3VyY2VSb290IjoiRTovRXRoZXJldW0vV29ybGRwYXkvbG90dGVyeS1jb250cmFjdCJ9
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXENhcmRJbmRleC5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkljb24iLCJJbWFnZSIsIkNvbnRhaW5lciIsIkNhcmQiLCJ3ZWIzIiwiVGltZXN0YW1wIiwiTGluayIsIkNhcmRJbmRleCIsInN0YXRlIiwibG90dGVyeVByaWNlIiwicHJvcHMiLCJsb3R0ZXJ5SmFja1BvdCIsImRlYWRsaW5lIiwibnVtT2ZQbGF5ZXJzIiwibG90dGVyeUhhc1BsYXllZCIsIm51bU9mTG90dGVyaWVzIiwidGltZVN0YXJ0ZWQiLCJhZGRyZXNzIiwibG90dGVyeUFkZHJlc3MiLCJldGhQcmljZSIsIm5leHRQcm9wcyIsInNldFN0YXRlIiwicm91dGUiLCJyZW5kZXJNZXRhIl0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLEFBQU8sQUFBUTs7OztBQUNmLEFBQVMsQUFBTSxBQUFPLEFBQVc7O0FBQ2pDLEFBQU8sQUFBVTs7OztBQUNqQixBQUFPOzs7O0FBQ1AsQUFBUyxBQUFZOzs7Ozs7O0lBRWYsQTs7Ozs7Ozs7Ozs7Ozs7c04sQUFFRjswQkFDa0IsTUFBQSxBQUFLLE1BRGYsQUFDcUIsQUFDekI7NEJBQWdCLE1BQUEsQUFBSyxNQUZqQixBQUV1QixBQUMzQjtzQkFBVSxNQUFBLEFBQUssTUFIWCxBQUdpQixBQUNyQjswQkFBYyxNQUFBLEFBQUssTUFKZixBQUlxQixBQUN6Qjs4QkFBa0IsTUFBQSxBQUFLLE1BTG5CLEFBS3lCLEFBQzdCOzRCQUFnQixNQUFBLEFBQUssTUFOakIsQUFNdUIsQUFDM0I7eUJBQWEsTUFBQSxBQUFLLE1BUGQsQUFPb0IsQUFDeEI7cUJBQVMsTUFBQSxBQUFLLE1BUlYsQUFRZ0IsQUFDcEI7NEJBQWdCLE1BQUEsQUFBSyxNQVRqQixBQVN1QixBQUMzQjtzQkFBVSxNQUFBLEFBQUssTSxBQVZYLEFBVWlCO0FBVmpCLEFBQ0o7Ozs7O2tEQVlzQixBLFdBQVcsQUFDakM7aUJBQUEsQUFBSzs4QkFDYSxVQURKLEFBQ2MsQUFDeEI7Z0NBQWdCLFVBRk4sQUFFZ0IsQUFDMUI7MEJBQVUsVUFIQSxBQUdVLEFBQ3BCOzhCQUFjLFVBSkosQUFJYyxBQUN4QjtrQ0FBa0IsVUFMUixBQUtrQixBQUM1QjtnQ0FBZ0IsVUFOTixBQU1nQixBQUMxQjs2QkFBYSxVQVBILEFBT2EsQUFDdkI7Z0NBQWdCLEtBQUEsQUFBSyxNQVJYLEFBUWlCLEFBQzNCOzBCQUFVLFVBVGQsQUFBYyxBQVNVLEFBRTNCO0FBWGlCLEFBQ1Y7Ozs7bUMsQUFZRyxnQkFBZ0IsQSxVQUFVLEFBQ2pDO2dCQUFHLFlBQUgsQUFBZSxHQUFHLEFBQ2Q7dUNBQ0ssY0FBRCxzQkFBQSxBQUFNOztrQ0FBTjtvQ0FBQSxBQUNLO0FBREw7QUFBQSxpQkFBQSxtQkFBQSxBQUNzQixVQUYxQixBQUNJLEFBSVA7QUFDRDttQkFBQSxBQUFPLEFBQ1Y7Ozs7aUNBR1E7eUJBRzJFLEtBSDNFLEFBR2dGO2dCQUhoRixBQUVELHNCQUZDLEFBRUQ7Z0JBRkMsQUFFYSx3QkFGYixBQUVhO2dCQUZiLEFBRTZCLGtCQUY3QixBQUU2QjtnQkFGN0IsQUFFdUMsc0JBRnZDLEFBRXVDO2dCQUZ2QyxBQUdELDBCQUhDLEFBR0Q7Z0JBSEMsQUFHaUIsd0JBSGpCLEFBR2lCO2dCQUhqQixBQUdpQyxxQkFIakMsQUFHaUM7Z0JBSGpDLEFBRzhDLHdCQUg5QyxBQUc4QztnQkFIOUMsQUFHOEQsa0JBSDlELEFBRzhELEFBQy9EOztnQkFBSSx3QkFBSixBQUEwQixBQUMxQjtnQkFBQSxBQUFHLGtCQUFrQixBQUNqQjt3Q0FBQSxBQUFzQixBQUN6QjtBQUNMO21DQUNJLEFBQUMsNENBQVUsSUFBWCxBQUFjOzhCQUFkO2dDQUFBLEFBQ0k7QUFESjthQUFBLGtCQUNJLEFBQUM7OzhCQUFEO2dDQUFBLEFBQ0k7QUFESjtBQUFBLCtCQUNJLEFBQUMsd0NBQU0sZUFBUCxBQUFxQixVQUFTLE1BQTlCLEFBQW1DLFVBQVMsVUFBNUMsTUFBcUQsVUFBckQsTUFBOEQsS0FBOUQsQUFBa0U7OEJBQWxFO2dDQURKLEFBQ0ksQUFDQTtBQURBO2dDQUNDLGNBQUQsc0JBQUEsQUFBTTs7OEJBQU47Z0NBQUEsQUFDQTtBQURBO0FBQUEsK0JBQ0MsY0FBRCxzQkFBQSxBQUFNOzs4QkFBTjtnQ0FBQSxBQUFjO0FBQWQ7QUFBQSxlQUFBLGdCQURBLEFBQ0EsQUFDQyxjQUFBLEFBQUssV0FBTCxBQUFnQixnQkFGakIsQUFFQyxBQUFnQyxBQUVqQywyQkFBQyxjQUFELHNCQUFBLEFBQU07OzhCQUFOO2dDQUFBLEFBQ0k7QUFESjtBQUFBLCtCQUNJLGNBQUEsVUFBTSxXQUFOLEFBQWdCOzhCQUFoQjtnQ0FBQTtBQUFBO2VBQ2MsOEJBQUEsQUFBQywwQ0FBVSxNQUFYLEFBQWlCLGFBQWEsUUFBOUIsQUFBcUM7OEJBQXJDO2dDQVJ0QixBQUVJLEFBSUEsQUFDSSxBQUNjLEFBSWxCO0FBSmtCO21DQUlqQixjQUFELHNCQUFBLEFBQU0sV0FBUSxPQUFkOzhCQUFBO2dDQUFBLEFBQ0E7QUFEQTsrQkFDQSxBQUFDLDhCQUFLLFVBQU4sTUFBZSxPQUFmLEFBQXNCOzhCQUF0QjtnQ0FBQSxBQUNJO0FBREo7K0JBQ0ksY0FBQTs7OEJBQUE7Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksQUFBQyx1Q0FBSyxNQUFOLEFBQVc7OEJBQVg7Z0NBREosQUFDSTtBQUFBO2dCQWpCcEIsQUFDSSxBQUNJLEFBWUksQUFDQSxBQUNJLEFBU25COzs7OztBQTFFbUIsQSxBQThFeEI7O2tCQUFBLEFBQWUiLCJmaWxlIjoiQ2FyZEluZGV4LmpzIiwic291cmNlUm9vdCI6IkU6L0V0aGVyZXVtL1dvcmxkcGF5L2xvdHRlcnktY29udHJhY3QifQ==

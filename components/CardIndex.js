@@ -15,7 +15,8 @@ class CardIndex extends Component {
         numOfLotteries: this.props.numOfLotteries, 
         timeStarted: this.props.timeStarted, 
         address: this.props.address,
-        lotteryAddress: this.props.lotteryAddress
+        lotteryAddress: this.props.lotteryAddress,
+        ethPrice: this.props.ethPrice
     };  
 
     componentWillReceiveProps(nextProps) {
@@ -27,31 +28,44 @@ class CardIndex extends Component {
             lotteryHasPlayed: nextProps.lotteryHasPlayed,
             numOfLotteries: nextProps.numOfLotteries,
             timeStarted: nextProps.timeStarted,
-            lotteryAddress: this.props.lotteryAddress
+            lotteryAddress: this.props.lotteryAddress,
+            ethPrice: nextProps.ethPrice
         });
+    }
+
+    renderMeta(lotteryJackPot, ethPrice) {
+        if(ethPrice >= 0) {
+            return (
+                <Card.Meta>
+                    {lotteryJackPot * ethPrice} USD
+                </Card.Meta>
+            );
+        }
+        return null;
     }
     
 
     render() {   
         let { 
             lotteryPrice, lotteryJackPot, deadline, numOfPlayers, 
-            lotteryHasPlayed, numOfLotteries, timeStarted, lotteryAddress } = this.state
+            lotteryHasPlayed, numOfLotteries, timeStarted, lotteryAddress, ethPrice } = this.state
             let route = `/lotteries/${lotteryAddress}`;
             if(lotteryHasPlayed) {
                 route = `/lotteries/${lotteryAddress}`;
             }
         return (
-            <Container style={{marginTop:'100px', display: 'flex', justifyContent: 'center'}} >
+            <Container id='indexCardContainer' >
                 <Card>
-                    <Image src='/static/eth.png' />
+                    <Image verticalAlign='middle' size='medium' centered circular src='/static/lottery_icon.png' />
                     <Card.Content>
-                    <Card.Header>Draw number {numOfLotteries}</Card.Header>
-                    <Card.Meta>
+                    <Card.Header>{lotteryJackPot} ETH</Card.Header>
+                    {this.renderMeta(lotteryJackPot, ethPrice)}
+
+                    <Card.Description>
                         <span className='date'>
                             Sarted on <Timestamp time={timeStarted} format='full' />
                         </span>
-                    </Card.Meta>
-                    <Card.Description>Choose 4 numbers from 1 to 99</Card.Description>
+                    </Card.Description>
                     </Card.Content>
                     <Card.Content extra>
                     <Link prefetch route={route} >

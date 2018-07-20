@@ -13,7 +13,7 @@
              Page
 *******************************/
 
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Libre Baskerville:400,700,400italic,700italic&subset=latin');
 html,
 body {
   height: 100%;
@@ -28,7 +28,7 @@ body {
   min-width: 320px;
   background: -webkit-radial-gradient(#1c3248, #061019);
   background: radial-gradient(#1c3248, #061019);
-  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Libre Baskerville', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);
@@ -45,7 +45,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Libre Baskerville', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   font-weight: bold;

@@ -100,7 +100,7 @@
 
 /* Text Container */
 .ui.text.container {
-  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Libre Baskerville', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   max-width: 700px !important;
   line-height: 1.5;
 }
@@ -145,3 +145,17 @@
          Site Overrides
 *******************************/
 
+#indexHeaderContainer {
+  margin-top: 100px;
+  display: 'flex';
+  -webkit-box-pack: 'center';
+      -ms-flex-pack: 'center';
+          justify-content: 'center';
+}
+#indexCardContainer {
+  margin-top: 40px;
+  display: 'flex';
+  -webkit-box-pack: 'center';
+      -ms-flex-pack: 'center';
+          justify-content: 'center';
+}

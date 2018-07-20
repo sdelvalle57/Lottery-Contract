@@ -2,8 +2,23 @@
     User Variable Overrides
 *******************************/
 
-@background: #CCCCCC;
+@background: linear-gradient(180deg, rgba(226, 39, 26, 1) 0%, rgba(254, 149, 0, 1) 100%);;
 @borderRadius: 19px;
-//@minHeight: 60vh;
-@width: 25vw;
-@imageBackground: #CCCCCC;
+@borderSpacing: 5px;
+@minHeight: 60vh;
+@width: 350px;
+@contentDivider: none;
+
+//image
+
+@imagePadding: 0px;
+@iconWidth: 200px;
+
+// header
+@headerColor: white;
+@headerLineHeightOffset: 15px;
+@headerFontSize: 40px;
+@letterSpacing: 2px;
+
+// meta
+@metaFontSize: 25px;

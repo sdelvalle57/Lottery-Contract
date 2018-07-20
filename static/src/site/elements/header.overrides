@@ -1,3 +1,14 @@
 /*******************************
          Site Overrides
 *******************************/
+.ui.header {
+  display: inline-block;
+}
+
+#indexHeader {
+    color: @blockTextColor;
+    width: @blockWidth;
+    font-weight: @bold;
+    font-size: @blockFontSize;
+    letter-spacing: @letterSpacing;
+}

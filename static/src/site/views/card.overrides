@@ -1,3 +1,45 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.cards > .card > .image,
+.ui.card > .image {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    padding: @imagePadding;
+    width: @iconWidth;
+    margin-top: 40px;
+    background: 'none';
+  }
+
+  .ui.card {
+      border: 5px solid rgba(28, 50, 72, 1) ; 
+  }
+
+  .ui.card::after {
+    display: block ; 
+    position: absolute ; 
+    top: 0 ; 
+    bottom: 0 ; 
+    left: 0 ; 
+    right: 0 ; 
+    border-radius: 5px ; 
+    border: 2px solid white ;
+  }
+
+  .ui.cards > .card > .content > .header:not(.ui),
+.ui.card > .content > .header:not(.ui) {
+    text-align: center;
+    letter-spacing: @letterSpacing;
+    font-weight: @bold;
+    margin-bottom: 13px;
+}
+
+.ui.cards > .card .meta,
+.ui.card .meta {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: @bold;
+}

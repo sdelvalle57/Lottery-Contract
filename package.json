@@ -4,6 +4,7 @@
   "description": "Worldpay Lottery",
   "main": "index.js",
   "dependencies": {
+    "get-eth-price": "^1.0.0",
     "gulp": "^3.9.1",
     "next": "^4.2.0",
     "next-routes": "^1.4.2",

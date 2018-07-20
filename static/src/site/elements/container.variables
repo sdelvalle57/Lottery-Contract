@@ -1,3 +1,5 @@
 /*******************************
     User Variable Overrides
 *******************************/
+@indexContainerMarginTop: 100px;
+@indexCardContainerMarginTop: 40px;

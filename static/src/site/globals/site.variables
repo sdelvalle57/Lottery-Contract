@@ -2,6 +2,13 @@
      User Global Variables
 *******************************/
 @primaryColor: #CDE77F;
-@fontName: 'Poppins';
+@fontName: 'Libre Baskerville';
 @pageBackground : radial-gradient(rgba(28, 50, 72, 1) , rgba(6, 16, 25, 1));
 @borderColor: rgba(34, 36, 38, 0.15);
+
+
+//Container
+@containerDisplay: 'flex';
+@containerJustify: 'center';
+
+@letterSpacing: 8px;
