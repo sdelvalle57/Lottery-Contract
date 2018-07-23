@@ -730,8 +730,9 @@ a.ui.inverted.grey.header:hover {
 }
 #indexHeader {
   color: white !important;
-  width: 600px;
+  width: 520px;
   font-weight: bold;
   font-size: 30px;
-  letter-spacing: 8px;
+  letter-spacing: 6px;
+  height: 58px;
 }

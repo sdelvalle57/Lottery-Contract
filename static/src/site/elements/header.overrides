@@ -11,4 +11,5 @@
     font-weight: @bold;
     font-size: @blockFontSize;
     letter-spacing: @letterSpacing;
+    height: @blockHeight;
 }

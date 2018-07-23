@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { Icon, Image, Container, Card } from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
+import { Icon, Image, Container, Card, Button } from 'semantic-ui-react';
 import Timestamp from 'react-timestamp';
 import { Link } from '../routes';
+import numeral from 'numeral';
 
 class CardIndex extends Component {
     
@@ -35,13 +35,29 @@ class CardIndex extends Component {
 
     renderMeta(lotteryJackPot, ethPrice) {
         if(ethPrice >= 0) {
+            let usdJackpot = lotteryJackPot * ethPrice;
+            if(usdJackpot > 0){
+                usdJackpot = numeral(usdJackpot).format('0,0');
+            }
             return (
                 <Card.Meta>
-                    {lotteryJackPot * ethPrice} USD
+                   {usdJackpot} USD
                 </Card.Meta>
             );
         }
         return null;
+    }
+
+    renderDeadline(deadline, lotteryHasPlayed) {
+        const canBuyLottery = !lotteryHasPlayed && Date.now()/1000 - deadline  < 0;
+        if(canBuyLottery) {
+            return <p>Ends  <Timestamp
+                    precision={2} 
+                    
+                    autoUpdate time={deadline} 
+                    actualSeconds /></p>
+        }
+        return "Ended";
     }
     
 
@@ -60,19 +76,15 @@ class CardIndex extends Component {
                     <Card.Content>
                     <Card.Header>{lotteryJackPot} ETH</Card.Header>
                     {this.renderMeta(lotteryJackPot, ethPrice)}
-
                     <Card.Description>
-                        <span className='date'>
-                            Sarted on <Timestamp time={timeStarted} format='full' />
-                        </span>
+                        {this.renderDeadline(deadline, lotteryHasPlayed)}
                     </Card.Description>
                     </Card.Content>
                     <Card.Content extra>
                     <Link prefetch route={route} >
-                        <a>
-                            <Icon name='play' />
-                            Play Lottery
-                        </a>
+                        <Button id='buyTicketButton'>
+                            BUY TICKET
+                        </Button>
                     </Link>
                     </Card.Content>
                 </Card>

@@ -5,7 +5,9 @@
 @blockBackground:  none;
 @blockBorderRadius: 16px;
 @blockVerticalPadding: @tiny;
-@blockWidth: 600px;
+@blockWidth: 520px;
+@blockHeight: 58px;
 @blockMarginTop: 100px;
 @blockTextColor: white !important;
 @blockFontSize: 30px;
+@letterSpacing: 6px;

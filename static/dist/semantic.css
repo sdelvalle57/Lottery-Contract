@@ -568,8 +568,7 @@ body {
   padding: 0px;
   overflow-x: hidden;
   min-width: 320px;
-  background: -webkit-radial-gradient(#1c3248, #061019);
-  background: radial-gradient(#1c3248, #061019);
+  background: #FFFFFF;
   font-family: 'Libre Baskerville', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
@@ -760,6 +759,11 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /*******************************
          Site Overrides
 *******************************/
+
+body {
+  background-image: url(../background.png);
+  background-size: cover;
+}
 /*!
  * # Semantic UI 2.3.3 - Button
  * http://github.com/semantic-org/semantic-ui/
@@ -5298,6 +5302,15 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   -ms-flex-pack: 'center';
   justify-content: 'center';
 }
+
+#drawContainer {
+  text-align: center;
+  font-size: 15px;
+  margin-top: 7px;
+  color: white;
+  letter-spacing: 2.5px;
+  font-weight: normal;
+}
 /*!
  * # Semantic UI 2.3.3 - Divider
  * http://github.com/semantic-org/semantic-ui/
@@ -7675,10 +7688,11 @@ a.ui.inverted.grey.header:hover {
 
 #indexHeader {
   color: white !important;
-  width: 600px;
+  width: 520px;
   font-weight: bold;
   font-size: 30px;
-  letter-spacing: 8px;
+  letter-spacing: 6px;
+  height: 58px;
 }
 /*!
  * # Semantic UI 2.3.3 - Icon
@@ -27910,7 +27924,7 @@ Floated Menu / Item
   border-top: none;
   background: none;
   margin: 0em;
-  padding: 1em 1em;
+  padding: 'none';
   -webkit-box-shadow: none;
   box-shadow: none;
   font-size: 1em;
@@ -27940,8 +27954,8 @@ Floated Menu / Item
 .ui.cards > .card > .content > .header:not(.ui),
 .ui.card > .content > .header:not(.ui) {
   font-weight: bold;
-  font-size: 40px;
-  margin-top: 15px;
+  font-size: 43px;
+  margin-top: 28px;
   line-height: 1.28571429em;
 }
 
@@ -27949,7 +27963,7 @@ Floated Menu / Item
 .ui.cards > .card > .content > .header + .description,
 .ui.card > .content > .meta + .description,
 .ui.card > .content > .header + .description {
-  margin-top: 0.5em;
+  margin-top: 26px;
 }
 
 /*----------------
@@ -28035,7 +28049,7 @@ Floated Menu / Item
 
 .ui.cards > .card .meta,
 .ui.card .meta {
-  font-size: 25px;
+  font-size: 23.4px;
   color: rgba(0, 0, 0, 0.4);
 }
 
@@ -28106,7 +28120,7 @@ Floated Menu / Item
 .ui.cards > .card > .button,
 .ui.card > .button {
   margin: 0px -1px;
-  width: calc(100% +  2px );
+  width: 280px;
 }
 
 /*--------------
@@ -28180,7 +28194,7 @@ Floated Menu / Item
   -webkit-box-flex: 0;
   -ms-flex-positive: 0;
   flex-grow: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border-top: 'none' !important;
   position: static;
   background: none;
   width: auto;
@@ -28865,8 +28879,8 @@ a.ui.card:hover,
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
   padding: 0px;
-  width: 200px;
-  margin-top: 40px;
+  width: 175px;
+  margin-top: 68px;
   background: 'none';
 }
 
@@ -28888,17 +28902,49 @@ a.ui.card:hover,
 .ui.cards > .card > .content > .header:not(.ui),
 .ui.card > .content > .header:not(.ui) {
   text-align: center;
-  letter-spacing: 2px;
   font-weight: bold;
-  margin-bottom: 13px;
+  margin-bottom: 15.6px;
 }
 
 .ui.cards > .card .meta,
 .ui.card .meta {
   color: white;
   text-align: center;
-  margin-bottom: 20px;
   font-weight: bold;
+}
+
+.ui.cards > .card > .content > .meta + .description {
+  color: white;
+  text-align: center;
+  font-weight: normal;
+  font-size: 23px;
+}
+
+.ui.cards > .card > .content > .description,
+.ui.card > .content > .description {
+  clear: both;
+  color: white;
+  margin-top: 26px;
+  text-align: center;
+  font-size: 21px;
+}
+
+.ui.card > .extra {
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+
+#buyTicketButton {
+  background: -webkit-gradient(linear, left top, right top, color-stop(76.2%, #1c3248), color-stop(95.92%, #1c3248));
+  background: -webkit-linear-gradient(left, #1c3248 76.2%, #1c3248 95.92%);
+  background: linear-gradient(90deg, #1c3248 76.2%, #1c3248 95.92%);
+  font-size: 18.2px;
+  color: white;
+  border-radius: 14px;
+  height: 65px;
+  width: 280px;
+  letter-spacing: 3.6px;
+  margin-bottom: 19px;
 }
 /*!
  * # Semantic UI 2.3.3 - Comment
@@ -36917,8 +36963,7 @@ body.pushable {
 }
 
 body.pushable > .pusher {
-  background: -webkit-radial-gradient(#1c3248, #061019);
-  background: radial-gradient(#1c3248, #061019);
+  background: #FFFFFF;
 }
 
 /* Pusher should inherit background from context */

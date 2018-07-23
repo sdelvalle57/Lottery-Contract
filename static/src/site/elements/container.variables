@@ -3,3 +3,8 @@
 *******************************/
 @indexContainerMarginTop: 100px;
 @indexCardContainerMarginTop: 40px;
+
+//draw container index
+@drawContainerFontSize: 15px;
+@drawContainerMarginTop: 7px;
+@drawContainerLetterSpacing: 2.5px;

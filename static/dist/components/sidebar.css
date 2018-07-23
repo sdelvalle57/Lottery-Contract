@@ -135,8 +135,7 @@ body.pushable {
   z-index: 2;
 }
 body.pushable > .pusher {
-  background: -webkit-radial-gradient(#1c3248, #061019);
-  background: radial-gradient(#1c3248, #061019);
+  background: #FFFFFF;
 }
 
 /* Pusher should inherit background from context */

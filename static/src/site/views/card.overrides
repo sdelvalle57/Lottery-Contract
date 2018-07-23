@@ -9,7 +9,7 @@
     flex: 0 0 auto;
     padding: @imagePadding;
     width: @iconWidth;
-    margin-top: 40px;
+    margin-top: 68px;
     background: 'none';
   }
 
@@ -31,15 +31,45 @@
   .ui.cards > .card > .content > .header:not(.ui),
 .ui.card > .content > .header:not(.ui) {
     text-align: center;
-    letter-spacing: @letterSpacing;
     font-weight: @bold;
-    margin-bottom: 13px;
+    margin-bottom: @headerMarginBottom;
 }
 
 .ui.cards > .card .meta,
 .ui.card .meta {
   color: white;
   text-align: center;
-  margin-bottom: 20px;
   font-weight: @bold;
+}
+
+.ui.cards > .card > .content > .meta + .description {
+    color: white;
+    text-align: center;
+    font-weight: normal;
+    font-size: @descriptionFontSize;
+
+}
+
+.ui.cards > .card > .content > .description,
+.ui.card > .content > .description {
+  clear: both;
+  color: white;
+  margin-top: @descriptionDistance;
+  text-align: center;
+  font-size: @deadlineFontSize;
+}
+
+.ui.card > .extra {
+    align-self: center;
+  }
+
+  #buyTicketButton {
+    background : @backgroundColor;
+    font-size: @buttonFontSize;
+    color: white;
+    border-radius: @buttonBorderRadius;
+    height: @buttonHeight;
+    width: @buttonWidth;
+    letter-spacing: @buttonLetterSpacing;
+    margin-bottom: @buttonMarginBottom;
 }

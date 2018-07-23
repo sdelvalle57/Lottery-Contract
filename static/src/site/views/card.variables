@@ -12,13 +12,28 @@
 //image
 
 @imagePadding: 0px;
-@iconWidth: 200px;
+@iconWidth: 175px;
 
 // header
 @headerColor: white;
-@headerLineHeightOffset: 15px;
-@headerFontSize: 40px;
-@letterSpacing: 2px;
+@headerLineHeightOffset: 28px;
+@headerFontSize: 43px;
+@contentPadding: 'none';
+@headerMarginBottom: 15.6px;
+
 
 // meta
-@metaFontSize: 25px;
+@metaFontSize: 23.4px;
+@descriptionFontSize: 23px;
+@descriptionDistance: 26px;
+@deadlineFontSize: 21px;
+@extraDivider: 'none';
+
+//button
+@buttonFontSize: 18.2px;
+@backgroundColor: linear-gradient(90deg, rgba(28, 50, 72, 1) 76.2%, rgba(28, 50, 72, 1) 95.92%);
+@buttonBorderRadius: 14px;
+@buttonHeight: 65px;
+@buttonWidth: 280px;
+@buttonLetterSpacing: 3.6px;
+@buttonMarginBottom: 19px;

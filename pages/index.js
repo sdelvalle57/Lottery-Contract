@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-import { Card, Button, Container, Header } from 'semantic-ui-react'
+import { Card, Button, Container, Header } from 'semantic-ui-react';
 import lotteryFactoryAt from '../ethereum/factory';
 import Layout from '../components/Layout';
-import HeaderIndex from '../components/HeaderIndex';
 import LotteryHasPlayedModal from '../components/LotteryPlayedModal';
 import { Link } from '../routes';
-import web3 from '../ethereum/web3'
-import web3Socket from '../ethereum/web3Socket'
+import web3 from '../ethereum/web3';
+import web3Socket from '../ethereum/web3Socket';
 import lotteryAt from '../ethereum/lottery';
 import { Router } from '../routes';
-import { runInThisContext } from 'vm';
 import CardIndex from '../components/CardIndex';
 import {getEthPriceNow} from 'get-eth-price';
-
 
 class LotteryIndex extends Component {
 
@@ -35,7 +32,7 @@ class LotteryIndex extends Component {
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0x1f878cb46383ce6ee5ab989c9896ebd411b13ab0";
+        const factoryAddress = "0xE7FdE5dbce8893a29BD36827AE1A63Ebc4D7532e";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         console.log(owner);
@@ -50,8 +47,6 @@ class LotteryIndex extends Component {
                 break
             }
         }
-        console.log(ethPrice);
-        
         
         if(numOfLotteries > 0) {
             const lotteryAddress = lotteries[numOfLotteries -1];
@@ -87,10 +82,6 @@ class LotteryIndex extends Component {
               }
             return;
         }
-    }
-
-    getEthPrice = async () => {
-     
     }
 
     async componentDidMount() {
@@ -266,13 +257,18 @@ class LotteryIndex extends Component {
         return null;
     }
 
+    renderDrawContainer() {
+        return <Container id='drawContainer'>Draw {this.state.numOfLotteries}</Container>
+    }
+
     render() {
         return (
-            <Layout style={{marginTop:'100px'}}>
+            <Layout>
                 <div>
                     {this.renderIndex()}
                     {/*this.renderModal()*/}
                     {this.renderCardIndex()}
+                    {this.renderDrawContainer()}
                     {this.renderAdmin()}
                 </div>
             </Layout>

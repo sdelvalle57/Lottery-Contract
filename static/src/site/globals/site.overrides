@@ -1,3 +1,7 @@
 /*******************************
          Site Overrides
 *******************************/
+body {
+    background-image: @backgroundLocation;
+    background-size: cover;
+  }

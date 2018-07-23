@@ -12,3 +12,12 @@
     display: @containerDisplay;
     justify-content: @containerJustify; 
 }
+
+#drawContainer {
+    text-align: center;
+    font-size: @drawContainerFontSize;
+    margin-top: @drawContainerMarginTop;
+    color: white;
+    letter-spacing: @drawContainerLetterSpacing;
+    font-weight: normal;
+}

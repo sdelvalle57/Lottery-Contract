@@ -26,8 +26,7 @@ body {
   padding: 0px;
   overflow-x: hidden;
   min-width: 320px;
-  background: -webkit-radial-gradient(#1c3248, #061019);
-  background: radial-gradient(#1c3248, #061019);
+  background: #FFFFFF;
   font-family: 'Libre Baskerville', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
@@ -203,3 +202,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Site Overrides
 *******************************/
 
+body {
+  background-image: url(../background.png);
+  background-size: cover;
+}
