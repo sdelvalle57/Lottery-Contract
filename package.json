@@ -31,8 +31,8 @@
   "scripts": {
     "test": "mocha",
     "dev": "npm run build-semantic && node server.js",
-    "build": "npm run build-semantic && next build",
-    "start": "npm run build-semantic && next build && NODE_ENV=production node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
     "build-semantic": "cd static && gulp build-css build-assets",
     "watch-semantic": "cd static && npm run build-semantic && gulp watch"
   },
