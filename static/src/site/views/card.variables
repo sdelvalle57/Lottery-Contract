@@ -2,10 +2,12 @@
     User Variable Overrides
 *******************************/
 
+
+
 @background: linear-gradient(180deg, rgba(226, 39, 26, 1) 0%, rgba(254, 149, 0, 1) 100%);;
 @borderRadius: 19px;
 @borderSpacing: 5px;
-@minHeight: 60vh;
+@minHeight: 500px;
 @width: 350px;
 @contentDivider: none;
 
@@ -30,6 +32,7 @@
 @extraDivider: 'none';
 
 //button
+@buttonFontFamily: 'Poppins';
 @buttonFontSize: 18.2px;
 @backgroundColor: linear-gradient(90deg, rgba(28, 50, 72, 1) 76.2%, rgba(28, 50, 72, 1) 95.92%);
 @buttonBorderRadius: 14px;

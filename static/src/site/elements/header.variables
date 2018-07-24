@@ -10,4 +10,4 @@
 @blockMarginTop: 100px;
 @blockTextColor: white !important;
 @blockFontSize: 30px;
-@letterSpacing: 6px;
+@letterSpacing: 6.24px;

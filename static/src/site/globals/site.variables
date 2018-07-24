@@ -1,8 +1,11 @@
 /*******************************
      User Global Variables
 *******************************/
+
+
+
 @primaryColor: #CDE77F;
-@fontName: 'Libre Baskerville';
+@fontName: 'Roboto Slab';
 @borderColor: rgba(34, 36, 38, 0.15);
 @backgroundLocation: url(../background.png);
 

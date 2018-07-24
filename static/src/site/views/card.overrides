@@ -39,7 +39,6 @@
 .ui.card .meta {
   color: white;
   text-align: center;
-  font-weight: @bold;
 }
 
 .ui.cards > .card > .content > .meta + .description {
@@ -65,7 +64,9 @@
 
   #buyTicketButton {
     background : @backgroundColor;
+    font-family: @buttonFontFamily;
     font-size: @buttonFontSize;
+    font-weight: bold;
     color: white;
     border-radius: @buttonBorderRadius;
     height: @buttonHeight;

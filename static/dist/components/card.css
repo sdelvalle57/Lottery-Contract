@@ -30,7 +30,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   width: 350px;
-  min-height: 60vh;
+  min-height: 500px;
   background: -webkit-gradient(linear, left top, left bottom, from(#e2271a), to(#fe9500));
   background: -webkit-linear-gradient(top, #e2271a 0%, #fe9500 100%);
   background: linear-gradient(180deg, #e2271a 0%, #fe9500 100%);
@@ -171,7 +171,7 @@
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: 'Libre Baskerville', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: white;
 }
 
@@ -1032,7 +1032,6 @@ a.ui.card:hover,
 .ui.card .meta {
   color: white;
   text-align: center;
-  font-weight: bold;
 }
 .ui.cards > .card > .content > .meta + .description {
   color: white;
@@ -1056,7 +1055,9 @@ a.ui.card:hover,
   background: -webkit-gradient(linear, left top, right top, color-stop(76.2%, #1c3248), color-stop(95.92%, #1c3248));
   background: -webkit-linear-gradient(left, #1c3248 76.2%, #1c3248 95.92%);
   background: linear-gradient(90deg, #1c3248 76.2%, #1c3248 95.92%);
+  font-family: 'Poppins';
   font-size: 18.2px;
+  font-weight: bold;
   color: white;
   border-radius: 14px;
   height: 65px;
