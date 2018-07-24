@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Button, Container, Header } from 'semantic-ui-react';
+import 'isomorphic-fetch';
 import lotteryFactoryAt from '../ethereum/factory';
 import Layout from '../components/Layout';
 import LotteryHasPlayedModal from '../components/LotteryPlayedModal';
@@ -27,18 +28,19 @@ class LotteryIndex extends Component {
         numOfLotteries: this.props.numOfLotteries, 
         timeStarted: this.props.timeStarted,
         lotteryAddress: this.props.lotteryAddress, 
-        ethPrice: 0
+        ethPrice: this.props.ethPrice
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0x24CdcE7acF6B32b25503F715F3d33df6a18672c3";
+        const factoryAddress = "0x97FA45F32DD46ffD5e8d5529dACa339f79fB7929";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         console.log(owner);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         const numOfLotteries = lotteries.length;
-
-        
+        let ethPrice = await fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/');
+        ethPrice = await ethPrice.json();
+        ethPrice = ethPrice[0].price_usd;        
         
         if(numOfLotteries > 0) {
             const lotteryAddress = lotteries[numOfLotteries -1];
@@ -61,7 +63,7 @@ class LotteryIndex extends Component {
             return {lotteries, factoryAddress, lotteryPrice, lotteryJackPot,
                 deadline, numOfPlayers, lotteryFactory, lotteryAddress, owner,
                 prize, winningNumber, numOfWinners, finalJackPot, numOfLotteries,
-                timeStarted };
+                timeStarted, ethPrice };
         } else {
             if (res) {
                 res.writeHead(302, {
