@@ -9,7 +9,6 @@ import web3Socket from '../ethereum/web3Socket';
 import lotteryAt from '../ethereum/lottery';
 import { Router } from '../routes';
 import CardIndex from '../components/CardIndex';
-import {getEthPriceNow} from 'get-eth-price';
 
 class LotteryIndex extends Component {
 
@@ -28,25 +27,18 @@ class LotteryIndex extends Component {
         numOfLotteries: this.props.numOfLotteries, 
         timeStarted: this.props.timeStarted,
         lotteryAddress: this.props.lotteryAddress, 
-        ethPrice: this.props.ethPrice
+        ethPrice: 0
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0xE7FdE5dbce8893a29BD36827AE1A63Ebc4D7532e";
+        const factoryAddress = "0x24CdcE7acF6B32b25503F715F3d33df6a18672c3";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         console.log(owner);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         const numOfLotteries = lotteries.length;
 
-        let ethPrice = await  getEthPriceNow();
-        let i = 0;
-        for (var [key, value] of Object.entries(ethPrice)) {
-            if(i == 0){
-                ethPrice = value.ETH.USD;
-                break
-            }
-        }
+        
         
         if(numOfLotteries > 0) {
             const lotteryAddress = lotteries[numOfLotteries -1];
@@ -69,7 +61,7 @@ class LotteryIndex extends Component {
             return {lotteries, factoryAddress, lotteryPrice, lotteryJackPot,
                 deadline, numOfPlayers, lotteryFactory, lotteryAddress, owner,
                 prize, winningNumber, numOfWinners, finalJackPot, numOfLotteries,
-                timeStarted, ethPrice };
+                timeStarted };
         } else {
             if (res) {
                 res.writeHead(302, {

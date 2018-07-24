@@ -42,9 +42,6 @@ var _numeral2 = _interopRequireDefault(_numeral);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _jsxFileName = 'E:\\Ethereum\\Worldpay\\lottery-contract\\components\\CardIndex.js';
-
-
 var CardIndex = function (_Component) {
     (0, _inherits3.default)(CardIndex, _Component);
 
@@ -96,12 +93,7 @@ var CardIndex = function (_Component) {
                 if (usdJackpot > 0) {
                     usdJackpot = (0, _numeral2.default)(usdJackpot).format('0,0');
                 }
-                return _react2.default.createElement(_semanticUiReact.Card.Meta, {
-                    __source: {
-                        fileName: _jsxFileName,
-                        lineNumber: 43
-                    }
-                }, usdJackpot, ' USD');
+                return _react2.default.createElement(_semanticUiReact.Card.Meta, null, usdJackpot, ' USD');
             }
             return null;
         }
@@ -110,20 +102,11 @@ var CardIndex = function (_Component) {
         value: function renderDeadline(deadline, lotteryHasPlayed) {
             var canBuyLottery = !lotteryHasPlayed && Date.now() / 1000 - deadline < 0;
             if (canBuyLottery) {
-                return _react2.default.createElement('p', {
-                    __source: {
-                        fileName: _jsxFileName,
-                        lineNumber: 54
-                    }
-                }, 'Ends  ', _react2.default.createElement(_reactTimestamp2.default, {
+                return _react2.default.createElement('p', null, 'Ends  ', _react2.default.createElement(_reactTimestamp2.default, {
                     precision: 2,
 
                     autoUpdate: true, time: deadline,
-                    actualSeconds: true, __source: {
-                        fileName: _jsxFileName,
-                        lineNumber: 54
-                    }
-                }));
+                    actualSeconds: true }));
             }
             return "Ended";
         }
@@ -145,47 +128,7 @@ var CardIndex = function (_Component) {
             if (lotteryHasPlayed) {
                 route = '/lotteries/' + lotteryAddress;
             }
-            return _react2.default.createElement(_semanticUiReact.Container, { id: 'indexCardContainer', __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 73
-                }
-            }, _react2.default.createElement(_semanticUiReact.Card, {
-                __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 74
-                }
-            }, _react2.default.createElement(_semanticUiReact.Image, { verticalAlign: 'middle', size: 'medium', centered: true, circular: true, src: '/static/lottery_icon.png', __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 75
-                }
-            }), _react2.default.createElement(_semanticUiReact.Card.Content, {
-                __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 76
-                }
-            }, _react2.default.createElement(_semanticUiReact.Card.Header, {
-                __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 77
-                }
-            }, lotteryJackPot, ' ETH'), this.renderMeta(lotteryJackPot, ethPrice), _react2.default.createElement(_semanticUiReact.Card.Description, {
-                __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 79
-                }
-            }, this.renderDeadline(deadline, lotteryHasPlayed))), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 83
-                }
-            }, _react2.default.createElement(_routes.Link, { prefetch: true, route: route, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 84
-                }
-            }, _react2.default.createElement(_semanticUiReact.Button, { id: 'buyTicketButton', __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 85
-                }
-            }, 'BUY TICKET')))));
+            return _react2.default.createElement(_semanticUiReact.Container, { id: 'indexCardContainer' }, _react2.default.createElement(_semanticUiReact.Card, null, _react2.default.createElement(_semanticUiReact.Image, { verticalAlign: 'middle', size: 'medium', centered: true, circular: true, src: '/static/lottery_icon.png' }), _react2.default.createElement(_semanticUiReact.Card.Content, null, _react2.default.createElement(_semanticUiReact.Card.Header, null, lotteryJackPot, ' ETH'), this.renderMeta(lotteryJackPot, ethPrice), _react2.default.createElement(_semanticUiReact.Card.Description, null, this.renderDeadline(deadline, lotteryHasPlayed))), _react2.default.createElement(_semanticUiReact.Card.Content, { extra: true }, _react2.default.createElement(_routes.Link, { prefetch: true, route: route }, _react2.default.createElement(_semanticUiReact.Button, { id: 'buyTicketButton' }, 'BUY TICKET')))));
         }
     }]);
 
@@ -193,4 +136,3 @@ var CardIndex = function (_Component) {
 }(_react.Component);
 
 exports.default = CardIndex;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHNcXENhcmRJbmRleC5qcyJdLCJuYW1lcyI6WyJSZWFjdCIsIkNvbXBvbmVudCIsIkljb24iLCJJbWFnZSIsIkNvbnRhaW5lciIsIkNhcmQiLCJCdXR0b24iLCJUaW1lc3RhbXAiLCJMaW5rIiwibnVtZXJhbCIsIkNhcmRJbmRleCIsInN0YXRlIiwibG90dGVyeVByaWNlIiwicHJvcHMiLCJsb3R0ZXJ5SmFja1BvdCIsImRlYWRsaW5lIiwibnVtT2ZQbGF5ZXJzIiwibG90dGVyeUhhc1BsYXllZCIsIm51bU9mTG90dGVyaWVzIiwidGltZVN0YXJ0ZWQiLCJhZGRyZXNzIiwibG90dGVyeUFkZHJlc3MiLCJldGhQcmljZSIsIm5leHRQcm9wcyIsInNldFN0YXRlIiwidXNkSmFja3BvdCIsImZvcm1hdCIsImNhbkJ1eUxvdHRlcnkiLCJEYXRlIiwibm93Iiwicm91dGUiLCJyZW5kZXJNZXRhIiwicmVuZGVyRGVhZGxpbmUiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsQUFBTyxBQUFROzs7O0FBQ2YsQUFBUyxBQUFNLEFBQU8sQUFBVyxBQUFNOztBQUN2QyxBQUFPOzs7O0FBQ1AsQUFBUyxBQUFZOztBQUNyQixBQUFPOzs7Ozs7Ozs7SSxBQUVEOzs7Ozs7Ozs7Ozs7OztzTkFFRixBOzBCQUNrQixNQUFBLEFBQUssTUFEZixBQUNxQixBQUN6Qjs0QkFBZ0IsTUFBQSxBQUFLLE1BRmpCLEFBRXVCLEFBQzNCO3NCQUFVLE1BQUEsQUFBSyxNQUhYLEFBR2lCLEFBQ3JCOzBCQUFjLE1BQUEsQUFBSyxNQUpmLEFBSXFCLEFBQ3pCOzhCQUFrQixNQUFBLEFBQUssTUFMbkIsQUFLeUIsQUFDN0I7NEJBQWdCLE1BQUEsQUFBSyxNQU5qQixBQU11QixBQUMzQjt5QkFBYSxNQUFBLEFBQUssTUFQZCxBQU9vQixBQUN4QjtxQkFBUyxNQUFBLEFBQUssTUFSVixBQVFnQixBQUNwQjs0QkFBZ0IsTUFBQSxBQUFLLE1BVGpCLEFBU3VCLEFBQzNCO3NCQUFVLE1BQUEsQUFBSyxNQUFNLEEsQUFWakI7QUFBQSxBQUNKOzs7OztrREFZc0IsQSxXQUFXLEFBQ2pDO2lCQUFBLEFBQUs7OEJBQ2EsVUFESixBQUNjLEFBQ3hCO2dDQUFnQixVQUZOLEFBRWdCLEFBQzFCOzBCQUFVLFVBSEEsQUFHVSxBQUNwQjs4QkFBYyxVQUpKLEFBSWMsQUFDeEI7a0NBQWtCLFVBTFIsQUFLa0IsQUFDNUI7Z0NBQWdCLFVBTk4sQUFNZ0IsQUFDMUI7NkJBQWEsVUFQSCxBQU9hLEFBQ3ZCO2dDQUFnQixLQUFBLEFBQUssTUFSWCxBQVFpQixBQUMzQjswQkFBVSxVQVRkLEFBQWMsQUFTVSxBQUUzQjtBQVhpQixBQUNWOzs7O21DLEFBWUcsZ0JBQWdCLEEsVUFBVSxBQUNqQztnQkFBRyxZQUFILEFBQWUsR0FBRyxBQUNkO29CQUFJLGFBQWEsaUJBQWpCLEFBQWtDLEFBQ2xDO29CQUFHLGFBQUgsQUFBZ0IsR0FBRSxBQUNkO2lDQUFhLHVCQUFBLEFBQVEsWUFBUixBQUFvQixPQUFqQyxBQUFhLEFBQTJCLEFBQzNDO0FBQ0Q7dUNBQ0ssY0FBRCxzQkFBQSxBQUFNOztrQ0FBTjtvQ0FBQSxBQUNJO0FBREo7QUFBQSxpQkFBQSxFQUFBLFlBREosQUFDSSxBQUlQO0FBQ0Q7bUJBQUEsQUFBTyxBQUNWOzs7O3VDQUVjLEEsVSxBQUFVLGtCQUFrQixBQUN2QztnQkFBTSxnQkFBZ0IsQ0FBQSxBQUFDLG9CQUFvQixLQUFBLEFBQUssUUFBTCxBQUFXLE9BQVgsQUFBa0IsV0FBN0QsQUFBeUUsQUFDekU7Z0JBQUEsQUFBRyxlQUFlLEFBQ2Q7dUNBQU8sY0FBQTs7a0NBQUE7b0NBQUE7QUFBQTtBQUFBLGlCQUFBLEVBQVMsMEJBQUEsQUFBQzsrQkFBRCxBQUNHLEFBRVg7O2dDQUhRLE1BR0csTUFISCxBQUdTLEFBQ2pCO21DQUpRO2tDQUFBO29DQUFoQixBQUFPLEFBQVMsQUFLbkI7QUFMbUI7QUFDUjtBQUtaO21CQUFBLEFBQU8sQUFDVjs7OztpQ0FHUTt5QkFHMkUsS0FIM0UsQUFHZ0Y7Z0JBSGhGLEFBRUQsc0JBRkMsQUFFRDtnQkFGQyxBQUVhLHdCQUZiLEFBRWE7Z0JBRmIsQUFFNkIsa0JBRjdCLEFBRTZCO2dCQUY3QixBQUV1QyxzQkFGdkMsQUFFdUM7Z0JBRnZDLEFBR0QsMEJBSEMsQUFHRDtnQkFIQyxBQUdpQix3QkFIakIsQUFHaUI7Z0JBSGpCLEFBR2lDLHFCQUhqQyxBQUdpQztnQkFIakMsQUFHOEMsd0JBSDlDLEFBRzhDO2dCQUg5QyxBQUc4RCxrQkFIOUQsQUFHOEQsQUFDL0Q7O2dCQUFJLHdCQUFKLEFBQTBCLEFBQzFCO2dCQUFBLEFBQUcsa0JBQWtCLEFBQ2pCO3dDQUFBLEFBQXNCLEFBQ3pCO0FBQ0w7bUNBQ0ksQUFBQyw0Q0FBVSxJQUFYLEFBQWM7OEJBQWQ7Z0NBQUEsQUFDSTtBQURKO2FBQUEsa0JBQ0ksQUFBQzs7OEJBQUQ7Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksQUFBQyx3Q0FBTSxlQUFQLEFBQXFCLFVBQVMsTUFBOUIsQUFBbUMsVUFBUyxVQUE1QyxNQUFxRCxVQUFyRCxNQUE4RCxLQUE5RCxBQUFrRTs4QkFBbEU7Z0NBREosQUFDSSxBQUNBO0FBREE7Z0NBQ0MsY0FBRCxzQkFBQSxBQUFNOzs4QkFBTjtnQ0FBQSxBQUNBO0FBREE7QUFBQSwrQkFDQyxjQUFELHNCQUFBLEFBQU07OzhCQUFOO2dDQUFBLEFBQWM7QUFBZDtBQUFBLGVBQUEsZ0JBREEsQUFDQSxBQUNDLGNBQUEsQUFBSyxXQUFMLEFBQWdCLGdCQUZqQixBQUVDLEFBQWdDLEFBQ2pDLDJCQUFDLGNBQUQsc0JBQUEsQUFBTTs7OEJBQU47Z0NBQUEsQUFDSztBQURMO0FBQUEsb0JBQ0ssQUFBSyxlQUFMLEFBQW9CLFVBTjdCLEFBRUksQUFHQSxBQUNLLEFBQThCLEFBR25DLHFDQUFDLGNBQUQsc0JBQUEsQUFBTSxXQUFRLE9BQWQ7OEJBQUE7Z0NBQUEsQUFDQTtBQURBOytCQUNBLEFBQUMsOEJBQUssVUFBTixNQUFlLE9BQWYsQUFBc0I7OEJBQXRCO2dDQUFBLEFBQ0k7QUFESjsrQkFDSSxBQUFDLHlDQUFPLElBQVIsQUFBVzs4QkFBWDtnQ0FBQTtBQUFBO2VBYmhCLEFBQ0ksQUFDSSxBQVNJLEFBQ0EsQUFDSSxBQVFuQjs7Ozs7QUF0Rm1CLEEsQUEwRnhCOztrQkFBQSxBQUFlIiwiZmlsZSI6IkNhcmRJbmRleC5qcyIsInNvdXJjZVJvb3QiOiJFOi9FdGhlcmV1bS9Xb3JsZHBheS9sb3R0ZXJ5LWNvbnRyYWN0In0=
