@@ -4,7 +4,6 @@
   "description": "Worldpay Lottery",
   "main": "index.js",
   "dependencies": {
-    "get-eth-price": "^1.0.0",
     "gulp": "^3.9.1",
     "next": "^4.2.3",
     "next-routes": "^1.4.2",
@@ -16,7 +15,6 @@
     "semantic-ui-react": "^0.80.2",
     "semantic-ui-statistic": "^2.3.1",
     "truffle": "^4.1.13",
-    "truffle-hdwallet-provider": "0.0.5",
     "truffle-hdwallet-provider-privkey": "^0.2.0",
     "web3": "^1.0.0-beta.34"
   },
@@ -28,7 +26,7 @@
     "test": "mocha",
     "dev": "npm run build-semantic && node server.js",
     "build": "npm run build-semantic && next build",
-    "start": "npm run build-semantic && NODE_ENV=production node server.js",
+    "start": "next build && NODE_ENV=production node server.js",
     "build-semantic": "cd static && gulp build-css build-assets",
     "watch-semantic": "cd static && npm run build-semantic && gulp watch"
   },
