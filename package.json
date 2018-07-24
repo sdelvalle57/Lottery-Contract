@@ -4,8 +4,10 @@
   "description": "Worldpay Lottery",
   "main": "index.js",
   "dependencies": {
+    "better-console": "^1.0.1",
     "es6-promise": "^4.2.4",
     "gulp": "^3.9.1",
+    "gulp-help": "^1.6.1",
     "isomorphic-fetch": "^2.2.1",
     "next": "^4.2.3",
     "next-routes": "^1.4.2",
@@ -13,6 +15,7 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-timestamp": "^4.4.0",
+    "require-dot-file": "^0.4.0",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.80.2",
     "semantic-ui-statistic": "^2.3.1",
