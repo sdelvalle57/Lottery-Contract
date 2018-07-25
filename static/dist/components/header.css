@@ -736,3 +736,9 @@ a.ui.inverted.grey.header:hover {
   letter-spacing: 6.24px;
   height: 58px;
 }
+#enterHeader {
+  font-weight: 700;
+  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #383838;
+  margin-left: 20px;
+}

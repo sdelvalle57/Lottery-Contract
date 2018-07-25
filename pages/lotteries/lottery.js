@@ -1,5 +1,5 @@
 import React , { Component } from 'react';
-import { Card, Grid, Dimmer, Loader, Segment, Container, Feed, Label, Icon } from 'semantic-ui-react';
+import { Card, Grid, Dimmer, Loader, Segment, Container, Feed, Label, Icon, Divider } from 'semantic-ui-react';
 import Timestamp from 'react-timestamp';
 import Layout from '../../components/Layout';
 import lotteryAt from '../../ethereum/lottery';
@@ -158,20 +158,10 @@ class Lottery extends Component {
                 </Card.Content>
             </Card>
         )
-        /*
-        {
-                header: ,
-                meta: 'We accept just Ether as payment',
-                description: 'This is the value of each ticket to enter the Lottery',
-                style: { overflowWrap: 'break-word' },
-                id: 'mainCard'
-            },
-            */
     }
 
     renderCards() {
-        let {lotteryValue, deadline, lotteryJackPot, timeStarted, canBuyLottery} = this.state;
-        const isLotteryOpen = canBuyLottery? "Open": "Closed";
+        let {lotteryValue, lotteryJackPot} = this.state;
         const items = [
             {
                 header :web3.utils.fromWei(lotteryValue, 'ether') + " Ether",
@@ -227,10 +217,11 @@ class Lottery extends Component {
     }
 
     render() {
-        const {canPickWinner, canBuyLottery, number4, lotteryHasPlayed,
-            lotteryValue, lotteryAddress, numbers3, timeStarted} = this.state;
+        const {canPickWinner, canBuyLottery, number4,lotteryValue, 
+            lotteryAddress, numbers3} = this.state;
         return (
             <Layout >
+                <Divider />
                 <Dimmer active = {this.state.loading}>
                     <Loader size='large'>Loading</Loader>
                 </Dimmer>
@@ -238,11 +229,11 @@ class Lottery extends Component {
                 <Container style={{marginTop:'100px'}}>
                 { this.renderModal() }
                     <Grid >
-                        <Grid.Column width = { 10 } >
+                        <Grid.Column width = { 6 } >
                             { this.renderMainCard() }
                             { this.renderCards() }
                         </Grid.Column>
-                        <Grid.Column width = { 6 }>
+                        <Grid.Column width = { 10 }>
                             <Segment compact>
                                 <EnterForm
                                     number4 = {number4}
@@ -258,6 +249,7 @@ class Lottery extends Component {
                         </Grid.Column>
                     </Grid>
                 </Container>
+                <Divider />
             </Layout>
         )
     }

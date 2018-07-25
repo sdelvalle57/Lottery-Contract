@@ -109,11 +109,6 @@ class NumberPicker extends Component {
     render() {
         return (
             <Table celled textAlign='center'>
-                <Table.Header>
-                    <Table.Row>
-                    <Table.HeaderCell colSpan='9'>Pick 4 Numbers</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
                 <Table.Body>
                        
                     <Table.Row>

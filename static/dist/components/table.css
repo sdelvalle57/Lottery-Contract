@@ -358,7 +358,7 @@
 }
 .ui.table tr.warning,
 .ui.table td.warning {
-  background: #FFFAF3 !important;
+  background: #21ba45 !important;
   color: #573A08 !important;
 }
 
@@ -531,7 +531,7 @@
 .ui.selectable.table tr.warning:hover,
 .ui.table tr td.selectable.warning:hover,
 .ui.selectable.table tr:hover td.warning {
-  background: #fff4e4 !important;
+  background: #1fad40 !important;
   color: #493107 !important;
 }
 .ui.selectable.table tr.active:hover,
@@ -1136,3 +1136,14 @@
          Site Overrides
 *******************************/
 
+.ui.table {
+  color: white;
+  font-size: 15.6px;
+}
+.ui.table tfoot th {
+  background: transparent;
+}
+.ui.table tbody tr td.selectable {
+  background: #183149;
+  border: 1px solid white;
+}

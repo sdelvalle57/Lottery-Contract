@@ -85,11 +85,11 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  background: none;
+  background: #183149;
   padding: 0.92857143em 1.14285714em;
   text-transform: none;
-  color: rgba(0, 0, 0, 0.87);
-  font-weight: normal;
+  color: 'white';
+  font-weight: bold;
   -webkit-transition: background 0.1s ease, color 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: background 0.1s ease, color 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: background 0.1s ease, box-shadow 0.1s ease, color 0.1s ease;
@@ -638,7 +638,7 @@ Floated Menu / Item
   border-right: 1px solid transparent;
   border-top: 2px solid transparent;
   padding: 0.92857143em 1.42857143em;
-  color: rgba(0, 0, 0, 0.87);
+  color: 'white';
 }
 .ui.tabular.menu .item:before {
   display: none;
@@ -2050,3 +2050,14 @@ Floated Menu / Item
          Site Overrides
 *******************************/
 
+.ui.menu .item {
+  border: 1px solid white;
+  display: grid !important;
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+  width: 40px;
+  height: 40px;
+  font-size: 15.6px;
+  padding: 0px 0px 0px 0px;
+}

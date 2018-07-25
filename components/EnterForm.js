@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Message, Button } from 'semantic-ui-react';
+import { Form, Message, Button, Header } from 'semantic-ui-react';
 import lotteryAt from '../ethereum/lottery';
 import web3 from '../ethereum/web3';
 import { Router } from '../routes';
@@ -88,22 +88,26 @@ class EnterForm extends Component {
 
     renderButton() {
         if(this.state.canBuyLottery){
-            return <Button 
+            return ( <Button id='enterButton' 
                 positive = {this.state.number4.length==10} 
                 loading={this.state.loading}>Buy</Button>
+                 
+                );
         }else{
             return <Button negative>Ended</Button>
         }
-        
+    }
+
+    renderHeader() {
+        return <Header as='h4' id='enterHeader' align='center'>
+        Choose 4 numbers from 1 to 99</Header>
     }
 
     render() {
         return (
             <Form onSubmit={this.onSubmit} error={!!this.state.errroMessage}>
-                <Form.Field>
-                    <label>Enter the lottery</label>
-                </Form.Field>
                 {this.renderButton()}
+                {this.renderHeader()}
                 <Message error header="Oops!" content={this.state.errroMessage} />
                 
             </Form>
