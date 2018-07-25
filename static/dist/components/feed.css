@@ -58,7 +58,7 @@
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  width: 2.5em;
+  width: 97px;
   height: auto;
   -ms-flex-item-align: stretch;
       align-self: stretch;
@@ -126,10 +126,10 @@
 ---------------*/
 
 .ui.feed > .event > .content .summary {
-  margin: 0em;
-  font-size: 1em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
+  margin: 0px 0px 3px 32px;
+  font-size: 11.3px;
+  font-weight: 500;
+  color: #183149;
 }
 
 /* Summary Image */
@@ -293,3 +293,9 @@
     User Variable Overrides
 *******************************/
 
+.ui.feed {
+  margin-left: 20px;
+}
+.ui.feed > .event > .content .summary {
+  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}

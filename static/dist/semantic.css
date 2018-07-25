@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/MIT
  *
  */
-@import url('https://fonts.googleapis.com/css?family=Roboto Slab:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
 /*!
  * # Semantic UI 2.3.3 - Reset
  * http://github.com/semantic-org/semantic-ui/
@@ -585,7 +585,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   font-weight: bold;
@@ -4484,7 +4484,7 @@ body {
 
 .ui.primary.buttons .button,
 .ui.primary.button {
-  background-color: #CDE77F;
+  background-color: #2185D0;
   color: #FFFFFF;
   text-shadow: none;
   background-image: none;
@@ -4497,21 +4497,21 @@ body {
 
 .ui.primary.buttons .button:hover,
 .ui.primary.button:hover {
-  background-color: #c8e963;
+  background-color: #1678c2;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.primary.buttons .button:focus,
 .ui.primary.button:focus {
-  background-color: #c6ee4f;
+  background-color: #0d71bb;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.primary.buttons .button:active,
 .ui.primary.button:active {
-  background-color: #bcdf54;
+  background-color: #1a69a4;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4520,7 +4520,7 @@ body {
 .ui.primary.buttons .active.button:active,
 .ui.primary.active.button,
 .ui.primary.button .active.button:active {
-  background-color: #c9ec60;
+  background-color: #1279c6;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4529,40 +4529,40 @@ body {
 
 .ui.basic.primary.buttons .button,
 .ui.basic.primary.button {
-  -webkit-box-shadow: 0px 0px 0px 1px #CDE77F inset !important;
-  box-shadow: 0px 0px 0px 1px #CDE77F inset !important;
-  color: #CDE77F !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #2185D0 inset !important;
+  box-shadow: 0px 0px 0px 1px #2185D0 inset !important;
+  color: #2185D0 !important;
 }
 
 .ui.basic.primary.buttons .button:hover,
 .ui.basic.primary.button:hover {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #c8e963 inset !important;
-  box-shadow: 0px 0px 0px 1px #c8e963 inset !important;
-  color: #c8e963 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #1678c2 inset !important;
+  box-shadow: 0px 0px 0px 1px #1678c2 inset !important;
+  color: #1678c2 !important;
 }
 
 .ui.basic.primary.buttons .button:focus,
 .ui.basic.primary.button:focus {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #c6ee4f inset !important;
-  box-shadow: 0px 0px 0px 1px #c6ee4f inset !important;
-  color: #c8e963 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #0d71bb inset !important;
+  box-shadow: 0px 0px 0px 1px #0d71bb inset !important;
+  color: #1678c2 !important;
 }
 
 .ui.basic.primary.buttons .active.button,
 .ui.basic.primary.active.button {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #c9ec60 inset !important;
-  box-shadow: 0px 0px 0px 1px #c9ec60 inset !important;
-  color: #bcdf54 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #1279c6 inset !important;
+  box-shadow: 0px 0px 0px 1px #1279c6 inset !important;
+  color: #1a69a4 !important;
 }
 
 .ui.basic.primary.buttons .button:active,
 .ui.basic.primary.button:active {
-  -webkit-box-shadow: 0px 0px 0px 1px #bcdf54 inset !important;
-  box-shadow: 0px 0px 0px 1px #bcdf54 inset !important;
-  color: #bcdf54 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #1a69a4 inset !important;
+  box-shadow: 0px 0px 0px 1px #1a69a4 inset !important;
+  color: #1a69a4 !important;
 }
 
 .ui.buttons:not(.vertical) > .basic.primary.button:not(:first-child) {
@@ -6874,7 +6874,7 @@ i.flag.zimbabwe:before {
   border: none;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   padding: 0em 0em;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   line-height: 1.28571429em;
   text-transform: none;
@@ -16171,6 +16171,21 @@ a.ui.basic.label:hover {
 /*******************************
          Site Overrides
 *******************************/
+
+.ui.label.feedExtraLabel {
+  background-color: transparent;
+  background-image: none;
+  color: white;
+  background: -webkit-gradient(linear, left top, right top, color-stop(76.2%, #1c3248), color-stop(95.92%, #1c3248));
+  background: -webkit-linear-gradient(left, #1c3248 76.2%, #1c3248 95.92%);
+  background: linear-gradient(90deg, #1c3248 76.2%, #1c3248 95.92%);
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 14.3px;
+  border-radius: 8px;
+  margin-left: 27px;
+  margin-bottom: 10px;
+}
 /*!
  * # Semantic UI 2.3.3 - List
  * http://github.com/semantic-org/semantic-ui/
@@ -16348,7 +16363,7 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -19144,7 +19159,7 @@ ol.ui.horizontal.list li:before,
 /* Title */
 
 .ui.steps .step .title {
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   font-weight: bold;
 }
@@ -25654,7 +25669,7 @@ Floated Menu / Item
 
 .ui.message .header {
   display: block;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   margin: -0.14285714em 0em 0rem 0em;
 }
@@ -27790,11 +27805,9 @@ Floated Menu / Item
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  width: 350px;
-  min-height: 500px;
-  background: -webkit-gradient(linear, left top, left bottom, from(#e2271a), to(#fe9500));
-  background: -webkit-linear-gradient(top, #e2271a 0%, #fe9500 100%);
-  background: linear-gradient(180deg, #e2271a 0%, #fe9500 100%);
+  width: 290px;
+  min-height: 0px;
+  background: #183149;
   padding: 0em;
   border: none;
   border-radius: 19px;
@@ -27894,7 +27907,7 @@ Floated Menu / Item
   -webkit-box-flex: 0;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
-  padding: 0px;
+  padding: 0em;
   background: rgba(0, 0, 0, 0.05);
 }
 
@@ -27924,7 +27937,7 @@ Floated Menu / Item
   border-top: none;
   background: none;
   margin: 0em;
-  padding: 'none';
+  padding: 1em 1em;
   -webkit-box-shadow: none;
   box-shadow: none;
   font-size: 1em;
@@ -27945,8 +27958,8 @@ Floated Menu / Item
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: white;
+  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: rgba(0, 0, 0, 0.85);
 }
 
 /* Default Header Size */
@@ -27954,8 +27967,8 @@ Floated Menu / Item
 .ui.cards > .card > .content > .header:not(.ui),
 .ui.card > .content > .header:not(.ui) {
   font-weight: bold;
-  font-size: 43px;
-  margin-top: 28px;
+  font-size: 1.28571429em;
+  margin-top: -0.21425em;
   line-height: 1.28571429em;
 }
 
@@ -28049,7 +28062,7 @@ Floated Menu / Item
 
 .ui.cards > .card .meta,
 .ui.card .meta {
-  font-size: 23.4px;
+  font-size: 1em;
   color: rgba(0, 0, 0, 0.4);
 }
 
@@ -28091,7 +28104,7 @@ Floated Menu / Item
 
 .ui.cards > .card > .content > a.header,
 .ui.card > .content > a.header {
-  color: white;
+  color: rgba(0, 0, 0, 0.85);
 }
 
 .ui.cards > .card > .content > a.header:hover,
@@ -28871,8 +28884,16 @@ a.ui.card:hover,
     User Variable Overrides
 *******************************/
 
-.ui.cards > .card > .image,
-.ui.card > .image {
+#indexCard {
+  border: 5px solid #1c3248;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e2271a), to(#fe9500));
+  background: -webkit-linear-gradient(top, #e2271a 0%, #fe9500 100%);
+  background: linear-gradient(180deg, #e2271a 0%, #fe9500 100%);
+  width: 350px;
+  min-height: 500px;
+}
+
+#indexCard > .image {
   position: relative;
   display: block;
   -webkit-box-flex: 0;
@@ -28884,11 +28905,60 @@ a.ui.card:hover,
   background: 'none';
 }
 
-.ui.card {
-  border: 5px solid #1c3248;
+#indexCard > .content {
+  padding: 'none';
 }
 
-.ui.card::after {
+#indexCard > .content > .header {
+  display: block;
+  margin: '';
+  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: white;
+}
+
+#indexCard > .content > .header:not(.ui) {
+  text-align: center;
+  font-weight: bold;
+  font-size: 43px;
+  margin-bottom: 15.6px;
+  margin-top: 28px;
+}
+
+#indexCard .meta {
+  color: white;
+  text-align: center;
+  font-size: 23px;
+}
+
+#indexCard > .content > .description {
+  clear: both;
+  color: white;
+  margin-top: 26px;
+  text-align: center;
+  font-size: 21px;
+}
+
+#indexCard > .extra {
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+
+#buyTicketButton {
+  background: -webkit-gradient(linear, left top, right top, color-stop(76.2%, #1c3248), color-stop(95.92%, #1c3248));
+  background: -webkit-linear-gradient(left, #1c3248 76.2%, #1c3248 95.92%);
+  background: linear-gradient(90deg, #1c3248 76.2%, #1c3248 95.92%);
+  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 18.2px;
+  font-weight: bold;
+  color: white;
+  border-radius: 14px;
+  height: 65px;
+  width: 280px;
+  letter-spacing: 3.6px;
+  margin-bottom: 19px;
+}
+
+#indexCard::after {
   display: block;
   position: absolute;
   top: 0;
@@ -28899,53 +28969,61 @@ a.ui.card:hover,
   border: 2px solid white;
 }
 
-.ui.cards > .card > .content > .header:not(.ui),
-.ui.card > .content > .header:not(.ui) {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 15.6px;
+#mainCard {
+  -webkit-box-shadow: 'none';
+  box-shadow: 'none';
+  background: white;
+  width: 420px;
+  min-height: 130px;
+  float: right;
+  margin-bottom: 16px;
 }
 
-.ui.cards > .card .meta,
-.ui.card .meta {
+#cardsLottery {
+  display: block;
+  float: right;
+}
+
+.ui.card.regularCards {
+  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  background: -webkit-gradient(linear, left top, right top, color-stop(2.81%, #e84e0f), to(#e9b000));
+  background: -webkit-linear-gradient(left, #e84e0f 2.81%, #e9b000 100%);
+  background: linear-gradient(90deg, #e84e0f 2.81%, #e9b000 100%);
+  height: 130px;
+  width: 292px;
+  padding: 18px 0px 12px 12px;
+  margin-bottom: 16px;
+  font-weight: 500;
+  font-size: 12px;
   color: white;
-  text-align: center;
+  margin-left: 10px;
 }
 
-.ui.cards > .card > .content > .meta + .description {
-  color: white;
-  text-align: center;
-  font-weight: normal;
-  font-size: 23px;
-}
-
-.ui.cards > .card > .content > .description,
-.ui.card > .content > .description {
-  clear: both;
-  color: white;
-  margin-top: 26px;
-  text-align: center;
-  font-size: 21px;
-}
-
-.ui.card > .extra {
-  -ms-flex-item-align: center;
-  align-self: center;
-}
-
-#buyTicketButton {
+.ui.card.regularCards > .content > .header {
+  display: initial;
   background: -webkit-gradient(linear, left top, right top, color-stop(76.2%, #1c3248), color-stop(95.92%, #1c3248));
   background: -webkit-linear-gradient(left, #1c3248 76.2%, #1c3248 95.92%);
   background: linear-gradient(90deg, #1c3248 76.2%, #1c3248 95.92%);
-  font-family: 'Poppins';
-  font-size: 18.2px;
-  font-weight: bold;
   color: white;
-  border-radius: 14px;
-  height: 65px;
-  width: 280px;
-  letter-spacing: 3.6px;
-  margin-bottom: 19px;
+  padding-left: 7.8px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-right: 63px;
+  border-radius: 8px;
+  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 23px !important;
+  line-height: 0px !important;
+}
+
+.ui.card.regularCards > .content p {
+  margin-right: 30px;
+  padding-bottom: 1px;
+  border-bottom: 1.3px solid white;
+  margin-top: 10px;
+}
+
+.ui.card.regularCards > .content > .description {
+  color: white;
 }
 /*!
  * # Semantic UI 2.3.3 - Comment
@@ -29296,7 +29374,7 @@ a.ui.card:hover,
   -webkit-box-flex: 0;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
-  width: 2.5em;
+  width: 97px;
   height: auto;
   -ms-flex-item-align: stretch;
   align-self: stretch;
@@ -29369,10 +29447,10 @@ a.ui.card:hover,
 ---------------*/
 
 .ui.feed > .event > .content .summary {
-  margin: 0em;
-  font-size: 1em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
+  margin: 0px 0px 3px 32px;
+  font-size: 11.3px;
+  font-weight: 500;
+  color: #183149;
 }
 
 /* Summary Image */
@@ -29546,6 +29624,14 @@ a.ui.card:hover,
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.feed {
+  margin-left: 20px;
+}
+
+.ui.feed > .event > .content .summary {
+  font-family: 'Poppins', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
 /*!
  * # Semantic UI 2.3.3 - Item
  * http://github.com/semantic-org/semantic-ui/
@@ -29696,7 +29782,7 @@ a.ui.card:hover,
 .ui.items > .item > .content > .header {
   display: inline-block;
   margin: -0.21425em 0em 0em;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -30186,7 +30272,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .label,
 .ui.statistic > .label {
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
@@ -30734,7 +30820,7 @@ a.ui.card:hover,
 
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -31552,7 +31638,7 @@ a.ui.card:hover,
 
 .ui.toggle.checkbox input:checked ~ .box:before,
 .ui.toggle.checkbox input:checked ~ label:before {
-  background-color: #CDE77F !important;
+  background-color: #2185D0 !important;
 }
 
 .ui.toggle.checkbox input:checked ~ .box:after,
@@ -31571,7 +31657,7 @@ a.ui.card:hover,
 
 .ui.toggle.checkbox input:focus:checked ~ .box:before,
 .ui.toggle.checkbox input:focus:checked ~ label:before {
-  background-color: #c6ee4f !important;
+  background-color: #0d71bb !important;
 }
 
 /*******************************
@@ -33780,7 +33866,7 @@ select.ui.dropdown {
 
 .ui.modal > .header {
   display: block;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 1.5rem;
@@ -34539,7 +34625,7 @@ a.ui.nag {
 
 .ui.popup > .header {
   padding: 0em;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   line-height: 1.2;
   font-weight: bold;
@@ -36317,7 +36403,7 @@ a.ui.nag {
 
 .ui.search > .results .result .title {
   margin: -0.14285714em 0em 0em;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.85);
@@ -36343,7 +36429,7 @@ a.ui.nag {
 }
 
 .ui.search > .results > .message .header {
-  font-family: 'Roboto Slab', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);

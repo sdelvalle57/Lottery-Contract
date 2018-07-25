@@ -2,37 +2,39 @@
     User Variable Overrides
 *******************************/
 
-
-
-@background: linear-gradient(180deg, rgba(226, 39, 26, 1) 0%, rgba(254, 149, 0, 1) 100%);;
+/* Globals */
+@background: rgba(24, 49, 73, 1);
 @borderRadius: 19px;
 @borderSpacing: 5px;
-@minHeight: 500px;
-@width: 350px;
 @contentDivider: none;
 
-//image
+/* Index Card */
+@indexCardBackground: linear-gradient(180deg, rgba(226, 39, 26, 1) 0%, rgba(254, 149, 0, 1) 100%);
+@indexCardMinHeight: 500px;
+@indexCardWidth: 350px;
 
-@imagePadding: 0px;
-@iconWidth: 175px;
+//image
+@indexCardImagePadding: 0px;
+@indexCardIconWidth: 175px;
+@indexCardMarginTop: 68px;
 
 // header
-@headerColor: white;
-@headerLineHeightOffset: 28px;
-@headerFontSize: 43px;
-@contentPadding: 'none';
-@headerMarginBottom: 15.6px;
+@indexCardHeaderColor: white;
+@indexCardHeaderLineHeightOffset: 28px;
+@indexCardHeaderFontSize: 43px;
+@indexCardContentPadding: 'none';
+@indexCardHeaderMarginBottom: 15.6px;
 
 
 // meta
-@metaFontSize: 23.4px;
+@indexCardMetaFontSize: 23.4px;
 @descriptionFontSize: 23px;
 @descriptionDistance: 26px;
 @deadlineFontSize: 21px;
 @extraDivider: 'none';
 
 //button
-@buttonFontFamily: 'Poppins';
+@fontName: 'Poppins';
 @buttonFontSize: 18.2px;
 @backgroundColor: linear-gradient(90deg, rgba(28, 50, 72, 1) 76.2%, rgba(28, 50, 72, 1) 95.92%);
 @buttonBorderRadius: 14px;
@@ -40,3 +42,8 @@
 @buttonWidth: 280px;
 @buttonLetterSpacing: 3.6px;
 @buttonMarginBottom: 19px;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*Main Card */
+@mainCardWidth: 420px;
+@mainCardMinHeight: 130px;

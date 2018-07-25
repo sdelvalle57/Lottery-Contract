@@ -1,7 +1,6 @@
 import React , { Component } from 'react';
-import { Card, Button, Grid, Dimmer, Loader, Segment, Container } from 'semantic-ui-react';
+import { Card, Grid, Dimmer, Loader, Segment, Container, Feed, Label, Icon } from 'semantic-ui-react';
 import Timestamp from 'react-timestamp';
-import { Link } from '../../routes';
 import Layout from '../../components/Layout';
 import lotteryAt from '../../ethereum/lottery';
 import web3 from '../../ethereum/web3';
@@ -10,7 +9,6 @@ import EnterForm from '../../components/EnterForm';
 import PickWinnerForm from '../../components/PickWinnerForm';
 import NumberPicker from '../../components/NumberPicker';
 import LotteryPlayedModal from '../../components/LotteryPlayedModal';
-import { runInThisContext } from 'vm';
 
 
 class Lottery extends Component {  
@@ -122,7 +120,7 @@ class Lottery extends Component {
     renderDeadline(deadline, canBuyLottery) {
         const ending = canBuyLottery ? "Ending ": "Ended";
         return <p>{ending} <Timestamp
-                    precision={3} 
+                    precision={2} 
                     autoUpdate time={deadline} 
                     actualSeconds /></p>
     }
@@ -131,30 +129,66 @@ class Lottery extends Component {
         return <p>Started on <Timestamp time={timeStarted} format='full' /></p>
     }
 
+    renderMainCard() {
+        let {deadline, timeStarted, canBuyLottery} = this.state;
+        const isLotteryOpen = canBuyLottery? "Open": "Closed";
+        return (
+            <Card id='mainCard'>
+                <Card.Content>
+                <Feed>
+                    <Feed.Event>
+                    <Feed.Label image='/static/lottery_icon.png' />
+                    <Feed.Content>
+                        <Feed.Extra  >
+                            <Label className="feedExtraLabel">
+                                <Icon name='clock' />
+                                Lottery is {isLotteryOpen}
+                                
+                            </Label>
+                        </Feed.Extra>
+                        <Feed.Summary>
+                            {this.renderDeadline(deadline, canBuyLottery)}
+                        </Feed.Summary>
+                        <Feed.Summary>
+                            {this.renderStartTime(timeStarted)}
+                        </Feed.Summary>
+                    </Feed.Content>
+                    </Feed.Event>
+                </Feed>
+                </Card.Content>
+            </Card>
+        )
+        /*
+        {
+                header: ,
+                meta: 'We accept just Ether as payment',
+                description: 'This is the value of each ticket to enter the Lottery',
+                style: { overflowWrap: 'break-word' },
+                id: 'mainCard'
+            },
+            */
+    }
+
     renderCards() {
         let {lotteryValue, deadline, lotteryJackPot, timeStarted, canBuyLottery} = this.state;
         const isLotteryOpen = canBuyLottery? "Open": "Closed";
         const items = [
             {
-                header: web3.utils.fromWei(this.state.lotteryValue, 'ether') + " Ether",
-                meta: 'We accept just Ether as payment',
-                description: 'This is the value of each ticket to enter the Lottery',
+                header :web3.utils.fromWei(lotteryValue, 'ether') + " Ether",
+                meta:  <p>Lottery price</p>,
+                description: 'Pay this amount to buy a ticket',
                 style: { overflowWrap: 'break-word' },
-            },
-            {
-                header: "Lottery is "+isLotteryOpen,
-                meta:  this.renderDeadline(deadline, canBuyLottery),
-                description: this.renderStartTime(timeStarted),
-                style: { overflowWrap: 'break-word' }
+                className: 'regularCards'
             },
             {
                 header: web3.utils.fromWei(lotteryJackPot, 'ether') + " Ether" ,
-                meta: 'Lottery Jackpot',
+                meta: <p>Lottery jackpot</p>,
                 description: 'This jackpot will be release to the winners',
-                style: { overflowWrap: 'break-word' }
+                style: { overflowWrap: 'break-word' },
+                className: 'regularCards'
             }
         ];
-        return <Card.Group items={ items } />;
+        return <Card.Group id='cardsLottery' items={ items } />;
     }
 
     renderPickWinnerButton() {
@@ -194,7 +228,7 @@ class Lottery extends Component {
 
     render() {
         const {canPickWinner, canBuyLottery, number4, lotteryHasPlayed,
-            lotteryValue, lotteryAddress, numbers3} = this.state;
+            lotteryValue, lotteryAddress, numbers3, timeStarted} = this.state;
         return (
             <Layout >
                 <Dimmer active = {this.state.loading}>
@@ -205,10 +239,11 @@ class Lottery extends Component {
                 { this.renderModal() }
                     <Grid >
                         <Grid.Column width = { 10 } >
+                            { this.renderMainCard() }
                             { this.renderCards() }
                         </Grid.Column>
                         <Grid.Column width = { 6 }>
-                            <Segment>
+                            <Segment compact>
                                 <EnterForm
                                     number4 = {number4}
                                     canPickWinner = {canPickWinner}

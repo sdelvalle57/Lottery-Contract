@@ -1,3 +1,15 @@
 /*******************************
          Site Overrides
 *******************************/
+.ui.label.feedExtraLabel {
+    background-color: transparent;
+    background-image: none;
+    color: white;
+    background: linear-gradient(90deg, rgba(28, 50, 72, 1) 76.2%, rgba(28, 50, 72, 1) 95.92%);
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 14.3px;
+    border-radius: 8px;
+    margin-left: 27px;
+    margin-bottom: 10px;
+  }

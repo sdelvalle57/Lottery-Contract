@@ -1311,3 +1311,17 @@ a.ui.basic.label:hover {
          Site Overrides
 *******************************/
 
+.ui.label.feedExtraLabel {
+  background-color: transparent;
+  background-image: none;
+  color: white;
+  background: -webkit-gradient(linear, left top, right top, color-stop(76.2%, #1c3248), color-stop(95.92%, #1c3248));
+  background: -webkit-linear-gradient(left, #1c3248 76.2%, #1c3248 95.92%);
+  background: linear-gradient(90deg, #1c3248 76.2%, #1c3248 95.92%);
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 14.3px;
+  border-radius: 8px;
+  margin-left: 27px;
+  margin-bottom: 10px;
+}

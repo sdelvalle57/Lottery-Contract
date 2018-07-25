@@ -71,7 +71,7 @@ class CardIndex extends Component {
             }
         return (
             <Container id='indexCardContainer' >
-                <Card>
+                <Card id='indexCard'>
                     <Image verticalAlign='middle' size='medium' centered circular src='/static/lottery_icon.png' />
                     <Card.Content>
                     <Card.Header>{lotteryJackPot} ETH</Card.Header>

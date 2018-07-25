@@ -1,3 +1,10 @@
 /*******************************
     User Variable Overrides
 *******************************/
+@fontName: 'Poppins';
+@labelWidth: 97px;
+@marginLeft: 20px;
+@summaryFontSize: 11.3px;
+@summaryMargin: 0px 0px 3px 32px;
+@summaryColor: rgb(24, 49, 73);
+@summaryFontWeight: 500;

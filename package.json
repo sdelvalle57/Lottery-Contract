@@ -30,7 +30,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "dev": "npm run build-semantic && node server.js",
+    "dev": "npm run build-semantic && next build && node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "build-semantic": "cd static && gulp build-css build-assets",

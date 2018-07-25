@@ -1,3 +1,11 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.feed {
+    margin-left: @marginLeft;
+  }
+
+  .ui.feed > .event > .content .summary {
+    font-family: @headerFont;
+  }

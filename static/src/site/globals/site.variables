@@ -2,10 +2,9 @@
      User Global Variables
 *******************************/
 
+@fontPageName: 'Roboto Slab';
+@pageFont: @fontPageName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-
-@primaryColor: #CDE77F;
-@fontName: 'Roboto Slab';
 @borderColor: rgba(34, 36, 38, 0.15);
 @backgroundLocation: url(../background.png);
 
