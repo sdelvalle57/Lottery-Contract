@@ -32,7 +32,7 @@
     "test": "mocha",
     "dev": "npm run build-semantic && next build && node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production ENV=production node server.js",
     "build-semantic": "cd static && gulp build-css build-assets",
     "watch-semantic": "cd static && npm run build-semantic && gulp watch"
   },

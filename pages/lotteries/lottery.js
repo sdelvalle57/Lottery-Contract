@@ -36,12 +36,10 @@ class Lottery extends Component {
 
     async componentDidMount() {
         const lotteryAddress = this.props.url.query.lotteryAddress;
-        if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
-            const lottery = lotteryAt(lotteryAddress, web3);
-            await this.setLotteryValues(lottery);
-            this.setIntervalFunction();
-        } 
-        this.setEventsListeners(lotteryAt(lotteryAddress, web3Socket));
+        const lottery = lotteryAt(lotteryAddress, web3Socket);
+        await this.setLotteryValues(lottery);
+        this.setIntervalFunction();
+        this.setEventsListeners(lottery);
     }
 
     componentWillUnmount() {
