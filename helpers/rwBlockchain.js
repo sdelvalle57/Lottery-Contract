@@ -1,6 +1,7 @@
 import web3Socket from '../ethereum/web3Socket';
 import web3 from '../ethereum/web3';
 import lotteryAt from '../ethereum/lottery';
+import lotteryFactoryAt from '../ethereum/factory';
 
 /* reading functions */
 async function getSummary(lotteryAddress) {
@@ -22,11 +23,20 @@ async function getAccounts() {
   return accounts;
 }
 
+async function getLotteries(factoryAddress) {
+  const lotteryFactory = lotteryFactoryAt(factoryAddress, web3Socket);
+  const lotteries = await lotteryFactory.methods.getLotteries().call();
+  return lotteries;
+}
+
 
 /* writing functions */
 async function enterLottery(lotteryAddress, number4, numbers3, lotteryValue, network) {
   console.log(network);
-  let response;
+  let response = {
+    error: false,
+    message: ""
+  };
   if(network.providerNotSet) {
     return this.errorMessage("Use Mist or Metamask to send the Transaction");
   } else if(network.networkNotSet) {
@@ -41,7 +51,7 @@ async function enterLottery(lotteryAddress, number4, numbers3, lotteryValue, net
         from: accounts[0],
         value: lotteryValue
     });
-    return response['error'] = false;
+    return response;
   } catch (err) {
     return this.errorMessage(err.message.split("\n")[0]);
   }
@@ -56,7 +66,7 @@ function errorMessage(message) {
 
 
 export default {
-  getSummary, getAccounts, enterLottery, errorMessage, getNumbersByPlayer
+  getSummary, getAccounts, enterLottery, errorMessage, getNumbersByPlayer, getLotteries
 }
 
  

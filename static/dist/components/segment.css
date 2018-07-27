@@ -815,3 +815,6 @@
          Site Overrides
 *******************************/
 
+.ui.segment {
+  max-width: 450px;
+}

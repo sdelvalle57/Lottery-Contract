@@ -31,6 +31,7 @@
   "scripts": {
     "test": "mocha",
     "dev": "npm run build-semantic && next build && node server.js",
+    "dev_simple": "node server.js",
     "stage": "next build && NODE_ENV=production node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",

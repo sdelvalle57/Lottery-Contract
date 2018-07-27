@@ -44,12 +44,14 @@ class EnterForm extends Component {
         const {lotteryAddress, canBuyLottery, lotteryValue, number4, numbers3, network} = this.state;
         if(canBuyLottery){
             this.setState({ loading: true, errroMessage: '' });
+            this.props.callback({step: 1});
             const response = await api.enterLottery(lotteryAddress, number4, numbers3, lotteryValue, network);
             if(response.error) {
                 this.setState({ loading: false, errroMessage: response.message });
                 return;
             }
-            this.setState({ loading: false, value:''});
+            this.setState({ loading: false, value:'', errroMessage: ""});
+            this.props.callback({step: 2});
         }
     }
 

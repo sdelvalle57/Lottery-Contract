@@ -7,8 +7,8 @@ class NumberPicker extends Component {
         cells: [],
         numbers: [],
         numbersObj: [],
-        finalNumbers: []
-        
+        finalNumbers: [],
+        lastNumbers: []
     }
 
     componentDidMount() {
@@ -24,7 +24,27 @@ class NumberPicker extends Component {
         this.setState({cells, numbersObj});
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {lastNumbers, finalNumbers, numbersObj} = this.state;
+        switch (nextProps.step) {
+            case 1:
+                this.setState({lastNumbers: finalNumbers});
+                break;
+            case 2:
+                if(lastNumbers == finalNumbers){
+                    for(let i=1; i<=100; i++){
+                        if(i!=100)
+                            numbersObj[i] = {selected: false};
+                    }
+                    this.setState({finalNumbers: [], numbers: [], numbersObj});
+                    this.props.callback({number4: '', numbers3: []});
+                }
+                break;
+        }
+    }
+
     cellClick(item, e) {
+        console.log(item);
         const numbersObj = this.state.numbersObj;
         const numbers = this.state.numbers;
         const index = numbers.indexOf(item);

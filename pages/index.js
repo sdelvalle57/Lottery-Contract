@@ -32,10 +32,12 @@ class LotteryIndex extends Component {
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
+        const env = process.env.ENV || process.env.NODE_ENV || 'development';
+        let factoryAddress = "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F";
+        if(env == 'production')
+            factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
-        console.log(owner);
         const lotteries = await lotteryFactory.methods.getLotteries().call();
         const numOfLotteries = lotteries.length;
         let ethPrice = await fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/');
@@ -255,6 +257,22 @@ class LotteryIndex extends Component {
         return <Container id='drawContainer'>Draw {this.state.numOfLotteries}</Container>
     }
 
+    renderArchive() {
+        return (
+            <Container style={{marginTop:'10px'}} > 
+                <Link route={ `/lotteries/archive/${this.props.factoryAddress}`} >
+                        <a>
+                            <Button 
+                                floated="left" 
+                                content="Archive" 
+                                icon="eye" 
+                                primary />
+                        </a>
+                    </Link>
+            </Container>
+        )
+    }
+
     render() {
         return (
             <Layout>
@@ -264,6 +282,7 @@ class LotteryIndex extends Component {
                     {this.renderCardIndex()}
                     {this.renderDrawContainer()}
                     {this.renderAdmin()}
+                    {this.renderArchive()}
                 </div>
             </Layout>
         )

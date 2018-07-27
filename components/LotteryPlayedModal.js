@@ -18,7 +18,8 @@ class LotteryPlayedModal extends Component {
         lotteryAddress: this.props.lotteryAddress,
         loading: false,
         errroMessage: '',
-        isOwner: this.props.isOwner
+        isOwner: this.props.isOwner,
+        modalShown: false
     }
 
     componentWillReceiveProps(nextProps) {
@@ -33,7 +34,10 @@ class LotteryPlayedModal extends Component {
     }
 
     show = () => this.setState({open: true })
-    close = () => this.setState({ open: false })
+    close = () => {
+        this.setState({ open: false });
+        this.setState({modalShown: true});
+    }
 
     convertToNumbers(numByte) {
         let numbers = [];
@@ -41,10 +45,10 @@ class LotteryPlayedModal extends Component {
         numByte = numByte.split("0x")[1];    
         for(let k = 0; k < numByte.length; k=k+2){
             const number = parseInt((numByte[k]+numByte[k+1]), 16);
-            numbers.push(number);
+            numbers.push(<span>{number}</span>);
             numbersString += number +" ";
         }
-        return numbersString;
+        return numbers;
     }
 
     goHome() {
@@ -106,7 +110,7 @@ class LotteryPlayedModal extends Component {
                     icon='checkmark'
                     labelPosition='right'
                     content="Ok!"
-                    onClick={this.goHome}
+                    onClick={this.close}
                 />
             )
         }
@@ -114,35 +118,39 @@ class LotteryPlayedModal extends Component {
     }
 
     render() {
-        let { open, numOfWinners, winningNumber, prize, finalJackPot, showMessage, winnersPaid } = this.state
-        return (
-        <div>
-            <Modal closeOnEscape = {false}
-                closeOnDimmerClick = {showMessage} 
-                size='mini' 
-                dimmer='inverted' 
-                open={open} 
-                onClose={this.close}>
-            <Modal.Header>Lottery Result</Modal.Header>
-            <Modal.Content image>
-                <Image src='/static/eth2.png' size='small' />
-                <Modal.Description>
-                <Header> {this.convertToNumbers(winningNumber)} </Header>
-                <p>There are {numOfWinners} winners </p>
-                <p>Paid {prize} ETH</p>
-                <p>JackPot left {finalJackPot} ETH</p>
-                </Modal.Description>
-            </Modal.Content>
-                <Modal.Description>{this.showMessage(showMessage)}</Modal.Description>
-                <Modal.Actions>
-                    {this.renderPayButton(showMessage, winnersPaid)}                    
-                    {this.renderButton(showMessage)}
-                </Modal.Actions>
-                    {this.renderMessage()}
-                
-            </Modal>
-        </div>
-        )
+        let { open, numOfWinners, winningNumber, prize, finalJackPot, 
+            showMessage, winnersPaid, modalShown } = this.state;
+        if(!modalShown){
+            return (
+            <div>
+                <Modal 
+                    className='lotteryPlayed'
+                    size='mini' 
+                    dimmer='inverted' 
+                    open={open} 
+                    onClose={this.close}>
+                    <Modal.Header>Lottery Result</Modal.Header>
+                    <Modal.Content image>
+                        <Image src='/static/lottery_icon.png' size='small' />
+                        <Modal.Description>
+                        <Header className="winners"> {this.convertToNumbers(winningNumber)} </Header>
+                        <p>THERE ARE {numOfWinners} WINNERS </p>
+                        <p>PAID {prize} ETH</p>
+                        <p>JACKPOT LEFT {finalJackPot} ETH</p>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Description>{this.showMessage(showMessage)}</Modal.Description>
+                    <Modal.Actions>
+                        {this.renderPayButton(showMessage, winnersPaid)}                    
+                        {this.renderButton(showMessage)}
+                    </Modal.Actions>
+                        {this.renderMessage()}
+                    
+                </Modal>
+            </div>
+            )
+        } 
+        return null;
     }
 }
 

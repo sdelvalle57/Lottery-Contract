@@ -32,7 +32,8 @@ class Lottery extends Component {
         numOfWinners:'',
         winningNumber:'',
         winnersPaid: true,
-        numbersPlayed: []
+        numbersPlayed: [],
+        step: 0
     }
 
 
@@ -70,6 +71,10 @@ class Lottery extends Component {
 
     numberPickerCallback = (number4, numbers3) => {
         this.setState({number4, numbers3});
+    }
+
+    ticketBoughtCallback = (step) => {
+        this.setState({step: step.step});
     }
 
     setIntervalFunction =  (lotteryAddress) => {
@@ -219,7 +224,7 @@ class Lottery extends Component {
     }
 
     renderModal() {
-        /*
+        
         const { lotteryHasPlayed, numOfWinners, winningNumber, prize, lotteryJackPot, 
             winnersPaid, lotteryAddress, owner, accounts} = this.state;
         const jackPot = web3.utils.fromWei(lotteryJackPot, 'ether');
@@ -237,13 +242,13 @@ class Lottery extends Component {
                 isOwner = {isOwner}
                 />;
         }
-        */
+        
         return null;
     }
 
     render() {
         const {canPickWinner, canBuyLottery, number4,lotteryValue, 
-            lotteryAddress, numbers3} = this.state;
+            lotteryAddress, numbers3, step} = this.state;
         return (
             <Layout >
                 <Divider />
@@ -267,8 +272,12 @@ class Lottery extends Component {
                                     lotteryValue = {lotteryValue}
                                     lotteryAddress = {lotteryAddress}
                                     numbers3 = {numbers3}
+                                    callback={this.ticketBoughtCallback}
                                     />
-                                <NumberPicker callback={this.numberPickerCallback} />
+                                <NumberPicker 
+                                    callback={this.numberPickerCallback} 
+                                    step = {step}
+                                />
                             </Segment>
                             {this.renderPickWinnerButton()}
                         </Grid.Column>

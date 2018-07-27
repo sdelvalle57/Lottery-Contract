@@ -47,3 +47,4 @@
 /*Main Card */
 @mainCardWidth: 420px;
 @mainCardMinHeight: 130px;
+

@@ -29,7 +29,7 @@ contract('Lottery', () =>{
     it('deploys a Lottery', async ()=>{
         console.log(lotteryFactory.options.address);
         while(true) {
-            await lotteryFactory.methods.createNewLottery(600, lotteryValue).send({
+            await lotteryFactory.methods.createNewLottery(60, lotteryValue).send({
                 from: accounts[0],
                 gas: '5000000'
             });
@@ -47,7 +47,7 @@ contract('Lottery', () =>{
                 }
                 buyTicket(lottery);  
             }
-            await sleep(30000);
+            await sleep(5000);
             const playTheLottery = await lottery.methods.playTheLottery().send({
                 from: accounts[0],
                 gas: '3000000'
@@ -72,7 +72,7 @@ contract('Lottery', () =>{
             console.log("prize "+web3.utils.fromWei(summary[4]), 'ether');
             const balance = await web3.eth.getBalance(lotteryAddress);
             console.log("balance "+web3.utils.fromWei(balance), 'ether');
-            await sleep(30000);
+            await sleep(5000);
         }
     });    
 })

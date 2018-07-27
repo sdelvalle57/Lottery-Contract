@@ -1,3 +1,75 @@
 /*******************************
          Site Overrides
 *******************************/
+@media only screen and (min-width: 1200px){
+    .ui.mini.modal.lotteryPlayed {
+        width: 390px;
+    } 
+}
+
+@media only screen and (min-width: 992px){
+    .ui.mini.modal.lotteryPlayed {
+        width: 390px;
+    } 
+}
+
+.ui.mini.modal.lotteryPlayed {
+    margin-top: 180px !important;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px 20px 0px 20px;
+    border-radius: 28px;
+    border: 2px solid #183149;
+  }
+  
+
+  .ui.modal.lotteryPlayed > .header {
+    display: inline-block;
+    background: #183149;
+    padding: 10px 100px 10px 20px;
+    box-shadow: none;
+    color: white;
+    border-bottom: none;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 13px;
+  }
+
+  .ui.modal.lotteryPlayed>.content>.image {
+      align-self: center;
+      width: 110px;
+      height: auto;;
+  }
+
+  .ui.modal.lotteryPlayed>.content>.image+.description {
+      float: none;
+      font-size: 13px;
+      padding-left: 10px;
+  }
+
+  .ui.header.winners {
+    display: inline-block;
+}
+
+.ui.header.winners> span {
+    background: #183149;
+    color: white;
+    margin-right: 1px;
+    padding: 7px;
+}
+
+.ui.modal.winners>.actions {
+    border-top: 5px solid #e84e0f;
+}
+
+.ui.modal.winners .actions>.button {
+    border-radius: 11px;
+    font-size: 18px;
+    padding: 10px;
+    font-weight: 500;
+    
+}
+

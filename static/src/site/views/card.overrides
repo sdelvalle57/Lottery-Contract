@@ -138,4 +138,23 @@
     width: 230px;
 }
 
+#lotteries.ui.cards {
+    display: flex;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+#lotteries.ui.cards>.card {
+    background: white;
+    width: 800px;
+}
+
+#lotteries.ui.cards>.card>.content>.header {
+    color: black;
+    font-weight: 500 !important;
+}
+
+#lotteries.ui.fluid.card {
+    width: 800px;
+}
 
