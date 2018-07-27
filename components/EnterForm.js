@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Message, Button, Header } from 'semantic-ui-react';
-import lotteryAt from '../ethereum/lottery';
-import web3 from '../ethereum/web3';
 import { Router } from '../routes';
+import api from '../helpers/rwBlockchain';
 
 class EnterForm extends Component {
     state = {
@@ -15,8 +14,7 @@ class EnterForm extends Component {
         canBuyLottery: this.props.canBuyLottery,
         lotteryValue: this.props.lotteryValue,
         lotteryAddress: this.props.lotteryAddress, 
-        network: true,
-        provider: true
+        network: {},
     }
 
     componentDidMount() {
@@ -43,46 +41,45 @@ class EnterForm extends Component {
 
     onSubmit = async event =>{  
         event.preventDefault();
-        const {lotteryAddress, canBuyLottery, lotteryValue, number4, numbers3} = this.state;
-        const lottery = lotteryAt(lotteryAddress, web3);
-        const canSendTx = await this.checkNetwork();
-        if(canSendTx && canBuyLottery){
+        const {lotteryAddress, canBuyLottery, lotteryValue, number4, numbers3, network} = this.state;
+        if(canBuyLottery){
             this.setState({ loading: true, errroMessage: '' });
-            try {
-                const accounts = await web3.eth.getAccounts();
-                await lottery.methods.enter(number4, numbers3).send({
-                    from: accounts[0],
-                    value: lotteryValue
-                });
-                Router.replaceRoute(`/lotteries/${lotteryAddress}`);
-            } catch (err) {
-                this.setState({ errroMessage: err.message.split("\n")[0] });
+            const response = await api.enterLottery(lotteryAddress, number4, numbers3, lotteryValue, network);
+            if(response.error) {
+                this.setState({ loading: false, errroMessage: response.message });
+                return;
             }
             this.setState({ loading: false, value:''});
         }
     }
 
-    checkNetwork = async () => {
-        if(!this.state.provider) {
-            this.setState({ errroMessage: "Use Mist or Metamask to send the Transaction" });
-            return false;
-        }else if(!this.state.network) {
-            this.setState({ errroMessage: "Select The Rinkeby network" });
-            return false;
-        }
-        return true;
-    }
-
     setCheckNetworkInterval = () => {
         this.interval = setInterval(() => {
+            let network = {
+                providerNotSet: false,
+                networkNotSet: false,
+                notLogged: false
+            };
+
             if (typeof window.web3 == 'undefined') {
-                this.setState({provider: false});
+                network.providerNotSet = true;
+                this.setState({network});
+                return;
             }
-            window.web3.version.getNetwork((err, netId) => {
-                if(netId!=4) {
-                    this.setState({network: false});
-                }
-            });
+
+            if (typeof window.web3 != 'undefined') {
+                window.web3.version.getNetwork(async (err, netId) => {
+                    if(netId == "4") {
+                        const accounts = await api.getAccounts();
+                        if(!accounts[0]) {
+                            network.notLogged = true;
+                        }
+                    } else {
+                        network.networkNotSet = true;
+                    }
+                    this.setState({network});
+                });
+            }
         }, 1000);
     }
 

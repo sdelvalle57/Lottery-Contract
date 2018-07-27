@@ -48,7 +48,7 @@ class LotteryPlayedModal extends Component {
     }
 
     goHome() {
-        Router.push(`/`)
+        //Router.push(`/`)
     }
 
     payWinners = async () => {

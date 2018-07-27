@@ -133,4 +133,9 @@
     color: white;
 }
 
+.ui.card.regularCards.myTickets {
+    height: auto;
+    width: 230px;
+}
+
 

@@ -32,7 +32,7 @@ class LotteryIndex extends Component {
     }
 
     static async getInitialProps({res}) {
-        const factoryAddress = "0x3f9e1c124ccfe558a95541e401c62e2c4d1e2e26";
+        const factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         console.log(owner);

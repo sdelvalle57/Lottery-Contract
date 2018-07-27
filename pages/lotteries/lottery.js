@@ -9,7 +9,8 @@ import EnterForm from '../../components/EnterForm';
 import PickWinnerForm from '../../components/PickWinnerForm';
 import NumberPicker from '../../components/NumberPicker';
 import LotteryPlayedModal from '../../components/LotteryPlayedModal';
-
+import PlayedNumbers from '../../components/PlayedNumbers';
+import api from '../../helpers/rwBlockchain';
 
 class Lottery extends Component {  
 
@@ -30,25 +31,25 @@ class Lottery extends Component {
         prize:'',
         numOfWinners:'',
         winningNumber:'',
-        winnersPaid: true
+        winnersPaid: true,
+        numbersPlayed: []
     }
 
 
     async componentDidMount() {
         const lotteryAddress = this.props.url.query.lotteryAddress;
         const lottery = lotteryAt(lotteryAddress, web3Socket);
-        await this.setLotteryValues(lottery);
-        this.setIntervalFunction();
+        await this.setLotteryValues(lotteryAddress);
         this.setEventsListeners(lottery);
+        this.setIntervalFunction(lotteryAddress);
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    setLotteryValues = async (lottery) => {
-        const summary = await lottery.methods.getSummary().call();
-        const accounts = await web3.eth.getAccounts(); 
+    setLotteryValues = async (lotteryAddress) => {
+        const summary = await api.getSummary(lotteryAddress);
         const lotteryValue = summary[0];
         const deadline = summary[1];
         let lotteryJackPot = summary[2];
@@ -63,26 +64,27 @@ class Lottery extends Component {
         const winningNumber = summary[11];
         const winnersPaid = summary[13];
         console.log(summary);
-        this.setState({lotteryValue, deadline, lotteryJackPot, lotteryHasPlayed, owner, 
-            accounts, canBuyLottery, canPickWinner, loading:false, timeStarted, prize,
-            numOfWinners, winningNumber, winnersPaid})
+        this.setState({lotteryValue, deadline, lotteryJackPot, lotteryHasPlayed, owner, canBuyLottery, 
+            canPickWinner, loading:false, timeStarted, prize, numOfWinners, winningNumber, winnersPaid})
     }
 
     numberPickerCallback = (number4, numbers3) => {
         this.setState({number4, numbers3});
     }
 
-    setIntervalFunction = () => {
-        this.interval = setInterval(() => {
+    setIntervalFunction =  (lotteryAddress) => {
+        this.interval = setInterval(async () => {
+            const accounts = await api.getAccounts();
+            if(accounts[0]) {
+                const numbersPlayed = await api.getNumbersByPlayer(accounts[0], lotteryAddress);
+                this.setState({numbersPlayed});
+            }
+            this.setState({accounts});
             this.isLotteryOpen(); 
         }, 2000);  
     }
 
     setEventsListeners =  (lottery) => {
-        window.addEventListener('load', async () => {
-            await this.setLotteryValues(lotteryAt(lotteryAddress, web3));
-            this.setIntervalFunction();
-        }, false);
         lottery.events.TicketBuy({}, async (error, data) => {
             if (error == null) {
                 let lotteryJackPot = data.returnValues.jackPot;
@@ -91,7 +93,7 @@ class Lottery extends Component {
         });
         lottery.events.LotteryHasPlayed({}, async (error, data) => {
             if(error == null) {
-                const summary = await lottery.methods.getSummary().call();
+                const summary = await api.getSummary(lottery.options.address);
                 const lotteryJackPot = summary[6];
                 const prize = web3.utils.fromWei(summary[4], 'ether');
                 const numOfWinners = summary[5];
@@ -179,6 +181,29 @@ class Lottery extends Component {
         return <Card.Group id='cardsLottery' items={ items } />;
     }
 
+    renderNumbers() {
+        return <PlayedNumbers 
+            numbersPlayed = {this.state.numbersPlayed}/>
+    }
+
+    renderMyNumbersCard() {
+        let {accounts} = this.state;
+        if(accounts[0]) {
+            const items = [
+                {
+                    header: 'My tickets' ,
+                    meta: <p>{accounts[0].slice(0, 20)}... </p>,
+                    description: this.renderNumbers(),
+                    style: { overflowWrap: 'break-word' },
+                    className: 'regularCards myTickets'
+                }
+            ];
+            return <Card.Group id='cardsLottery' items={ items } />;
+        }else {
+            return null;
+        }
+    }
+
     renderPickWinnerButton() {
         const {lotteryAddress, canPickWinner, lotteryHasPlayed, owner, accounts} = this.state;
         if(!lotteryHasPlayed && canPickWinner && accounts.length > 0 && 
@@ -194,6 +219,7 @@ class Lottery extends Component {
     }
 
     renderModal() {
+        /*
         const { lotteryHasPlayed, numOfWinners, winningNumber, prize, lotteryJackPot, 
             winnersPaid, lotteryAddress, owner, accounts} = this.state;
         const jackPot = web3.utils.fromWei(lotteryJackPot, 'ether');
@@ -211,6 +237,7 @@ class Lottery extends Component {
                 isOwner = {isOwner}
                 />;
         }
+        */
         return null;
     }
 
@@ -231,7 +258,7 @@ class Lottery extends Component {
                             { this.renderMainCard() }
                             { this.renderCards() }
                         </Grid.Column>
-                        <Grid.Column width = { 10 }>
+                        <Grid.Column width = { 8 }>
                             <Segment compact>
                                 <EnterForm
                                     number4 = {number4}
@@ -244,6 +271,9 @@ class Lottery extends Component {
                                 <NumberPicker callback={this.numberPickerCallback} />
                             </Segment>
                             {this.renderPickWinnerButton()}
+                        </Grid.Column>
+                        <Grid.Column width= { 2 }>
+                            { this.renderMyNumbersCard() }
                         </Grid.Column>
                     </Grid>
                 </Container>

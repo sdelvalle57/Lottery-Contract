@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
 const Lottery = artifacts.require('./Lottery.sol');
 const LotteryFactory = artifacts.require('./LotteryFactory.sol');
 
@@ -86,14 +86,14 @@ async function buyTicket(lottery) {
     const finalNumbers = nums.sort(function (a, b) {  return a - b;  });
     number4 = convertToBytes(finalNumbers);
     numbers3 = convertEachToBytes(k_combinations(finalNumbers, 3));
-    const acc = Math.floor((Math.random() * 9) + 1);
+    const acc = Math.floor((Math.random() * 4));
     try{
         const enter = await lottery.methods.enter(number4, numbers3).send({
             from: accounts[acc],
             value: lotteryValue,
             gas: '3000000'
         })
-        console.log("Good "+itr+" "+nums + " "+number4 + " "+enter.gasUsed);
+        console.log("Good "+itr+" "+nums + " "+number4 + " "+enter.gasUsed+" acc"+acc);
     } catch(e) {
         console.log("bad "+itr+" "+nums + " "+number4);
     }

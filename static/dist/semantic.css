@@ -17279,6 +17279,10 @@ ol.ui.horizontal.list li:before,
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.list > .item {
+  font-family: monospace;
+}
 /*!
  * # Semantic UI 2.3.3 - Loader
  * http://github.com/semantic-org/semantic-ui/
@@ -29066,6 +29070,11 @@ a.ui.card:hover,
 
 .ui.card.regularCards > .content > .description {
   color: white;
+}
+
+.ui.card.regularCards.myTickets {
+  height: auto;
+  width: 230px;
 }
 /*!
  * # Semantic UI 2.3.3 - Comment
