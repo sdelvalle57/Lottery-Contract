@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Form, Message, Button, Header } from 'semantic-ui-react';
-import { Router } from '../routes';
 import api from '../helpers/rwBlockchain';
 
 class EnterForm extends Component {
