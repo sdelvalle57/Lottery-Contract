@@ -45,7 +45,6 @@ class LotteryNew extends Component {
     handleLoad = async (factoryAddress) => {
         this.setEventsListeners();
         const lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
-        const owner = await lotteryFactory.methods.owner().call();
         const accounts = await  web3.eth.getAccounts();
         this.setState({ lotteryFactory, accounts, web3 });
     }

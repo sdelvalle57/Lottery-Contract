@@ -33,9 +33,9 @@ class LotteryIndex extends Component {
 
     static async getInitialProps({res}) {
         const env = process.env.ENV || process.env.NODE_ENV || 'development';
-        let factoryAddress = "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F";
-        if(env == 'production')
-            factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
+        //let factoryAddress = "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F";
+       // if(env == 'production')
+       let     factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
         let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         const owner = await lotteryFactory.methods.owner().call();
         const lotteries = await lotteryFactory.methods.getLotteries().call();

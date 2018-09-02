@@ -1,17 +1,16 @@
-import web3Socket from '../ethereum/web3Socket';
 import web3 from '../ethereum/web3';
 import lotteryAt from '../ethereum/lottery';
 import lotteryFactoryAt from '../ethereum/factory';
 
 /* reading functions */
 async function getSummary(lotteryAddress) {
-  const lottery = lotteryAt(lotteryAddress, web3Socket);
+  const lottery = lotteryAt(lotteryAddress, web3);
   const summary  = await lottery.methods.getSummary().call();
   return summary;
 }
 
 async function getNumbersByPlayer(account, lotteryAddress) {
-  const lottery = lotteryAt(lotteryAddress, web3Socket);
+  const lottery = lotteryAt(lotteryAddress, web3);
   const numbers = await lottery.methods.getNumbers4ByPlayer().call({
     from: account
   });
@@ -24,7 +23,7 @@ async function getAccounts() {
 }
 
 async function getLotteries(factoryAddress) {
-  const lotteryFactory = lotteryFactoryAt(factoryAddress, web3Socket);
+  const lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
   const lotteries = await lotteryFactory.methods.getLotteries().call();
   return lotteries;
 }
@@ -32,7 +31,6 @@ async function getLotteries(factoryAddress) {
 
 /* writing functions */
 async function enterLottery(lotteryAddress, number4, numbers3, lotteryValue, network) {
-  console.log(network);
   let response = {
     error: false,
     message: ""

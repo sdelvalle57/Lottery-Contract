@@ -39,9 +39,8 @@ class Lottery extends Component {
 
     async componentDidMount() {
         const lotteryAddress = this.props.url.query.lotteryAddress;
-        const lottery = lotteryAt(lotteryAddress, web3Socket);
         await this.setLotteryValues(lotteryAddress);
-        this.setEventsListeners(lottery);
+        this.setEventsListeners();
         this.setIntervalFunction(lotteryAddress);
     }
 
@@ -64,7 +63,6 @@ class Lottery extends Component {
         const numOfWinners = summary[5];
         const winningNumber = summary[11];
         const winnersPaid = summary[13];
-        console.log(summary);
         this.setState({lotteryValue, deadline, lotteryJackPot, lotteryHasPlayed, owner, canBuyLottery, 
             canPickWinner, loading:false, timeStarted, prize, numOfWinners, winningNumber, winnersPaid})
     }
@@ -89,7 +87,9 @@ class Lottery extends Component {
         }, 2000);  
     }
 
-    setEventsListeners =  (lottery) => {
+    setEventsListeners =  () => {
+        const lotteryAddress = this.props.url.query.lotteryAddress;
+        const lottery = lotteryAt(lotteryAddress, web3Socket);
         lottery.events.TicketBuy({}, async (error, data) => {
             if (error == null) {
                 let lotteryJackPot = data.returnValues.jackPot;

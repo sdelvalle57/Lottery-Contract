@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Table } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 
 class PlayedNumbers extends Component {
     state = {
@@ -48,7 +48,7 @@ class PlayedNumbers extends Component {
             return (
                 <List>
                     {numbers.map((i) => 
-                        <List.Item><span>{i}</span></List.Item>)} 
+                        <List.Item key={i}><span>{i}</span></List.Item>)} 
                 </List>
             )
         }

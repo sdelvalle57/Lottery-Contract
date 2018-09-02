@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Menu, Table, TableBody } from 'semantic-ui-react'
+import { Menu, Table } from 'semantic-ui-react'
 
 class NumberPicker extends Component {
 
@@ -44,7 +44,6 @@ class NumberPicker extends Component {
     }
 
     cellClick(item, e) {
-        console.log(item);
         const numbersObj = this.state.numbersObj;
         const numbers = this.state.numbers;
         const index = numbers.indexOf(item);

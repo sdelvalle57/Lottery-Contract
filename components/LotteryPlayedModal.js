@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Header, Modal, Icon, Image } from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
-import { Router } from '../routes';
 import lotteryAt from '../ethereum/lottery';
 
 
