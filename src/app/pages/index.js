@@ -4,6 +4,7 @@ import lotteryFactoryAt from '../ethereum/factory';
 import Layout from '../components/Layout';
 import LotteryHasPlayedModal from '../components/LotteryPlayedModal';
 import { Link, Router } from '../routes';
+import "isomorphic-fetch";
 import web3 from '../ethereum/web3';
 import web3Socket from '../ethereum/web3Socket';
 import lotteryAt from '../ethereum/lottery';
@@ -30,23 +31,19 @@ class LotteryIndex extends Component {
         ethPrice: this.props.ethPrice
     }
 
-     
+   
 
-    static async getInitialProps({res}) {
-        const env = process.env.ENV || process.env.NODE_ENV || 'development';
-        //let factoryAddress = "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F";
-       // if(env == 'production')
-       let     factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
-        let lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
+    async componentDidMount() {
+
+        const factoryAddress = "0x3F9E1c124CCFe558A95541E401C62E2C4d1e2e26";
+        const lotteryFactory = lotteryFactoryAt(factoryAddress, web3);
         
         const owner = await lotteryFactory.methods.owner().call();
-        
         const lotteries = await lotteryFactory.methods.getLotteries().call();
-        
         const numOfLotteries = lotteries.length;
-        let ethPrice ="211.138425593"; //await fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/');
-        //ethPrice = await ethPrice.json();
-        //ethPrice = ethPrice[0].price_usd;        
+        let ethPrice = await fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/');
+        ethPrice = await ethPrice.json();
+        ethPrice = ethPrice[0].price_usd;        
        
         if(numOfLotteries > 0) {
             const lotteryAddress = lotteries[numOfLotteries -1];
@@ -67,40 +64,25 @@ class LotteryIndex extends Component {
             finalJackPot = web3.utils.fromWei(finalJackPot, 'ether');
             prize = web3.utils.fromWei(prize, 'ether');
             
-            return {lotteries, factoryAddress, lotteryPrice, lotteryJackPot,
+            this.setState({lotteries, factoryAddress, lotteryPrice, lotteryJackPot,
                 deadline, numOfPlayers, lotteryAddress, owner,
                 prize, winningNumber, numOfWinners, finalJackPot, numOfLotteries,
-                timeStarted, ethPrice };
-        } else {
-            if (res) {
-                res.writeHead(302, {
-                  Location: `/lotteries/new/${factoryAddress}`
-                })
-                res.end()
-                res.finished = true
-              } else {
-                Router.push(`/lotteries/new/${factoryAddress}`)
-              }
-            return;
+                timeStarted, ethPrice });
         }
-       return {};
-    }
 
-   
 
-    async componentDidMount() {
-        const lottery = lotteryAt(this.props.lotteryAddress, web3Socket);
-        const lotteryFactory = lotteryFactoryAt(this.props.factoryAddress, web3Socket);
+        const lottery = lotteryAt(this.state.lotteryAddress, web3Socket);
+        const lotteryFactoryWS = lotteryFactoryAt(factoryAddress, web3Socket);
         const lotteryHasPlayed = await lottery.methods.lotteryHasPlayed().call();
-        this.setFactoryEventsListeners(lotteryFactory);
-        this.setEventsListeners(lottery, lotteryFactory);
+        this.setFactoryEventsListeners(lotteryFactoryWS);
+        this.setEventsListeners(lottery, lotteryFactoryWS);
         if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
             const accounts = await web3.eth.getAccounts();
             this.setState({accounts});
         } else {
             this.setWindowListener();
         }
-        this.setState({lotteryHasPlayed, lottery});
+        this.setState({lotteryHasPlayed});
     }
 
     componentWillUnmount() {
@@ -195,7 +177,7 @@ class LotteryIndex extends Component {
     renderAdmin() {
         const { accounts, lotteryHasPlayed } = this.state;
         if(accounts.length > 0 && 
-            this.props.owner.toString() == accounts[0].toString()
+            this.state.owner.toString() == accounts[0].toString()
         && lotteryHasPlayed){
             return (
                 <Container style={{marginTop:'100px'}} > 
@@ -268,7 +250,7 @@ class LotteryIndex extends Component {
     renderArchive() {
         return (
             <Container style={{marginTop:'10px'}} > 
-                <Link route={ `/lotteries/archive/${this.props.factoryAddress}`} >
+                <Link route={ `/lotteries/archive/${this.state.factoryAddress}`} >
                         <a>
                             <Button 
                                 floated="left" 

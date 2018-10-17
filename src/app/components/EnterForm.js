@@ -56,7 +56,6 @@ class EnterForm extends Component {
 
     setCheckNetworkInterval = () => {
         this.interval = setInterval(() => {
-            console.log("aca");
             let network = {
                 providerNotSet: false,
                 networkNotSet: false,
