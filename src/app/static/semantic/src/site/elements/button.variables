@@ -1,0 +1,5 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+@enterButtonBorderRadius: 9px;
+@enterButtonPositiveColor: linear-gradient(90deg, rgba(0, 181, 54, 1) 0%, rgba(140, 198, 63, 1) 100%);

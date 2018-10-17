@@ -1,0 +1,11 @@
+/*******************************
+         Site Overrides
+*******************************/
+#enterButton.ui.positive.button {
+    border-radius: @enterButtonBorderRadius;
+}
+
+#enterButton.ui.positive.button {
+    background-color: @enterButtonPositiveColor;
+    color: white;
+  }

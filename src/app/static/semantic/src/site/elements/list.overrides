@@ -1,0 +1,7 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+.ui.list > .item {
+    font-family: monospace;
+}
+

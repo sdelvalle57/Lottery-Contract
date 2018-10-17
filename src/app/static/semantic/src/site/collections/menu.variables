@@ -1,0 +1,8 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+@itemBackground: rgba(24, 49, 73, 1);
+@itemTextColor: 'white';
+@itemFontWeight: @bold;
+
+@itemBorder: 1px solid white;

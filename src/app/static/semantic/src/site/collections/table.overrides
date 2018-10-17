@@ -1,0 +1,16 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.table {
+    color: white;
+    font-size: 15.6px;
+}
+.ui.table tfoot th {
+    background: transparent;
+}
+
+.ui.table tbody tr td.selectable {
+    background: rgba(24, 49, 73, 1);
+    border: 1px solid white;
+}

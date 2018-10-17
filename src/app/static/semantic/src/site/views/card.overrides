@@ -1,0 +1,160 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+#indexCard {
+    border: 5px solid rgba(28, 50, 72, 1) ; 
+    background: @indexCardBackground;
+    width: @indexCardWidth;
+    min-height: @indexCardMinHeight;
+}
+
+#indexCard > .image {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    padding: @indexCardImagePadding;
+    width: @indexCardIconWidth;
+    margin-top: @indexCardMarginTop;
+    background: 'none';
+}
+
+#indexCard > .content {
+    padding: @indexCardContentPadding;
+  }
+
+#indexCard > .content > .header {
+    display: block;
+    margin: @headerMargin;
+    font-family: @headerFont;
+    color: @indexCardHeaderColor;
+  }
+
+#indexCard > .content > .header:not(.ui) {
+    text-align: center;
+    font-weight: @bold;
+    font-size: @indexCardHeaderFontSize;
+    margin-bottom: @indexCardHeaderMarginBottom;
+    margin-top: @indexCardHeaderLineHeightOffset;
+}
+
+#indexCard .meta {
+  color: white;
+  text-align: center;
+  font-size: @descriptionFontSize;
+}
+
+
+#indexCard > .content > .description {
+  clear: both;
+  color: white;
+  margin-top: @descriptionDistance;
+  text-align: center;
+  font-size: @deadlineFontSize;
+}
+
+#indexCard > .extra {
+    align-self: center;
+}
+
+#buyTicketButton {
+    background : @backgroundColor;
+    font-family: @headerFont;
+    font-size: @buttonFontSize;
+    font-weight: bold;
+    color: white;
+    border-radius: @buttonBorderRadius;
+    height: @buttonHeight;
+    width: @buttonWidth;
+    letter-spacing: @buttonLetterSpacing;
+    margin-bottom: @buttonMarginBottom;
+}
+
+#indexCard::after {
+    display: block ; 
+    position: absolute ; 
+    top: 0 ; 
+    bottom: 0 ; 
+    left: 0 ; 
+    right: 0 ; 
+    border-radius: 5px ; 
+    border: 2px solid white ;
+  }
+
+#mainCard {
+    box-shadow: 'none';
+    background: white;
+    width: @mainCardWidth;
+    min-height: @mainCardMinHeight;
+    float: right;
+    margin-bottom: 16px;
+}
+
+#cardsLottery {
+    display: block;
+    float: right;
+}
+
+.ui.card.regularCards {
+    font-family: @headerFont;
+    background: linear-gradient(90deg, rgba(232, 78, 15, 1) 2.81%, rgba(233, 176, 0, 1) 100%);
+    height: 130px;
+    width: 292px;
+    padding: 18px 0px 12px 12px;
+    margin-bottom: 16px;
+    font-weight: 500;
+    font-size: 12px;
+    color: white;
+    margin-left: 10px;
+}
+
+.ui.card.regularCards >.content>.header {
+    display: initial;
+    background: linear-gradient(90deg, rgba(28, 50, 72, 1) 76.2%, rgba(28, 50, 72, 1) 95.92%);
+    color: white;
+    padding-left: 7.8px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-right: 63px;
+    border-radius: 8px;
+    font-family: @pageFont;
+    font-size: 23px !important;
+    line-height: 0px !important;
+}
+
+.ui.card.regularCards >.content p { 
+    margin-right: 30px;
+    padding-bottom: 1px;
+    border-bottom: 1.3px solid white;
+    margin-top: 10px;
+}
+
+.ui.card.regularCards >.content > .description { 
+    color: white;
+}
+
+.ui.card.regularCards.myTickets {
+    height: auto;
+    width: 230px;
+}
+
+#lotteries.ui.cards {
+    display: flex;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+#lotteries.ui.cards>.card {
+    background: white;
+    width: 800px;
+}
+
+#lotteries.ui.cards>.card>.content>.header {
+    color: black;
+    font-weight: 500 !important;
+}
+
+#lotteries.ui.fluid.card {
+    width: 800px;
+}
+
