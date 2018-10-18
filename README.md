@@ -1,5 +1,6 @@
 # Lottery-Contract
 Lottery Contract
+https://l0tt0.online/
 
 Lottery written in 
 * Solidity using Truffle framework
